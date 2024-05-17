@@ -1,0 +1,36 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/_Main/LevelEditor/LevelEditor.uss?fileID=7433441132597879392&amp;guid=b6f0f5a176744ff3ba0d281daf2c7273&amp;type=3#LevelEditor" />
+    <ui:VisualElement name="Main" style="flex-grow: 1;">
+        <ui:VisualElement name="Load" class="bordered-box">
+            <ui:Label text="Load" display-tooltip-when-elided="true" class="header" />
+            <ui:VisualElement name="Load_VE" style="flex-direction: row-reverse;">
+                <ui:Button text="Load" display-tooltip-when-elided="true" name="btn_Load" style="width: 100px;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="Grid" class="bordered-box" style="flex-grow: 1;">
+            <ui:Label text="Grid" display-tooltip-when-elided="true" class="header" />
+            <ui:VisualElement name="GridSetup_VE" style="flex-direction: row; margin-bottom: 10px;">
+                <ui:Vector2IntField label="Grid Size" x="1" y="1" name="v2Field_Size" style="flex-grow: 1; flex-direction: row; flex-wrap: nowrap;" />
+                <ui:Button text="Setup" display-tooltip-when-elided="true" name="btn_SetupGrid" style="width: 100px;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="GridOptions" style="flex-grow: 0; flex-direction: row; margin-bottom: 10px;">
+                <ui:RadioButtonGroup value="-1" choices="People,Obstacle" name="radio_PeopleObstacle" style="flex-shrink: 0; justify-content: space-around; align-items: center; align-self: stretch;" />
+                <ui:VisualElement style="flex-grow: 1;">
+                    <ui:VisualElement style="flex-grow: 1; flex-direction: row;">
+                        <ui:EnumField type="Utilities.PersonType, Assembly-CSharp" name="EnumField_PeopleType" value="None" style="flex-shrink: 0; flex-grow: 1;" />
+                        <ui:UnsignedIntegerField label="Group No:" value="1" name="txt_GroupNo" style="flex-grow: 0; min-width: 250px;" />
+                    </ui:VisualElement>
+                    <ui:DropdownField name="drop_Obstacle" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="Grid_VE" style="flex-grow: 1;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="Options" class="bordered-box">
+            <ui:Label text="Options" display-tooltip-when-elided="true" class="header" />
+            <ui:VisualElement name="Save_VE" style="flex-direction: row;">
+                <ui:UnsignedIntegerField label="Level No" value="1" name="txt_LevelNo" style="flex-grow: 1;" />
+                <ui:Button text="Save" display-tooltip-when-elided="true" name="btn_Save" style="width: 100px;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

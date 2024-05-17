@@ -27,6 +27,8 @@ namespace Fiber.UI
 			btnSettings.onClick.AddListener(OpenSettings);
 
 			LevelManager.OnLevelLoad += OnLevelLoaded;
+			
+			SetLevelNo(LevelManager.Instance.LevelNo);
 		}
 
 		private void OnDestroy()
