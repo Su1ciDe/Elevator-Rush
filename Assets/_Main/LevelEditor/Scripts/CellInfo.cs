@@ -10,8 +10,8 @@ namespace LevelEditor
 		public Vector2Int Coordinates;
 		public Button Button;
 		public Color Color;
-		
-		public PersonType PersonType;
+
+		public PersonType PersonType = PersonType.None;
 		public int GroupNo;
 		public BaseObstacle Obstacle;
 	}

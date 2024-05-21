@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using UnityEditor;
-using UnityEngine;
+using UnityEditor.UIElements;
 using UnityEngine.UIElements;
+using Object = UnityEngine.Object;
 
 namespace Fiber.Utilities
 {
@@ -67,6 +69,26 @@ namespace Fiber.Utilities
 
 			var assetPath = AssetDatabase.GUIDToAssetPath(guIds[0]);
 			return AssetDatabase.LoadAssetAtPath<T>(assetPath);
+		}
+
+		public static void DrawReorderableList<T>(List<T> sourceList, VisualElement rootVisualElement, bool allowSceneObjects = true) where T : UnityEngine.Object
+		{
+			var list = new ListView(sourceList)
+			{
+				virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight,
+				showFoldoutHeader = true,
+				headerTitle = "Prefabs",
+				showAddRemoveFooter = true,
+				reorderMode = ListViewReorderMode.Animated,
+				makeItem = () => new ObjectField { objectType = typeof(T), allowSceneObjects = allowSceneObjects },
+				bindItem = (element, i) =>
+				{
+					((ObjectField)element).value = sourceList[i];
+					((ObjectField)element).RegisterValueChangedCallback((value) => { sourceList[i] = (T)value.newValue; });
+				}
+			};
+
+			rootVisualElement.Add(list);
 		}
 #endif
 	}

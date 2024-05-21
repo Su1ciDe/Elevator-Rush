@@ -27,6 +27,7 @@
         </ui:VisualElement>
         <ui:VisualElement name="Options" class="bordered-box">
             <ui:Label text="Options" display-tooltip-when-elided="true" class="header" />
+            <ui:VisualElement name="Elevators_VE" style="flex-grow: 1;" />
             <ui:VisualElement name="Save_VE" style="flex-direction: row;">
                 <ui:UnsignedIntegerField label="Level No" value="1" name="txt_LevelNo" style="flex-grow: 1;" />
                 <ui:Button text="Save" display-tooltip-when-elided="true" name="btn_Save" style="width: 100px;" />

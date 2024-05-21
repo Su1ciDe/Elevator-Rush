@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
 using Fiber.Utilities;
 using Fiber.LevelSystem;
 using GamePlay.Obstacles;
@@ -30,17 +30,21 @@ namespace LevelEditor.Editor
 		private VisualElement Grid_VE;
 		private Vector2IntField v2Field_Size;
 		private Button btn_SetupGrid;
-		
+
 		private RadioButtonGroup radio_PeopleObstacle;
 		private UnsignedIntegerField txt_GroupNo;
 		private EnumField EnumField_PeopleType;
 		private DropdownField drop_Obstacle;
 
 		// Options
+		private VisualElement Elevators_VE;
+		private ListView listView_Elevator;
 		private UnsignedIntegerField txt_LevelNo;
 		private Button btn_Save;
 
 		#endregion
+
+		private List<PersonType> elevators = new List<PersonType>();
 
 		private PersonDataSO personDataSO;
 		private List<BaseObstacle> obstacles;
@@ -83,7 +87,6 @@ namespace LevelEditor.Editor
 			levelField.label = "Load Level";
 			levelField.style.flexGrow = 1;
 			levelField.objectType = typeof(Level);
-			// levelField.RegisterValueChangedCallback(evt => LoadPreset((CharEditorPresetSO)evt.newValue));
 			Load_VE.Add(levelField);
 			btn_Load = rootVisualElement.Q<Button>(nameof(btn_Load));
 			btn_Load.clickable.clicked += Load;
@@ -114,7 +117,25 @@ namespace LevelEditor.Editor
 				}
 			});
 
-			// Save
+			// Options
+			Elevators_VE = rootVisualElement.Q<VisualElement>(nameof(Elevators_VE));
+			listView_Elevator = new ListView(elevators)
+			{
+				virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight,
+				showFoldoutHeader = true,
+				headerTitle = "Elevators",
+				showAddRemoveFooter = true,
+				reorderMode = ListViewReorderMode.Animated,
+				makeItem = () => new EnumField(PersonType.None),
+				bindItem = (element, i) =>
+				{
+					((EnumField)element).value = elevators[i];
+					((EnumField)element).RegisterValueChangedCallback(value => elevators[i] = (PersonType)value.newValue);
+				},
+				itemsSource = elevators
+			};
+			Elevators_VE.Add(listView_Elevator);
+
 			txt_LevelNo = rootVisualElement.Q<UnsignedIntegerField>(nameof(txt_LevelNo));
 			btn_Save = rootVisualElement.Q<Button>(nameof(btn_Save));
 			btn_Save.clickable.clicked += Save;
@@ -176,7 +197,6 @@ namespace LevelEditor.Editor
 						cellInfo.PersonType = selectedType;
 						cellInfo.GroupNo = (int)txt_GroupNo.value;
 						cellInfo.Button.text = cellInfo.GroupNo.ToString();
-
 					}
 				}
 				else if (radio_PeopleObstacle.value.Equals(1))
@@ -191,6 +211,7 @@ namespace LevelEditor.Editor
 				cellInfo.Button.style.backgroundColor = Color.white;
 				cellInfo.Obstacle = null;
 				cellInfo.PersonType = PersonType.None;
+				cellInfo.Button.text = "";
 			}
 		}
 
@@ -222,13 +243,18 @@ namespace LevelEditor.Editor
 			//
 
 			var levelPath = $"{LEVELS_PATH}Level_{txt_LevelNo.value:000}.prefab";
+			if (loadedLevel)
+			{
+				AssetDatabase.DeleteAsset(levelPath);
+			}
+
 			levelPath = AssetDatabase.GenerateUniqueAssetPath(levelPath);
 			PrefabUtility.SaveAsPrefabAsset(levelBasePrefab, levelPath);
 
 			EditorUtility.ClearDirty(levelBasePrefab);
 
 			AssetDatabase.Refresh();
-			Debug.Log($"{levelPath} has saved!");
+			Debug.Log($"<color=lime>{levelPath} has saved!</color>");
 
 			DestroyImmediate(levelBasePrefab);
 			levelBasePrefab = null;
@@ -237,6 +263,7 @@ namespace LevelEditor.Editor
 		private void SetupLevel(Level level)
 		{
 			level.Grid.Setup(gridCells);
+			level.ElevatorManager.Setup(elevators);
 		}
 
 		#endregion
@@ -245,6 +272,45 @@ namespace LevelEditor.Editor
 
 		private void Load()
 		{
+			if (!levelField.value) return;
+			loadedLevel = AssetDatabase.LoadAssetAtPath<Level>(AssetDatabase.GetAssetPath(levelField.value.GetInstanceID()));
+
+			txt_LevelNo.value = (uint)ParseLevelNo(loadedLevel.name);
+			v2Field_Size.value = new Vector2Int(loadedLevel.Grid.GridCells.GetLength(0), loadedLevel.Grid.GridCells.GetLength(1));
+			SetupGrid();
+
+			foreach (var groupPair in loadedLevel.PeopleManager.Groups)
+			{
+				foreach (var person in groupPair.Value.People)
+				{
+					var cell = gridCells[person.Coordinates.x, person.Coordinates.y];
+					cell.PersonType = person.PersonType;
+					cell.GroupNo = groupPair.Key;
+					cell.Coordinates = person.Coordinates;
+					cell.Color = personDataSO.PersonData[person.PersonType].color;
+					cell.Button.style.backgroundColor = cell.Color;
+					cell.Button.text = groupPair.Key.ToString();
+				}
+			}
+
+			obstacles = loadedLevel.ObstacleManager.Obstacles;
+			foreach (var obstacle in loadedLevel.ObstacleManager.Obstacles)
+			{
+				var cell = gridCells[obstacle.Coordinates.x, obstacle.Coordinates.y];
+				cell.Obstacle = obstacle;
+				cell.Button.style.backgroundColor = cell.Color = Color.black;
+				cell.Button.text = obstacle.name;
+			}
+
+			elevators = loadedLevel.ElevatorManager.Elevators.Select(x => x.ElevatorType).ToList();
+			listView_Elevator.itemsSource = elevators;
+			listView_Elevator.Rebuild();
+			listView_Elevator.RefreshItems();
+		}
+
+		private int ParseLevelNo(string levelName)
+		{
+			return int.TryParse(levelName.Substring(levelName.Length - 3, 3), out var levelNo) ? levelNo : 0;
 		}
 
 		#endregion

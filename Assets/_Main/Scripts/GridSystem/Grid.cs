@@ -1,12 +1,13 @@
 using Fiber.Managers;
 using Fiber.Utilities;
-using GamePlay.Obstacles;
 using LevelEditor;
 using Managers;
 using TriInspector;
-using UnityEditor;
 using UnityEngine;
 using Utilities;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace GridSystem
 {
@@ -38,10 +39,10 @@ namespace GridSystem
 		#region Setup
 
 #if UNITY_EDITOR
-		public void Setup(CellInfo[,] cellInfo)
+		public void Setup(CellInfo[,] cellInfos)
 		{
-			var width = cellInfo.GetLength(0);
-			var height = cellInfo.GetLength(1);
+			var width = cellInfos.GetLength(0);
+			var height = cellInfos.GetLength(1);
 			gridCells = new GridCellMatrix(width, height);
 
 			var xOffset = (nodeSize.x * width + xSpacing * (width - 1)) / 2f - nodeSize.x / 2f;
@@ -50,21 +51,22 @@ namespace GridSystem
 			{
 				for (int x = 0; x < width; x++)
 				{
-					var cell = cellInfo[x, y];
-					var node = (GridCell)PrefabUtility.InstantiatePrefab(cellPrefab, transform);
-					node.Setup(x, y, nodeSize);
-					node.gameObject.name = x + " - " + y;
-					node.transform.localPosition = new Vector3(x * (nodeSize.x + xSpacing) - xOffset, 0, -y * (nodeSize.y + ySpacing) + yOffset);
-					gridCells[x, y] = node;
+					var cellInfo = cellInfos[x, y];
+					var cell = (GridCell)PrefabUtility.InstantiatePrefab(cellPrefab, transform);
+					cell.Setup(x, y, nodeSize);
+					cell.gameObject.name = x + " - " + y;
+					var pos =  new Vector3(x * (nodeSize.x + xSpacing) - xOffset, 0, -y * (nodeSize.y + ySpacing) + yOffset);
+					cell.transform.localPosition = pos;
+					gridCells[x, y] = cell;
 
-					if (cell.PersonType != PersonType.None)
+					if (cellInfo.PersonType != PersonType.None)
 					{
-						PeopleManager.Instance.SpawnPerson(cell.PersonType, x, y);
+						PeopleManager.Instance.SpawnPerson(cellInfo.PersonType, cellInfo.GroupNo, x, y,pos);
 					}
 
-					if (cell.Obstacle is not null)
+					if (cellInfo.Obstacle is not null)
 					{
-						var obstacle = (BaseObstacle)PrefabUtility.InstantiatePrefab(cell.Obstacle, transform);
+						ObstacleManager.Instance.SpawnObstacle(cellInfo.Obstacle);
 					}
 				}
 			}

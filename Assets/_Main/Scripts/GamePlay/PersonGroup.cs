@@ -10,5 +10,11 @@ namespace GamePlay
 		[SerializeField, ReadOnly] private PersonType type;
 		[SerializeField, ReadOnly] private List<Person> people = new List<Person>();
 		public List<Person> People => people;
+
+		public void AddPerson(Person person)
+		{
+			person.transform.SetParent(transform);
+			people.Add(person);
+		}
 	}
 }

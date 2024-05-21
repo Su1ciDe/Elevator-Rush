@@ -3,13 +3,13 @@ using Interfaces;
 using TriInspector;
 using UnityEngine;
 using Utilities;
+using Grid = GridSystem.Grid;
 
 namespace GamePlay
 {
 	public class Person : MonoBehaviour, INode
 	{
 		[field: SerializeField, ReadOnly] public Vector2Int Coordinates { get; set; }
-
 		[field: SerializeField, ReadOnly] public PersonType PersonType { get; private set; }
 
 		[Space]
@@ -17,10 +17,12 @@ namespace GamePlay
 
 		private const float HIGHLIGHT_DURATION = .25F;
 
-		public void Setup(PersonType type, Material material, Vector3 position)
+		public void Setup(PersonType type, Material material, Vector2Int coordinates, Vector3 position)
 		{
 			PersonType = type;
 			meshRenderer.material = material;
+			Coordinates = coordinates;
+			transform.position = position;
 		}
 
 		public void CheckIfCanMove()
