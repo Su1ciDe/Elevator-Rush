@@ -121,11 +121,12 @@ namespace LevelEditor.Editor
 			Elevators_VE = rootVisualElement.Q<VisualElement>(nameof(Elevators_VE));
 			listView_Elevator = new ListView(elevators)
 			{
-				virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight,
-				showFoldoutHeader = true,
 				headerTitle = "Elevators",
-				showAddRemoveFooter = true,
+				showFoldoutHeader = true,
+				virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight,
+				reorderable = true,
 				reorderMode = ListViewReorderMode.Animated,
+				showAddRemoveFooter = true,
 				makeItem = () => new EnumField(PersonType.None),
 				bindItem = (element, i) =>
 				{

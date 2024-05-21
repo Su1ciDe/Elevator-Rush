@@ -103,6 +103,12 @@ namespace Fiber.Utilities.Extensions
 
 		#region List
 
+		public static void AddIfNotContains<T>(this IList<T> list, T item)
+		{
+			if (!list.Contains(item))
+				list.Add(item);
+		}
+		
 		/// <summary>
 		/// Picks a random item from the list.
 		/// </summary>

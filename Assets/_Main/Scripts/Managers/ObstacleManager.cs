@@ -12,9 +12,10 @@ namespace Managers
 		[field: SerializeField, ReadOnly] public List<BaseObstacle> Obstacles { get; private set; } = new List<BaseObstacle>();
 
 #if UNITY_EDITOR
-		public void SpawnObstacle(BaseObstacle obstaclePrefab)
+		public BaseObstacle SpawnObstacle(BaseObstacle obstaclePrefab)
 		{
 			var obstacle = (BaseObstacle)PrefabUtility.InstantiatePrefab(obstaclePrefab, transform);
+			return obstacle;
 		}
 #endif
 	}

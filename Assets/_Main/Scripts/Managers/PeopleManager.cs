@@ -21,7 +21,7 @@ namespace Managers
 		public SerializedDictionary<int, PersonGroup> Groups => groups;
 
 #if UNITY_EDITOR
-		public void SpawnPerson(PersonType personType, int groupNo, int x, int y, Vector3 position)
+		public Person SpawnPerson(PersonType personType, int groupNo, int x, int y, Vector3 position)
 		{
 			var person = (Person)PrefabUtility.InstantiatePrefab(personPrefab);
 			person.Setup(personType, personDataSO.PersonData[personType], new Vector2Int(x, y), position);
@@ -33,6 +33,7 @@ namespace Managers
 			}
 
 			group.AddPerson(person);
+			return person;
 		}
 #endif
 	}
