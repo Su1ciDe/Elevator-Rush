@@ -13,7 +13,7 @@
                 <ui:Vector2IntField label="Grid Size" x="1" y="1" name="v2Field_Size" style="flex-grow: 1; flex-direction: row; flex-wrap: nowrap;" />
                 <ui:Button text="Setup" display-tooltip-when-elided="true" name="btn_SetupGrid" style="width: 100px;" />
             </ui:VisualElement>
-            <ui:VisualElement name="GridOptions" style="flex-grow: 0; flex-direction: row; margin-bottom: 10px;">
+            <ui:VisualElement name="GridOptions" focusable="true" style="flex-grow: 0; flex-direction: row; margin-bottom: 10px;">
                 <ui:RadioButtonGroup value="-1" choices="People,Obstacle" name="radio_PeopleObstacle" style="flex-shrink: 0; justify-content: space-around; align-items: center; align-self: stretch;" />
                 <ui:VisualElement style="flex-grow: 1;">
                     <ui:VisualElement style="flex-grow: 1; flex-direction: row;">
@@ -22,6 +22,10 @@
                     </ui:VisualElement>
                     <ui:DropdownField name="drop_Obstacle" />
                 </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="VisualElement" style="flex-grow: 0; flex-direction: row;">
+                <ui:Label tabindex="-1" text="Direction: " parse-escape-sequences="true" display-tooltip-when-elided="true" />
+                <ui:Label tabindex="-1" parse-escape-sequences="true" display-tooltip-when-elided="true" name="lbl_Direction" text="Up" style="-unity-font-style: bold; font-size: 20px;" />
             </ui:VisualElement>
             <ui:VisualElement name="Grid_VE" style="flex-grow: 1;" />
         </ui:VisualElement>

@@ -13,7 +13,7 @@ GameObject:
   m_Layer: 0
   m_Name: ElevatorManager
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 419385456094870383, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -44,4 +44,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 119a6562e3a4473896f5399ac747c270, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  elevatorPrefab: {fileID: 4229969746976849603, guid: c1c43bf3c656242e987b7a29e85308a4, type: 3}
+  <Elevators>k__BackingField: []
+  elevatorPrefabs:
+    _serializedList:
+    - Key: 10
+      Value: {fileID: 654431863473480157, guid: 98c8d7e58dc6c457e90db0295eeee0be, type: 3}
+    - Key: 15
+      Value: {fileID: 1589863716524812400, guid: 6fb759cd0b47e4bd28b6b7898c5bf6e7, type: 3}
+  personDataSO: {fileID: 11400000, guid: 3baa2da65b5c14f119c4caad8ea0ea0b, type: 2}

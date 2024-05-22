@@ -15,7 +15,9 @@ namespace GridSystem
 		[field: SerializeField, ReadOnly] public BaseObstacle CurrentObstacle { get; set; }
 		[field: SerializeField, ReadOnly] public Person CurrentPerson { get; set; }
 		
+		
 		// Pathfinding
+		public bool IsWalkable => !CurrentObstacle && !CurrentPerson;
 		public int GCost { get; set; }
 		public int HCost { get; set; }
 		public int FCost { get; set; }

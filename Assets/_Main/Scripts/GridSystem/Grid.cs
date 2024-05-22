@@ -44,6 +44,7 @@ namespace GridSystem
 		private List<GridCell> closedList;
 
 		private const int MOVE_COST = 10;
+		private const int MOVE_COST_DIAGONAL = 14;
 
 		public List<GridCell> FindPath(int startX, int startY, int endX, int endY)
 		{
@@ -59,6 +60,7 @@ namespace GridSystem
 				{
 					var cell = gridCells[x, y];
 					cell.GCost = int.MaxValue;
+					cell.HCost = 0;
 					cell.CalculateFCost();
 					cell.PreviousCell = null;
 				}
@@ -72,9 +74,7 @@ namespace GridSystem
 			{
 				var currentCell = GetLowestFCostNode(openList);
 				if (currentCell.Equals(endCell))
-				{
 					return CalculatePath(endCell);
-				}
 
 				openList.Remove(currentCell);
 				closedList.Add(currentCell);
@@ -83,7 +83,7 @@ namespace GridSystem
 				foreach (var neighbourCell in neighbourList)
 				{
 					if (closedList.Contains(neighbourCell)) continue;
-					if (!neighbourCell.CurrentObstacle)
+					if (!neighbourCell.IsWalkable)
 					{
 						closedList.Add(neighbourCell);
 						continue;
@@ -109,7 +109,7 @@ namespace GridSystem
 		{
 			var path = new List<GridCell> { endCell };
 			var currentCell = endCell;
-			while (currentCell.PreviousCell != null)
+			while (currentCell.PreviousCell)
 			{
 				path.Add(currentCell.PreviousCell);
 				currentCell = currentCell.PreviousCell;
@@ -122,8 +122,10 @@ namespace GridSystem
 
 		private int CalculateDistanceCost(GridCell a, GridCell b)
 		{
-			int distance = Mathf.Abs(a.X - b.X) + Mathf.Abs(a.Y - b.Y);
-			return MOVE_COST * distance;
+			int xDistance = Mathf.Abs(a.X - b.X);
+			int yDistance = Mathf.Abs(a.Y - b.Y);
+			int remaining = Mathf.Abs(xDistance - yDistance);
+			return MOVE_COST_DIAGONAL * Mathf.Min(xDistance, yDistance) + MOVE_COST * remaining;
 		}
 
 		private GridCell GetLowestFCostNode(List<GridCell> gridCellList)
@@ -138,25 +140,22 @@ namespace GridSystem
 			return lowestFCostCell;
 		}
 
-		private List<GridCell> GetNeighbours(GridCell currentCell)
+		public List<GridCell> GetNeighbours(GridCell currentCell)
 		{
 			var neighbourList = new List<GridCell>();
 
-			// Left 
-			if (currentCell.X - 1 >= 0)
-				neighbourList.Add(gridCells[currentCell.X - 1, currentCell.Y]);
-
+			// Up
+			if (currentCell.Y - 1 >= 0)
+				neighbourList.Add(gridCells[currentCell.X, currentCell.Y - 1]);
 			// Right
 			if (currentCell.X + 1 < GridCells.GetLength(0))
 				neighbourList.Add(gridCells[currentCell.X + 1, currentCell.Y]);
-
 			// Down
-			if (currentCell.Y - 1 >= 0)
-				neighbourList.Add(gridCells[currentCell.X, currentCell.Y - 1]);
-
-			// Up
-			if (currentCell.Y + 1 >= gridCells.GetLength(1))
+			if (currentCell.Y + 1 < gridCells.GetLength(1))
 				neighbourList.Add(gridCells[currentCell.X, currentCell.Y + 1]);
+			// Left 
+			if (currentCell.X - 1 >= 0)
+				neighbourList.Add(gridCells[currentCell.X - 1, currentCell.Y]);
 
 			return neighbourList;
 		}
@@ -188,17 +187,19 @@ namespace GridSystem
 
 					if (cellInfo.PersonType != PersonType.None)
 					{
-						var person = PeopleManager.Instance.SpawnPerson(cellInfo.PersonType, cellInfo.GroupNo, x, y, pos);
+						var person = PeopleManager.Instance.SpawnPerson(cellInfo.PersonType, cellInfo.Direction, cellInfo.GroupNo, x, y, pos);
 						cell.CurrentPerson = person;
 					}
 
 					if (cellInfo.Obstacle is not null)
 					{
-						var obstacle = ObstacleManager.Instance.SpawnObstacle(cellInfo.Obstacle);
+						var obstacle = ObstacleManager.Instance.SpawnObstacle(cellInfo.Obstacle, x, y, pos);
 						cell.CurrentObstacle = obstacle;
 					}
 				}
 			}
+
+			PeopleManager.Instance.SetupGroups();
 		}
 #endif
 
@@ -247,6 +248,19 @@ namespace GridSystem
 		}
 
 		#endregion
+
+		public GridCell TryToGetCell(int x, int y)
+		{
+			if (x >= 0 && x < GridCells.GetLength(0) && y >= 0 && y < GridCells.GetLength(1))
+				return gridCells[x, y];
+
+			return null;
+		}
+
+		public GridCell TryToGetCell(Vector2Int coordinates)
+		{
+			return TryToGetCell(coordinates.x, coordinates.y);
+		}
 
 		public Vector3 GetCellPosition(int x, int y)
 		{

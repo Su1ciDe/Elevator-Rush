@@ -1,6 +1,8 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using LevelEditor;
+using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace Fiber.Utilities.Extensions
@@ -303,6 +305,18 @@ namespace Fiber.Utilities.Extensions
 				if (flag.HasFlag((T)enums.GetValue(i)))
 					yield return i;
 			}
+		}
+
+		public static Vector2Int GetDirectionVector(this Direction direction)
+		{
+			return direction switch
+			{
+				Direction.Up => Vector2Int.up,
+				Direction.Right => Vector2Int.right,
+				Direction.Down => Vector2Int.down,
+				Direction.Left => Vector2Int.left,
+				_ => throw new ArgumentOutOfRangeException(nameof(direction), direction, null)
+			};
 		}
 
 		#endregion

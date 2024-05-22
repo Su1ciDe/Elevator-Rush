@@ -1,9 +1,12 @@
+using System.Collections;
 using System.Linq;
 using System.Collections.Generic;
 using Fiber.Utilities;
 using Fiber.LevelSystem;
+using GamePlay;
 using GamePlay.Obstacles;
 using ScriptableObjects;
+using Unity.EditorCoroutines.Editor;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEditor.SceneManagement;
@@ -30,6 +33,7 @@ namespace LevelEditor.Editor
 		private VisualElement Grid_VE;
 		private Vector2IntField v2Field_Size;
 		private Button btn_SetupGrid;
+		private Label lbl_Direction;
 
 		private RadioButtonGroup radio_PeopleObstacle;
 		private UnsignedIntegerField txt_GroupNo;
@@ -44,11 +48,14 @@ namespace LevelEditor.Editor
 
 		#endregion
 
-		private List<PersonType> elevators = new List<PersonType>();
+		private List<ElevatorData> elevators = new List<ElevatorData>();
 
 		private PersonDataSO personDataSO;
 		private List<BaseObstacle> obstacles;
 		private Level loadedLevel;
+
+		private Direction direction = Direction.Up;
+		private const string DIRECTION_LABEL_TEXT = "lbl_Direction";
 
 		#region Paths
 
@@ -116,6 +123,7 @@ namespace LevelEditor.Editor
 					drop_Obstacle.SetEnabled(true);
 				}
 			});
+			lbl_Direction = rootVisualElement.Q<Label>(nameof(lbl_Direction));
 
 			// Options
 			Elevators_VE = rootVisualElement.Q<VisualElement>(nameof(Elevators_VE));
@@ -127,11 +135,34 @@ namespace LevelEditor.Editor
 				reorderable = true,
 				reorderMode = ListViewReorderMode.Animated,
 				showAddRemoveFooter = true,
-				makeItem = () => new EnumField(PersonType.None),
-				bindItem = (element, i) =>
+				makeItem = () =>
 				{
-					((EnumField)element).value = elevators[i];
-					((EnumField)element).RegisterValueChangedCallback(value => elevators[i] = (PersonType)value.newValue);
+					var elevatorDataVisualElement = new ElevatorDataVisualElement();
+
+					var enumValue = elevatorDataVisualElement.Q<EnumField>("enum_Value");
+					enumValue.RegisterValueChangedCallback(evt =>
+					{
+						var i = (int)enumValue.userData;
+						elevators[i].Value = (ElevatorValueType)evt.newValue;
+					});
+
+					var enumColor = elevatorDataVisualElement.Q<EnumField>("enum_Color");
+					enumColor.RegisterValueChangedCallback(evt =>
+					{
+						var i = (int)enumColor.userData;
+						elevators[i].ElevatorType = (PersonType)evt.newValue;
+					});
+					return elevatorDataVisualElement;
+				},
+				bindItem = (e, i) =>
+				{
+					elevators[i] = new ElevatorData();
+
+					var enumColor = e.Q<EnumField>("enum_Color");
+					var enumValue = e.Q<EnumField>("enum_Value");
+					enumValue.userData = i;
+					enumColor.userData = i;
+					e.RegisterCallback<ChangeEvent<ElevatorData>>(value => elevators[i] = value.newValue);
 				},
 				itemsSource = elevators
 			};
@@ -173,6 +204,8 @@ namespace LevelEditor.Editor
 
 					int x1 = x;
 					int y1 = y;
+
+					button.RegisterCallback<PointerDownEvent>(e => Delete(e.clickCount, gridCells[x1, y1]), TrickleDown.TrickleDown);
 					button.RegisterCallback<MouseDownEvent>(e => OnCellClicked(e, gridCells[x1, y1]), TrickleDown.TrickleDown);
 
 					row.Add(button);
@@ -182,7 +215,7 @@ namespace LevelEditor.Editor
 
 		private void OnCellClicked(MouseDownEvent e, CellInfo cellInfo)
 		{
-			if (e.button.Equals(0))
+			if (e.button.Equals(0)) // Place
 			{
 				if (radio_PeopleObstacle.value.Equals(0))
 				{
@@ -198,6 +231,8 @@ namespace LevelEditor.Editor
 						cellInfo.PersonType = selectedType;
 						cellInfo.GroupNo = (int)txt_GroupNo.value;
 						cellInfo.Button.text = cellInfo.GroupNo.ToString();
+
+						SetLabelDirection(direction, cellInfo.Button);
 					}
 				}
 				else if (radio_PeopleObstacle.value.Equals(1))
@@ -207,13 +242,53 @@ namespace LevelEditor.Editor
 					cellInfo.Obstacle = obstacles[drop_Obstacle.index];
 				}
 			}
-			else if (e.button.Equals(1))
+			else if (e.button.Equals(1)) // Rotate
 			{
+				direction = direction switch
+				{
+					Direction.Up => Direction.Left,
+					Direction.Left => Direction.Down,
+					Direction.Down => Direction.Right,
+					Direction.Right => Direction.Up,
+					_ => direction
+				};
+
+				lbl_Direction.text = direction.ToString();
+			}
+		}
+
+		private void Delete(int clickCount, CellInfo cellInfo)
+		{
+			if (clickCount <= 1) return;
+			EditorCoroutineUtility.StartCoroutine(DeleteCoroutine(), this);
+			return;
+
+			IEnumerator DeleteCoroutine()
+			{
+				yield return null;
+
 				cellInfo.Button.style.backgroundColor = Color.white;
 				cellInfo.Obstacle = null;
 				cellInfo.PersonType = PersonType.None;
 				cellInfo.Button.text = "";
+
+				var lblDirection = cellInfo.Button.Q<Label>(DIRECTION_LABEL_TEXT);
+				if (lblDirection is not null)
+					lblDirection.text = "";
 			}
+		}
+
+		private void SetLabelDirection(Direction dir, VisualElement ve)
+		{
+			var lblDirection = ve.Q<Label>(DIRECTION_LABEL_TEXT);
+			if (lblDirection is null)
+			{
+				lblDirection = EditorUtilities.CreateVisualElement<Label>();
+				lblDirection.name = DIRECTION_LABEL_TEXT;
+			}
+
+			lblDirection.text = dir.ToString();
+			ve.Add(lblDirection);
 		}
 
 		private PersonType selectedType = PersonType.None;
@@ -303,7 +378,7 @@ namespace LevelEditor.Editor
 				cell.Button.text = obstacle.name;
 			}
 
-			elevators = loadedLevel.ElevatorManager.Elevators.Select(x => x.ElevatorType).ToList();
+			elevators = loadedLevel.ElevatorManager.Elevators.Select(x => x.ElevatorData).ToList();
 			listView_Elevator.itemsSource = elevators;
 			listView_Elevator.Rebuild();
 			listView_Elevator.RefreshItems();

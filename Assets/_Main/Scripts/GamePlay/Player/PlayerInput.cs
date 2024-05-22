@@ -52,7 +52,7 @@ namespace GamePlay.Player
 			if (!person) return;
 
 			selectedPerson = person;
-			selectedPerson.Highlight();
+			selectedPerson.OnMouseDown();
 		}
 
 		private void OnDrag()
@@ -62,7 +62,7 @@ namespace GamePlay.Player
 			{
 				if (selectedPerson)
 				{
-					selectedPerson.HideHighlight();
+					selectedPerson.OnMouseUp();
 					selectedPerson = null;
 				}
 				return;
@@ -70,16 +70,16 @@ namespace GamePlay.Player
 
 			if (!selectedPerson && person.Equals(selectedPerson)) return;
 
-			selectedPerson?.HideHighlight();
+			selectedPerson?.OnMouseUp();
 			selectedPerson = person;
-			selectedPerson.Highlight();
+			selectedPerson.OnMouseDown();
 		}
 
 		private void OnUp()
 		{
 			if (!selectedPerson) return;
 
-			selectedPerson.CheckIfCanMove();
+			selectedPerson.OnTapped();
 		}
 
 		private Person GetPerson()

@@ -1,17 +1,23 @@
+using ScriptableObjects;
 using TriInspector;
 using UnityEngine;
-using Utilities;
 
 namespace GamePlay
 {
 	public class Elevator : MonoBehaviour
 	{
-		[field: SerializeField, ReadOnly] public PersonType ElevatorType { get; private set; }
-		[field: SerializeField, ReadOnly] public int Value { get; private set; }
-		
-		public void Setup(PersonType elevatorType)
+		[SerializeField, ReadOnly] public ElevatorData ElevatorData;
+
+		[SerializeField] private MeshRenderer[] meshRenderers;
+ 
+		public void Setup(ElevatorData elevatorData,PersonDataSO personDataSO)
 		{
-			ElevatorType = elevatorType;
+			ElevatorData = elevatorData;
+
+			foreach (var meshRenderer in meshRenderers)
+			{
+				meshRenderer.material = personDataSO.PersonData[ElevatorData.ElevatorType];
+			}
 		}
 	}
 }

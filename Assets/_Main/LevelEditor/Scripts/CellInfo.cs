@@ -13,6 +13,8 @@ namespace LevelEditor
 
 		public PersonType PersonType = PersonType.None;
 		public int GroupNo;
+		public Direction Direction;
+		
 		public BaseObstacle Obstacle;
 	}
 }

@@ -8,8 +8,10 @@ namespace GamePlay.Obstacles
 	{
 		[field: SerializeField, ReadOnly] public Vector2Int Coordinates { get; set; }
 
-		public void Setup(int x, int y)
+		public void Setup(int x, int y, Vector3 position)
 		{
+			Coordinates = new Vector2Int(x, y);
+			transform.position = position;
 		}
 	}
 }
