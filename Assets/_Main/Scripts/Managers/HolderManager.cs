@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using Fiber.Managers;
 using GamePlay;
 using TriInspector;
@@ -63,13 +64,14 @@ namespace Managers
 				if (!holders[i].CurrentPersonGroup) continue;
 
 				var elevator = LevelManager.Instance.CurrentLevel.ElevatorManager.CurrentElevator;
+				float duration = 0;
 				for (var j = 0; j < holders[i].CurrentPersonGroup.People.Count; j++)
 				{
 					var person = holders[i].CurrentPersonGroup.People[j];
-					person.MoveToSlot(null, elevator);
+					duration = person.MoveToSlot(null, elevator).Duration();
 				}
 
-				PeopleManager.Instance.WaitForPeopleMovement(holders[i].CurrentPersonGroup.People, 1);
+				PeopleManager.Instance.WaitForPeopleMovement(holders[i].CurrentPersonGroup.People, duration + 1f);
 
 				yield return new WaitForSeconds(0.5f);
 
