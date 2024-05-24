@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using Fiber.Managers;
 using GamePlay;
@@ -52,6 +53,11 @@ namespace Managers
 
 		public void CheckPeople()
 		{
+			StartCoroutine(CheckPeopleCoroutine());
+		}
+
+		private IEnumerator CheckPeopleCoroutine()
+		{
 			for (var i = 0; i < holders.Count; i++)
 			{
 				if (!holders[i].CurrentPersonGroup) continue;
@@ -63,10 +69,14 @@ namespace Managers
 					person.MoveToSlot(null, elevator);
 				}
 
+				PeopleManager.Instance.WaitForPeopleMovement(holders[i].CurrentPersonGroup.People, 1);
+
+				yield return new WaitForSeconds(0.5f);
+
 				holders[i].CurrentPersonGroup = null;
 			}
 
-			// RearrangePeople();
+			RearrangePeople();
 		}
 
 		public void RearrangePeople()
