@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Fiber.Utilities;
 using Fiber.LevelSystem;
@@ -93,6 +94,8 @@ namespace Fiber.Managers
 			CurrentLevel = Instantiate(LevelNo <= TutorialLevels.Length ? TutorialLevels[index - 1] : Levels[index - 1]);
 			CurrentLevel.Load();
 			OnLevelLoad?.Invoke();
+			
+			StartLevel();
 		}
 
 		public void StartLevel()
@@ -141,7 +144,23 @@ namespace Fiber.Managers
 		private void AddLevelAssetsToList()
 		{
 			const string levelPath = "Assets/_Main/Prefabs/Levels";
-			Levels = EditorUtilities.LoadAllAssetsFromPath<Level>(levelPath).ToArray();
+			var levels = EditorUtilities.LoadAllAssetsFromPath<Level>(levelPath);
+			var normalLevels = new List<Level>();
+			var tutorialLevels = new List<Level>();
+
+			foreach (var level in levels)
+			{
+				if (level.name.Contains("TEST")) continue;
+				if (level.name.Contains("_Base")) continue;
+
+				if (level.name.Contains("Tutorial"))
+					tutorialLevels.Add(level);
+				else
+					normalLevels.Add(level);
+			}
+
+			Levels = normalLevels.ToArray();
+			TutorialLevels = tutorialLevels.ToArray();
 		}
 #endif
 	}

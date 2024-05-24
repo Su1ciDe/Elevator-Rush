@@ -299,6 +299,6 @@ MonoBehaviour:
   <Coordinates>k__BackingField: {x: 0, y: 0}
   <PersonType>k__BackingField: -1
   <Direction>k__BackingField: 0
-  moveSpeed: 10
+  moveSpeed: 12
   meshRenderer: {fileID: 8452938511761164189}
   col: {fileID: 1669794503877246547}

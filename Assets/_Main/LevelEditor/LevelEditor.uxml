@@ -32,6 +32,9 @@
         <ui:VisualElement name="Options" class="bordered-box">
             <ui:Label text="Options" display-tooltip-when-elided="true" class="header" />
             <ui:VisualElement name="Elevators_VE" style="flex-grow: 1;" />
+            <ui:VisualElement style="flex-grow: 1;">
+                <ui:SliderInt label="Holder Count" high-value="10" show-input-field="true" low-value="1" name="slider_HolderCount" inverted="false" />
+            </ui:VisualElement>
             <ui:VisualElement name="Save_VE" style="flex-direction: row;">
                 <ui:UnsignedIntegerField label="Level No" value="1" name="txt_LevelNo" style="flex-grow: 1;" />
                 <ui:Button text="Save" display-tooltip-when-elided="true" name="btn_Save" style="width: 100px;" />

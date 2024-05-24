@@ -1,6 +1,8 @@
 using System.Linq;
 using System.Collections.Generic;
+using Fiber.Managers;
 using Fiber.Utilities.Extensions;
+using Model;
 using TriInspector;
 using UnityEngine;
 using Utilities;
@@ -42,8 +44,15 @@ namespace GamePlay
 			var path = leader.CheckPath();
 			var pathPos = path?.Select(x => x.transform.position).ToList();
 
-			//TODO: Check whether they go to goal or holder
-			//
+			SlotHolder slotHolder = null;
+			if (LevelManager.Instance.CurrentLevel.ElevatorManager.CurrentElevator && type == LevelManager.Instance.CurrentLevel.ElevatorManager.CurrentElevator.ElevatorData.ElevatorType)
+			{
+				slotHolder = LevelManager.Instance.CurrentLevel.ElevatorManager.CurrentElevator;
+			}
+			else
+			{
+				slotHolder = LevelManager.Instance.CurrentLevel.HolderManager.GetFirstEmptyHolder();
+			}
 
 			for (var i = 0; i < people.Count; i++)
 			{
@@ -55,7 +64,7 @@ namespace GamePlay
 					if (i > 0)
 						pathPos.Insert(0, people[i - 1].CurrentCell.transform.position);
 
-					people[i].MoveToSlot(pathPos.ToArray(), null /**/);
+					people[i].MoveToSlot(pathPos.ToArray(), slotHolder);
 				}
 			}
 		}
@@ -65,6 +74,7 @@ namespace GamePlay
 #if UNITY_EDITOR
 		public void AddPerson(Person person)
 		{
+			type = person.PersonType;
 			person.transform.SetParent(transform);
 			people.Add(person);
 		}

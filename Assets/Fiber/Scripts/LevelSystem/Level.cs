@@ -18,6 +18,9 @@ namespace Fiber.LevelSystem
 		[SerializeField] private ObstacleManager obstacleManager;
 		public ObstacleManager ObstacleManager => obstacleManager;
 
+		[SerializeField] private HolderManager holderManager;
+		public HolderManager HolderManager => holderManager;
+
 		public virtual void Load()
 		{
 			gameObject.SetActive(true);

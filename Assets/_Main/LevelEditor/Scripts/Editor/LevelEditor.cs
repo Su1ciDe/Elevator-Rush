@@ -43,6 +43,7 @@ namespace LevelEditor.Editor
 		// Options
 		private VisualElement Elevators_VE;
 		private ListView listView_Elevator;
+		private SliderInt slider_HolderCount;
 		private UnsignedIntegerField txt_LevelNo;
 		private Button btn_Save;
 
@@ -168,6 +169,8 @@ namespace LevelEditor.Editor
 			};
 			Elevators_VE.Add(listView_Elevator);
 
+			slider_HolderCount = rootVisualElement.Q<SliderInt>(nameof(slider_HolderCount));
+			slider_HolderCount.value = 5;
 			txt_LevelNo = rootVisualElement.Q<UnsignedIntegerField>(nameof(txt_LevelNo));
 			btn_Save = rootVisualElement.Q<Button>(nameof(btn_Save));
 			btn_Save.clickable.clicked += Save;
@@ -231,6 +234,7 @@ namespace LevelEditor.Editor
 						cellInfo.PersonType = selectedType;
 						cellInfo.GroupNo = (int)txt_GroupNo.value;
 						cellInfo.Button.text = cellInfo.GroupNo.ToString();
+						cellInfo.Direction = direction;
 
 						SetLabelDirection(direction, cellInfo.Button);
 					}
@@ -340,6 +344,7 @@ namespace LevelEditor.Editor
 		{
 			level.Grid.Setup(gridCells);
 			level.ElevatorManager.Setup(elevators);
+			level.HolderManager.Setup(slider_HolderCount.value);
 		}
 
 		#endregion

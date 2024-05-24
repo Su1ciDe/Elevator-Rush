@@ -4,6 +4,7 @@ using Fiber.Utilities.Extensions;
 using GridSystem;
 using Interfaces;
 using LevelEditor;
+using Model;
 using TriInspector;
 using UnityEngine;
 using UnityEngine.Events;
@@ -34,23 +35,6 @@ namespace GamePlay
 		public event UnityAction OnDown;
 		public event UnityAction OnUp;
 
-#if UNITY_EDITOR
-		public void Setup(PersonType type, Material material, Direction direction, Vector2Int coordinates, Vector3 position)
-		{
-			Direction = direction;
-			PersonType = type;
-			meshRenderer.material = material;
-			Coordinates = coordinates;
-			transform.position = position;
-			transform.eulerAngles = new Vector3(0, (int)direction * 90);
-		}
-#endif
-
-		public void OnTapped()
-		{
-			OnTap?.Invoke();
-		}
-
 		public List<GridCell> CheckPath()
 		{
 			var xList = new List<int> { Coordinates.x };
@@ -66,24 +50,36 @@ namespace GamePlay
 					xList.AddIfNotContains(right);
 			}
 
+			List<GridCell> shortestPath = null;
+			int shortestPathCount = int.MaxValue;
 			for (int i = 0; i < xList.Count; i++)
 			{
 				var path = Grid.Instance.FindPath(Coordinates.x, Coordinates.y, xList[i], 0);
-				if (path is not null && path.Count > 0)
-					return path;
+				if (path is not null && path.Count > 0 && path.Count < shortestPathCount)
+				{
+					shortestPath = path;
+					shortestPathCount = path.Count;
+				}
 			}
 
-			return null;
+			return shortestPath;
 		}
 
-		public void MoveToSlot(Vector3[] path, PersonSlot slot)
+		public void MoveToSlot(Vector3[] path, SlotHolder slotHolder)
 		{
 			RemoveFromCell(CurrentCell);
 
 			var seq = DOTween.Sequence();
-			seq.Append(transform.DOPath(path, moveSpeed).SetSpeedBased(true).SetEase(Ease.Linear));
-
+			var duration = CalculateMovementDuration(transform.position, path[^1]);
+			seq.Append(transform.DOPath(path, duration).SetEase(Ease.Linear));
+			slotHolder.MoveToSlot(this, seq);
 			//TODO: Move to slot
+		}
+
+		public Tween MoveTo(Vector3 position)
+		{
+			var duration = CalculateMovementDuration(transform.position, position);
+			return transform.DOMove(position, duration).SetEase(Ease.Linear);
 		}
 
 		private void RemoveFromCell(GridCell currentCell)
@@ -95,6 +91,11 @@ namespace GamePlay
 		public void OnMouseDown()
 		{
 			OnDown?.Invoke();
+		}
+
+		public void OnTapped()
+		{
+			OnTap?.Invoke();
 		}
 
 		public void OnMouseUp()
@@ -115,5 +116,22 @@ namespace GamePlay
 			transform.DOKill();
 			transform.DOScale(1, HIGHLIGHT_DURATION).SetEase(Ease.OutSine);
 		}
+
+		private float CalculateMovementDuration(Vector3 a, Vector3 b)
+		{
+			return Vector3.Distance(a, b) / moveSpeed;
+		}
+
+#if UNITY_EDITOR
+		public void Setup(PersonType type, Material material, Direction direction, Vector2Int coordinates, Vector3 position)
+		{
+			Direction = direction;
+			PersonType = type;
+			meshRenderer.material = material;
+			Coordinates = coordinates;
+			transform.position = position;
+			transform.eulerAngles = new Vector3(0, (int)direction * 90);
+		}
+#endif
 	}
 }
