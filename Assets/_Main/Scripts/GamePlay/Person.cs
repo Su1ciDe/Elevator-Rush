@@ -20,6 +20,8 @@ namespace GamePlay
 		[field: SerializeField, ReadOnly] public PersonType PersonType { get; private set; }
 		[field: SerializeField, ReadOnly] public Direction Direction { get; private set; }
 
+		public bool IsMoving { get; set; }
+
 		public GridCell CurrentCell => Grid.Instance.GridCells[Coordinates.x, Coordinates.y];
 
 		[Space]
@@ -65,21 +67,30 @@ namespace GamePlay
 			return shortestPath;
 		}
 
-		public void MoveToSlot(Vector3[] path, SlotHolder slotHolder)
+		public Tween MoveToSlot(Vector3[] path, SlotHolder slotHolder)
 		{
+			IsMoving = true;
+
 			RemoveFromCell(CurrentCell);
 
 			var seq = DOTween.Sequence();
-			var duration = CalculateMovementDuration(transform.position, path[^1]);
-			seq.Append(transform.DOPath(path, duration).SetEase(Ease.Linear));
+			if (path is not null)
+			{
+				var duration = CalculateMovementDuration(transform.position, path[^1]);
+				seq.Append(transform.DOPath(path, duration).SetEase(Ease.Linear));
+			}
+
 			slotHolder.MoveToSlot(this, seq);
-			//TODO: Move to slot
+
+			seq.AppendCallback(() => IsMoving = false);
+			return seq;
 		}
 
 		public Tween MoveTo(Vector3 position)
 		{
+			IsMoving = true;
 			var duration = CalculateMovementDuration(transform.position, position);
-			return transform.DOMove(position, duration).SetEase(Ease.Linear);
+			return transform.DOMove(position, duration).SetEase(Ease.Linear).OnComplete(() => IsMoving = false);
 		}
 
 		private void RemoveFromCell(GridCell currentCell)

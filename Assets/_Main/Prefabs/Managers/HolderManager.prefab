@@ -45,4 +45,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   amount: 0
+  spacing: 0.5
   holderPrefab: {fileID: 7850897050448381355, guid: bbff6304c0c8f4030a60ccdff0d5f50f, type: 3}

@@ -9,6 +9,7 @@ using DG.Tweening;
 using Fiber.Managers;
 using Lofelt.NiceVibrations;
 using AYellowpaper.SerializedCollections;
+using UnityEngine.Events;
 
 namespace Managers
 {
@@ -31,6 +32,8 @@ namespace Managers
 		[SerializeField] private Transform moveOutPoint;
 
 		private const float MOVE_SPEED = 15f;
+
+		public static event UnityAction<Elevator> OnNewElevator;
 
 		private void OnEnable()
 		{
@@ -57,7 +60,12 @@ namespace Managers
 		{
 			CurrentElevator = null;
 			var currentTempElevator = Elevators[CurrentElevatorStageIndex];
-			currentTempElevator.transform.DOMove(floorPoint.position, MOVE_SPEED).SetSpeedBased(true).SetEase(Ease.OutBack).OnComplete(() => { CurrentElevator = currentTempElevator; });
+			currentTempElevator.transform.DOMove(floorPoint.position, MOVE_SPEED).SetSpeedBased(true).SetEase(Ease.OutBack).OnComplete(() =>
+			{
+				CurrentElevator = currentTempElevator;
+				OnNewElevator?.Invoke(CurrentElevator);
+			});
+
 			if (CurrentElevatorStageIndex + 1 < Elevators.Count)
 
 			{
@@ -78,7 +86,10 @@ namespace Managers
 			CurrentElevatorStageIndex++;
 			if (CurrentElevatorStageIndex < Elevators.Count)
 			{
-				tempElevator.transform.DOMove(moveOutPoint.position, MOVE_SPEED).SetSpeedBased(true).SetEase(Ease.InBack).OnComplete(() => Destroy(tempElevator.gameObject));
+				//TODO: elevator door
+				//
+
+				tempElevator.transform.DOMove(moveOutPoint.position, MOVE_SPEED).SetSpeedBased(true).SetEase(Ease.OutQuint).OnComplete(() => Destroy(tempElevator.gameObject));
 				LoadNewElevator();
 			}
 			else
@@ -89,6 +100,7 @@ namespace Managers
 
 		private void OnElevatorCompleted(Elevator elevator)
 		{
+			CompleteStage();
 		}
 
 #if UNITY_EDITOR

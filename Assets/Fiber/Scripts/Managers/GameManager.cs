@@ -10,6 +10,7 @@ namespace Fiber.Managers
 		{
 			base.Awake();
 			Application.targetFrameRate = 60;
+			Input.multiTouchEnabled = false;
 			Debug.unityLogger.logEnabled = Debug.isDebugBuild;
 		}
 	}

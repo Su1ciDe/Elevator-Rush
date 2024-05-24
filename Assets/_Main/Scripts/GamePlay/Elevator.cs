@@ -36,22 +36,15 @@ namespace GamePlay
 
 			base.MoveToSlot(person, sequence);
 
-			sequence.AppendCallback(() =>
-			{
-				person.transform.SetParent(transform);
-				CheckIfCompleted();
-			});
-
+			sequence.AppendCallback(() => person.transform.SetParent(transform));
 			sequence.Append(person.transform.DORotate(180 * Vector3.up, .15f).SetEase(Ease.InOutSine));
 		}
 
-		private void CheckIfCompleted()
+		public void CheckIfCompleted()
 		{
-			Debug.Log("check");
 			var totalCount = GetPeopleCount();
-			if (totalCount >= (int)ElevatorData.Value)
+			if (totalCount.Equals((int)ElevatorData.Value))
 			{
-				Debug.Log("Completed");
 				OnComplete?.Invoke(this);
 			}
 		}

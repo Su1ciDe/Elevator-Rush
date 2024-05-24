@@ -1,7 +1,10 @@
+using System.Collections;
 using System.Linq;
 using System.Collections.Generic;
+using DG.Tweening;
 using Fiber.Managers;
 using Fiber.Utilities.Extensions;
+using Managers;
 using Model;
 using TriInspector;
 using UnityEngine;
@@ -52,19 +55,30 @@ namespace GamePlay
 			else
 			{
 				slotHolder = LevelManager.Instance.CurrentLevel.HolderManager.GetFirstEmptyHolder();
+				((Holder)slotHolder).CurrentPersonGroup = this;
 			}
 
-			for (var i = 0; i < people.Count; i++)
+			if (path is not null && path.Count > 0)
 			{
-				people[i].HideHighlight();
-
-				if (path is not null && path.Count > 0)
+				float duration = 0;
+				for (var i = 0; i < people.Count; i++)
 				{
+					people[i].HideHighlight();
+
 					// Adds the position of the front person
 					if (i > 0)
 						pathPos.Insert(0, people[i - 1].CurrentCell.transform.position);
 
-					people[i].MoveToSlot(pathPos.ToArray(), slotHolder);
+					duration = people[i].MoveToSlot(pathPos.ToArray(), slotHolder).Duration();
+				}
+
+				PeopleManager.Instance.WaitForPeopleMovement(people, duration + 0.5f);
+			}
+			else
+			{
+				for (var i = 0; i < people.Count; i++)
+				{
+					people[i].HideHighlight();
 				}
 			}
 		}
