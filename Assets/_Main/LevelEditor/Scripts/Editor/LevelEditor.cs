@@ -128,45 +128,7 @@ namespace LevelEditor.Editor
 
 			// Options
 			Elevators_VE = rootVisualElement.Q<VisualElement>(nameof(Elevators_VE));
-			listView_Elevator = new ListView(elevators)
-			{
-				headerTitle = "Elevators",
-				showFoldoutHeader = true,
-				virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight,
-				reorderable = true,
-				reorderMode = ListViewReorderMode.Animated,
-				showAddRemoveFooter = true,
-				makeItem = () =>
-				{
-					var elevatorDataVisualElement = new ElevatorDataVisualElement();
-
-					var enumValue = elevatorDataVisualElement.Q<EnumField>("enum_Value");
-					enumValue.RegisterValueChangedCallback(evt =>
-					{
-						var i = (int)enumValue.userData;
-						elevators[i].Value = (ElevatorValueType)evt.newValue;
-					});
-
-					var enumColor = elevatorDataVisualElement.Q<EnumField>("enum_Color");
-					enumColor.RegisterValueChangedCallback(evt =>
-					{
-						var i = (int)enumColor.userData;
-						elevators[i].ElevatorType = (PersonType)evt.newValue;
-					});
-					return elevatorDataVisualElement;
-				},
-				bindItem = (e, i) =>
-				{
-					elevators[i] = new ElevatorData();
-
-					var enumColor = e.Q<EnumField>("enum_Color");
-					var enumValue = e.Q<EnumField>("enum_Value");
-					enumValue.userData = i;
-					enumColor.userData = i;
-					e.RegisterCallback<ChangeEvent<ElevatorData>>(value => elevators[i] = value.newValue);
-				},
-				itemsSource = elevators
-			};
+			SetupElevators();
 			Elevators_VE.Add(listView_Elevator);
 
 			slider_HolderCount = rootVisualElement.Q<SliderInt>(nameof(slider_HolderCount));
@@ -181,6 +143,57 @@ namespace LevelEditor.Editor
 			var obstaclePrefabs = EditorUtilities.LoadAllAssetsFromPath<BaseObstacle>(OBSTACLES_PATH);
 			obstacles = obstaclePrefabs.Where(x => !x.name.Contains("_BaseObstacle")).ToList();
 			return obstacles.Select(x => x.name).ToList();
+		}
+
+		private void SetupElevators()
+		{
+			listView_Elevator = new ListView(elevators)
+			{
+				headerTitle = "Elevators",
+				showFoldoutHeader = true,
+				virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight,
+				reorderable = true,
+				reorderMode = ListViewReorderMode.Animated,
+				showAddRemoveFooter = true,
+				makeItem = () =>
+				{
+					var elevatorDataVisualElement = new ElevatorDataVisualElement();
+
+					var enumValue = elevatorDataVisualElement.Q<EnumField>("enum_Value");
+					int i = 0;
+					if (enumValue.userData is not null)
+					{
+						i = (int)enumValue.userData;
+						enumValue.value = elevators[i].Value;
+					}
+
+					enumValue.RegisterValueChangedCallback(evt => elevators[i].Value = (ElevatorValueType)evt.newValue);
+
+					var enumColor = elevatorDataVisualElement.Q<EnumField>("enum_Color");
+					int j = 0;
+					if (enumColor.userData is not null)
+					{
+						j = (int)enumColor.userData;
+						enumColor.value = elevators[j].ElevatorType;
+					}
+
+					enumColor.RegisterValueChangedCallback(evt => elevators[j].ElevatorType = (PersonType)evt.newValue);
+					return elevatorDataVisualElement;
+				},
+				bindItem = (e, i) =>
+				{
+					// elevators[i] = new ElevatorData();
+
+					var enumColor = e.Q<EnumField>("enum_Color");
+					var enumValue = e.Q<EnumField>("enum_Value");
+					enumValue.userData = i;
+					enumColor.userData = i;
+					enumValue.value = elevators[i].Value;
+					enumColor.value = elevators[i].ElevatorType;
+
+					e.RegisterCallback<ChangeEvent<ElevatorData>>(value => elevators[i] = value.newValue);
+				},
+			};
 		}
 
 		#region Grid
@@ -358,6 +371,9 @@ namespace LevelEditor.Editor
 
 			txt_LevelNo.value = (uint)ParseLevelNo(loadedLevel.name);
 			v2Field_Size.value = new Vector2Int(loadedLevel.Grid.GridCells.GetLength(0), loadedLevel.Grid.GridCells.GetLength(1));
+
+			slider_HolderCount.value = loadedLevel.HolderManager.Amount;
+
 			SetupGrid();
 
 			foreach (var groupPair in loadedLevel.PeopleManager.Groups)
@@ -371,6 +387,8 @@ namespace LevelEditor.Editor
 					cell.Color = personDataSO.PersonData[person.PersonType].color;
 					cell.Button.style.backgroundColor = cell.Color;
 					cell.Button.text = groupPair.Key.ToString();
+
+					SetLabelDirection(person.Direction, cell.Button);
 				}
 			}
 
@@ -383,8 +401,17 @@ namespace LevelEditor.Editor
 				cell.Button.text = obstacle.name;
 			}
 
-			elevators = loadedLevel.ElevatorManager.Elevators.Select(x => x.ElevatorData).ToList();
-			listView_Elevator.itemsSource = elevators;
+			var temp = new List<ElevatorData>(loadedLevel.ElevatorManager.Elevators.Select(x => x.ElevatorData));
+			elevators = new List<ElevatorData>(temp);
+			// for (int i = 0; i < temp.Count; i++)
+			// {
+			// 	elevators.Add(temp[i]);
+			// }
+
+			Debug.Log(elevators[0].ElevatorType);
+
+			 // SetupElevators();
+			 listView_Elevator.itemsSource = elevators;
 			listView_Elevator.Rebuild();
 			listView_Elevator.RefreshItems();
 		}

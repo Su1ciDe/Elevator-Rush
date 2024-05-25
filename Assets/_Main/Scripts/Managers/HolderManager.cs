@@ -12,6 +12,7 @@ namespace Managers
 	{
 		[Title("Properties")]
 		[SerializeField] private int amount;
+		public int Amount => amount;
 		[SerializeField] private float spacing = 0;
 
 		[Space]
