@@ -393,13 +393,15 @@ namespace LevelEditor.Editor
 				}
 			}
 
-			obstacles = loadedLevel.ObstacleManager.Obstacles;
 			foreach (var obstacle in loadedLevel.ObstacleManager.Obstacles)
 			{
+				var path = PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(obstacle);
+				var obstaclePrefab = AssetDatabase.LoadAssetAtPath<BaseObstacle>(path);
+
 				var cell = gridCells[obstacle.Coordinates.x, obstacle.Coordinates.y];
-				cell.Obstacle = obstacle;
+				cell.Obstacle = obstaclePrefab;
+				cell.Button.text = obstaclePrefab.name;
 				cell.Button.style.backgroundColor = cell.Color = Color.black;
-				cell.Button.text = obstacle.name;
 			}
 
 			var temp = new List<ElevatorData>(loadedLevel.ElevatorManager.Elevators.Select(x => x.ElevatorData));
