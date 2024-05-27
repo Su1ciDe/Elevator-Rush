@@ -166,7 +166,7 @@ namespace LevelEditor.Editor
 						enumValue.value = elevators[i].Value;
 					}
 
-					enumValue.RegisterValueChangedCallback(evt => elevators[i].Value = (ElevatorValueType)evt.newValue);
+					enumValue.RegisterValueChangedCallback(evt => elevators[(int)enumValue.userData].Value = (ElevatorValueType)evt.newValue);
 
 					var enumColor = elevatorDataVisualElement.Q<EnumField>("enum_Color");
 					int j = 0;
@@ -176,7 +176,7 @@ namespace LevelEditor.Editor
 						enumColor.value = elevators[j].ElevatorType;
 					}
 
-					enumColor.RegisterValueChangedCallback(evt => elevators[j].ElevatorType = (PersonType)evt.newValue);
+					enumColor.RegisterValueChangedCallback(evt => elevators[(int)enumColor.userData].ElevatorType = (PersonType)evt.newValue);
 					return elevatorDataVisualElement;
 				},
 				bindItem = (e, i) =>
