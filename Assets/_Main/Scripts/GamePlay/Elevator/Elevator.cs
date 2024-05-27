@@ -38,7 +38,6 @@ namespace GamePlay.Elevator
 			base.MoveToSlot(person, ref sequence);
 
 			sequence.AppendCallback(() => person.transform.SetParent(transform));
-			sequence.Append(person.transform.DORotate(180 * Vector3.up, .15f).SetEase(Ease.InOutSine));
 		}
 
 		public void CheckIfCompleted()

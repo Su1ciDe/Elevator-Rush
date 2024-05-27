@@ -160,6 +160,30 @@ namespace GridSystem
 			return neighbourList;
 		}
 
+		public List<GridCell> GetSameNeighbours(GridCell currentCell)
+		{
+			var neighbourList = new List<GridCell>();
+
+			// Up
+			if (currentCell.Y - 1 >= 0 && gridCells[currentCell.X, currentCell.Y - 1].CurrentPerson)
+				if (currentCell.CurrentPerson.PersonType == gridCells[currentCell.X, currentCell.Y - 1].CurrentPerson.PersonType)
+					neighbourList.Add(gridCells[currentCell.X, currentCell.Y - 1]);
+			// Right
+			if (currentCell.X + 1 < GridCells.GetLength(0) && gridCells[currentCell.X + 1, currentCell.Y].CurrentPerson)
+				if (currentCell.CurrentPerson.PersonType == gridCells[currentCell.X + 1, currentCell.Y].CurrentPerson.PersonType)
+					neighbourList.Add(gridCells[currentCell.X + 1, currentCell.Y]);
+			// Down
+			if (currentCell.Y + 1 < gridCells.GetLength(1) && gridCells[currentCell.X, currentCell.Y + 1].CurrentPerson)
+				if (currentCell.CurrentPerson.PersonType == gridCells[currentCell.X, currentCell.Y + 1].CurrentPerson.PersonType)
+					neighbourList.Add(gridCells[currentCell.X, currentCell.Y + 1]);
+			// Left 
+			if (currentCell.X - 1 >= 0 && gridCells[currentCell.X - 1, currentCell.Y].CurrentPerson)
+				if (currentCell.CurrentPerson.PersonType == gridCells[currentCell.X - 1, currentCell.Y].CurrentPerson.PersonType)
+					neighbourList.Add(gridCells[currentCell.X - 1, currentCell.Y]);
+
+			return neighbourList;
+		}
+
 		#endregion
 
 		#region Setup

@@ -311,9 +311,9 @@ namespace Fiber.Utilities.Extensions
 		{
 			return direction switch
 			{
-				Direction.Up => Vector2Int.up,
+				Direction.Up => Vector2Int.down,
 				Direction.Right => Vector2Int.right,
-				Direction.Down => Vector2Int.down,
+				Direction.Down => Vector2Int.up,
 				Direction.Left => Vector2Int.left,
 				_ => throw new ArgumentOutOfRangeException(nameof(direction), direction, null)
 			};

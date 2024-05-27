@@ -102,14 +102,20 @@ namespace GamePlay.People
 			Person leader = null;
 			foreach (var person in people)
 			{
-				var neighbours = Grid.Instance.GetNeighbours(Grid.Instance.GridCells[person.Coordinates.x, person.Coordinates.y]);
+				var neighbours = Grid.Instance.GetSameNeighbours(Grid.Instance.GridCells[person.Coordinates.x, person.Coordinates.y]);
 				if (!neighbours.Count.Equals(1)) continue;
 
 				var newCoor = person.Coordinates + person.Direction.GetDirectionVector();
+				Debug.Log(newCoor);
 				var cell = Grid.Instance.TryToGetCell(newCoor);
-				
+
 				// If there is no person in the direction of this person looking then it is the leader
-				if (!cell) continue;
+				if (!cell)
+				{
+					leader = person;
+					break;
+				}
+
 				if (!cell.CurrentPerson || (cell.CurrentPerson && person.PersonType != cell.CurrentPerson.PersonType))
 				{
 					leader = person;
@@ -117,6 +123,7 @@ namespace GamePlay.People
 				}
 			}
 
+			Debug.Log(leader);
 			if (!leader) return;
 
 			// Sort people in a line
@@ -124,15 +131,21 @@ namespace GamePlay.People
 			var nextPerson = leader;
 			for (var i = 0; i < people.Count; i++)
 			{
-				var neighbours = Grid.Instance.GetNeighbours(Grid.Instance.GridCells[nextPerson.Coordinates.x, nextPerson.Coordinates.y]);
+				var neighbours = Grid.Instance.GetSameNeighbours(Grid.Instance.GridCells[nextPerson.Coordinates.x, nextPerson.Coordinates.y]);
 				foreach (var neighbour in neighbours)
 				{
 					if (neighbour.CurrentPerson)
-						tempPeopleList.AddIfNotContains(neighbour.CurrentPerson);
+					{
+						if (!tempPeopleList.Contains(neighbour.CurrentPerson))
+						{
+							tempPeopleList.Add(neighbour.CurrentPerson);
+							nextPerson = neighbour.CurrentPerson;
+						}
+					}
 				}
 			}
 
-			people = tempPeopleList;
+			people = new List<Person>(tempPeopleList);
 		}
 #endif
 

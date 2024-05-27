@@ -16,6 +16,7 @@ namespace Model
 			var slot = GetFirstEmptySlot();
 			slot.CurrentPerson = person;
 			sequence.Append(person.MoveTo(slot.transform.position));
+			sequence.Append(person.transform.DORotate(transform.eulerAngles, .15f).SetEase(Ease.InOutSine));
 		}
 
 		#region Helpers
