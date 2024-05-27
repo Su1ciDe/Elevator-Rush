@@ -75,7 +75,7 @@ namespace Managers
 					holders[i].Slots[j].CurrentPerson = null;
 				}
 
-				PeopleManager.Instance.WaitForPeopleMovement(holders[i].CurrentPersonGroup, duration + 1f);
+				PeopleManager.Instance.WaitMovementElevator(holders[i].CurrentPersonGroup, duration + 1f);
 
 				yield return new WaitForSeconds(0.5f);
 

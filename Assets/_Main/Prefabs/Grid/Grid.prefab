@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d95d239231e41d2a24bd6e179372b90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nodeSize: {x: 1, y: 1}
+  nodeSize: {x: 1.25, y: 1.25}
   xSpacing: 0
   ySpacing: 0
   cellPrefab: {fileID: 6213213560772275614, guid: 2e65e0c8d55f648e68fc173676e0eafb, type: 3}

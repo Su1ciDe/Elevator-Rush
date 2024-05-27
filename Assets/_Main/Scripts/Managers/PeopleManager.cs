@@ -12,7 +12,6 @@ using LevelEditor;
 using UnityEngine.Events;
 #if UNITY_EDITOR
 using UnityEditor;
-using UnityEditor.SceneManagement;
 #endif
 
 namespace Managers
@@ -27,12 +26,13 @@ namespace Managers
 		[SerializeField] private Person personPrefab;
 		[SerializeField] private PersonGroup personGroupPrefab;
 		[SerializeField] private PersonDataSO personDataSO;
+		public PersonDataSO PersonDataSO => personDataSO;
 
 		private Coroutine waitForPeopleMovementCoroutine;
 
 		public static event UnityAction OnMovementCompleted;
 
-		public void WaitForPeopleMovement(PersonGroup group, float delay)
+		public void WaitMovementElevator(PersonGroup group, float delay)
 		{
 			if (waitForPeopleMovementCoroutine is not null)
 			{
@@ -45,7 +45,7 @@ namespace Managers
 
 		private IEnumerator WaitForPeopleMovementCoroutine(PersonGroup group, float delay)
 		{
-			yield return WaitMovement(group, delay);
+			yield return WaitMovementCoroutine(group, delay);
 
 			if (LevelManager.Instance.CurrentLevel.ElevatorManager.CurrentElevator)
 			{
@@ -54,7 +54,12 @@ namespace Managers
 			}
 		}
 
-		public IEnumerator WaitMovement(PersonGroup group, float delay)
+		public void WaitMovement(PersonGroup group, float delay)
+		{
+			StartCoroutine(WaitMovementCoroutine(group, delay));
+		}
+
+		private IEnumerator WaitMovementCoroutine(PersonGroup group, float delay)
 		{
 			yield return new WaitForSeconds(delay);
 			yield return new WaitUntil(() => !group.People.Any(x => x.IsMoving));

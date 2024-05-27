@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using GamePlay;
 using LevelEditor;
 using ScriptableObjects;
 using TriInspector;
@@ -11,8 +10,9 @@ using Fiber.Managers;
 using Lofelt.NiceVibrations;
 using AYellowpaper.SerializedCollections;
 using GamePlay.Elevator;
+using TMPro;
 using UnityEngine.Events;
-using Grid = GridSystem.Grid;
+using Utilities;
 
 namespace Managers
 {
@@ -28,7 +28,18 @@ namespace Managers
 		[SerializeField] private SerializedDictionary<ElevatorValueType, Elevator> elevatorPrefabs;
 		[Space]
 		[SerializeField] private PersonDataSO personDataSO;
+
+		[Title("Elevator")]
+		[SerializeField] private ElevatorDoor leftDoor;
+		[SerializeField] private ElevatorDoor rightDoor;
+		[SerializeField] private float openDuration = .25f;
+		[SerializeField] private float closeDuration = .25f;
 		[Space]
+		[SerializeField] private TextMeshPro txtValue;
+		[SerializeField] private MeshRenderer[] currentElevatorMRs;
+		[SerializeField] private MeshRenderer[] nextElevatorMRs;
+
+		[Title("Points")]
 		[SerializeField] private Transform floorPoint;
 		[SerializeField] private Transform nextElevatorPoint;
 		[SerializeField] private Transform moveInPoint;
@@ -63,18 +74,24 @@ namespace Managers
 		{
 			CurrentElevator = null;
 			var currentTempElevator = Elevators[CurrentElevatorStageIndex];
+			ChangeCurrentColor(currentTempElevator.ElevatorData.ElevatorType);
+			SetValueText((int)currentTempElevator.ElevatorData.Value);
 			currentTempElevator.transform.DOMove(floorPoint.position, MOVE_SPEED).SetSpeedBased(true).SetEase(Ease.OutBack).OnComplete(() =>
 			{
+				// Open Doors
+				OpenDoors();
+
 				CurrentElevator = currentTempElevator;
 				OnNewElevator?.Invoke(CurrentElevator);
 
 				// Check if can play
-				CheckIfFailed();
+				// CheckIfFailed();
 			});
 
 			if (CurrentElevatorStageIndex + 1 < Elevators.Count)
 			{
 				var nextElevator = Elevators[CurrentElevatorStageIndex + 1];
+				ChangeNextColor(nextElevator.ElevatorData.ElevatorType);
 				nextElevator.gameObject.SetActive(true);
 				nextElevator.transform.position = moveInPoint.position;
 				nextElevator.transform.DOMove(nextElevatorPoint.position, MOVE_SPEED).SetSpeedBased(true).SetEase(Ease.OutBack);
@@ -93,14 +110,49 @@ namespace Managers
 			{
 				//TODO: elevator door
 				//
+				CloseDoors();
 
-				tempElevator.transform.DOMove(moveOutPoint.position, MOVE_SPEED).SetSpeedBased(true).SetEase(Ease.OutQuint).OnComplete(() => Destroy(tempElevator.gameObject));
+				tempElevator.transform.DOMove(moveOutPoint.position, MOVE_SPEED).SetDelay(closeDuration).SetSpeedBased(true).SetEase(Ease.OutQuint).OnComplete(() => Destroy(tempElevator.gameObject));
 				LoadNewElevator();
 			}
 			else
 			{
 				LevelManager.Instance.Win();
 			}
+		}
+
+		public void SetValueText(int value)
+		{
+			txtValue.SetText(value.ToString());
+		}
+
+		private void ChangeCurrentColor(PersonType type)
+		{
+			ChangeMaterial(currentElevatorMRs, type);
+		}
+
+		private void ChangeNextColor(PersonType type)
+		{
+			ChangeMaterial(nextElevatorMRs, type);
+		}
+
+		private void ChangeMaterial(MeshRenderer[] meshRenderers, PersonType type)
+		{
+			var mat = PeopleManager.Instance.PersonDataSO.PersonData[type];
+			for (int i = 0; i < meshRenderers.Length; i++)
+				meshRenderers[i].material = mat;
+		}
+
+		private void OpenDoors()
+		{
+			rightDoor.Open(openDuration);
+			leftDoor.Open(openDuration);
+		}
+
+		private void CloseDoors()
+		{
+			rightDoor.Close(closeDuration);
+			leftDoor.Close(closeDuration);
 		}
 
 		private void OnElevatorCompleted(Elevator elevator)
