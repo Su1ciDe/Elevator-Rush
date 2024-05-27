@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using DG.Tweening;
 using GamePlay.People;
 using Model;
@@ -19,6 +20,8 @@ namespace GamePlay.Elevator
 		[Space]
 		[SerializeField] private Transform entrancePoint;
 
+		private List<PersonGroup> currentGroups = new List<PersonGroup>();
+
 		public static event UnityAction<Elevator> OnComplete;
 
 		public void Setup(ElevatorData elevatorData, PersonDataSO personDataSO)
@@ -31,22 +34,25 @@ namespace GamePlay.Elevator
 			}
 		}
 
-		public override void MoveToSlot(Person person,ref  Sequence sequence)
+		public override void MoveToSlot(Person person, ref Sequence sequence)
 		{
 			sequence.Append(person.MoveTo(entrancePoint.position));
 
 			base.MoveToSlot(person, ref sequence);
 
 			sequence.AppendCallback(() => person.transform.SetParent(transform));
-		}
+}
 
-		public void CheckIfCompleted()
+		public bool CheckIfCompleted()
 		{
 			var totalCount = GetPeopleCount();
 			if (totalCount.Equals((int)ElevatorData.Value))
 			{
 				OnComplete?.Invoke(this);
+				return true;
 			}
+
+			return false;
 		}
 	}
 }

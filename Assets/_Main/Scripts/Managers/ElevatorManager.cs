@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using GamePlay;
 using LevelEditor;
@@ -11,6 +12,7 @@ using Lofelt.NiceVibrations;
 using AYellowpaper.SerializedCollections;
 using GamePlay.Elevator;
 using UnityEngine.Events;
+using Grid = GridSystem.Grid;
 
 namespace Managers
 {
@@ -65,10 +67,12 @@ namespace Managers
 			{
 				CurrentElevator = currentTempElevator;
 				OnNewElevator?.Invoke(CurrentElevator);
+
+				// Check if can play
+				CheckIfFailed();
 			});
 
 			if (CurrentElevatorStageIndex + 1 < Elevators.Count)
-
 			{
 				var nextElevator = Elevators[CurrentElevatorStageIndex + 1];
 				nextElevator.gameObject.SetActive(true);
@@ -102,6 +106,41 @@ namespace Managers
 		private void OnElevatorCompleted(Elevator elevator)
 		{
 			CompleteStage();
+		}
+
+		public void CheckIfFailed()
+		{
+			if (checkIfCanPlayCoroutine is not null)
+				StopCoroutine(checkIfCanPlayCoroutine);
+
+			checkIfCanPlayCoroutine = StartCoroutine(CheckIfCanPlayCoroutine());
+		}
+
+		private Coroutine checkIfCanPlayCoroutine;
+
+		private IEnumerator CheckIfCanPlayCoroutine()
+		{
+			yield return new WaitForSeconds(0.5f);
+
+			bool peopleCanMove = false;
+			foreach (var personGroup in PeopleManager.Instance.Groups.Values)
+			{
+				var leader = personGroup.People[0];
+				var path = leader.CheckPath();
+				if (path is not null)
+				{
+					peopleCanMove = true;
+					break;
+				}
+			}
+
+			if (!peopleCanMove)
+			{
+				if (LevelManager.Instance.CurrentLevel.HolderManager.GetFirstEmptyHolder() is null)
+				{
+					LevelManager.Instance.Lose();
+				}
+			}
 		}
 
 #if UNITY_EDITOR

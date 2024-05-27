@@ -1,16 +1,17 @@
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
+using Fiber.Managers;
 using Fiber.Utilities;
-using GamePlay;
 using ScriptableObjects;
 using TriInspector;
 using UnityEngine;
 using Utilities;
 using AYellowpaper.SerializedCollections;
-using Fiber.Managers;
+using GamePlay.Elevator;
 using GamePlay.People;
 using LevelEditor;
+using UnityEngine.Events;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -30,15 +31,24 @@ namespace Managers
 
 		private Coroutine waitForPeopleMovementCoroutine;
 
-		private IEnumerator WaitForPeopleMovementCoroutine(List<Person> people, float delay)
+		public static event UnityAction OnMovementCompleted;
+
+		private void OnEnable()
 		{
-			yield return new WaitForSeconds(delay);
-			
-			if (!people.Any(x => x.IsMoving))
-				LevelManager.Instance.CurrentLevel.ElevatorManager.CurrentElevator?.CheckIfCompleted();
+			Elevator.OnComplete += OnElevatorCompleted;
 		}
 
-		public void WaitForPeopleMovement(List<Person> people, float delay)
+		private void OnDisable()
+		{
+			Elevator.OnComplete -= OnElevatorCompleted;
+		}
+
+		private void OnElevatorCompleted(Elevator elevator)
+		{
+			// elevator.
+		}
+
+		public void WaitForPeopleMovement(PersonGroup group, float delay)
 		{
 			if (waitForPeopleMovementCoroutine is not null)
 			{
@@ -46,7 +56,26 @@ namespace Managers
 				waitForPeopleMovementCoroutine = null;
 			}
 
-			waitForPeopleMovementCoroutine = StartCoroutine(WaitForPeopleMovementCoroutine(people, delay));
+			waitForPeopleMovementCoroutine = StartCoroutine(WaitForPeopleMovementCoroutine(group, delay));
+		}
+
+		private IEnumerator WaitForPeopleMovementCoroutine(PersonGroup group, float delay)
+		{
+			yield return WaitMovement(group, delay);
+
+			if (LevelManager.Instance.CurrentLevel.ElevatorManager.CurrentElevator)
+			{
+				LevelManager.Instance.CurrentLevel.ElevatorManager.CurrentElevator.CheckIfCompleted();
+				group.IsCompleted = true;
+			}
+		}
+
+		public IEnumerator WaitMovement(PersonGroup group, float delay)
+		{
+			yield return new WaitForSeconds(delay);
+			yield return new WaitUntil(() => !group.People.Any(x => x.IsMoving));
+
+			OnMovementCompleted?.Invoke();
 		}
 
 #if UNITY_EDITOR

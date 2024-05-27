@@ -19,6 +19,8 @@ namespace GamePlay.People
 		public List<Person> People => people;
 		public PersonType Type => type;
 
+		public bool IsCompleted { get; set; }
+		
 		private void Start()
 		{
 			var idleNo = Random.Range(0, 4);
@@ -50,19 +52,28 @@ namespace GamePlay.People
 			var path = leader.CheckPath();
 			var pathPos = path?.Select(x => x.transform.position).ToList();
 
-			SlotHolder slotHolder = null;
-			if (LevelManager.Instance.CurrentLevel.ElevatorManager.CurrentElevator && type == LevelManager.Instance.CurrentLevel.ElevatorManager.CurrentElevator.ElevatorData.ElevatorType)
-			{
-				slotHolder = LevelManager.Instance.CurrentLevel.ElevatorManager.CurrentElevator;
-			}
-			else
-			{
-				slotHolder = LevelManager.Instance.CurrentLevel.HolderManager.GetFirstEmptyHolder();
-				((Holder)slotHolder).CurrentPersonGroup = this;
-			}
-
 			if (path is not null && path.Count > 0)
 			{
+				SlotHolder slotHolder;
+				if (LevelManager.Instance.CurrentLevel.ElevatorManager.CurrentElevator && type == LevelManager.Instance.CurrentLevel.ElevatorManager.CurrentElevator.ElevatorData.ElevatorType)
+				{
+					slotHolder = LevelManager.Instance.CurrentLevel.ElevatorManager.CurrentElevator;
+				}
+				else
+				{
+					slotHolder = LevelManager.Instance.CurrentLevel.HolderManager.GetFirstEmptyHolder();
+					if (slotHolder is not null)
+					{
+						((Holder)slotHolder).CurrentPersonGroup = this;
+					}
+				}
+
+				if (!slotHolder)
+				{
+					// LevelManager.Instance.CurrentLevel.HolderManager.CheckIfFull();
+					return;
+				}
+
 				float duration = 0;
 				for (var i = 0; i < people.Count; i++)
 				{
@@ -75,7 +86,14 @@ namespace GamePlay.People
 					duration = people[i].MoveToSlot(pathPos.ToArray(), slotHolder).Duration();
 				}
 
-				PeopleManager.Instance.WaitForPeopleMovement(people, duration + 0.5f);
+				if (slotHolder is Elevator.Elevator)
+				{
+					PeopleManager.Instance.WaitForPeopleMovement(this, duration + 0.5f);
+				}
+				else
+				{
+					StartCoroutine(PeopleManager.Instance.WaitMovement(this, duration + 0.5f));
+				}
 			}
 			else
 			{

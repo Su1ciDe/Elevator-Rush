@@ -72,9 +72,10 @@ namespace Managers
 				{
 					var person = holders[i].CurrentPersonGroup.People[j];
 					duration = person.MoveToSlot(null, elevator).Duration();
+					holders[i].Slots[j].CurrentPerson = null;
 				}
 
-				PeopleManager.Instance.WaitForPeopleMovement(holders[i].CurrentPersonGroup.People, duration + 1f);
+				PeopleManager.Instance.WaitForPeopleMovement(holders[i].CurrentPersonGroup, duration + 1f);
 
 				yield return new WaitForSeconds(0.5f);
 
@@ -99,6 +100,29 @@ namespace Managers
 
 				holderIndex++;
 			}
+		}
+
+		public void CheckIfFull()
+		{
+			if (checkIfFullCoroutine == null)
+			{
+				checkIfFullCoroutine = StartCoroutine(CheckIfFullCoroutine());
+			}
+		}
+
+		private Coroutine checkIfFullCoroutine;
+
+		private IEnumerator CheckIfFullCoroutine()
+		{
+			yield return new WaitUntil(() => LevelManager.Instance.CurrentLevel.ElevatorManager.CurrentElevator);
+			yield return new WaitForSeconds(.5f);
+
+			if (GetFirstEmptyHolder() is null)
+			{
+				LevelManager.Instance.Lose();
+			}
+
+			checkIfFullCoroutine = null;
 		}
 
 		public Holder GetFirstEmptyHolder()
