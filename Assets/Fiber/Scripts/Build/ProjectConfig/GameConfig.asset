@@ -13,18 +13,18 @@ MonoBehaviour:
   m_Name: GameConfig
   m_EditorClassIdentifier: 
   companyName: Fiber Games
-  productName: Project-Template
+  productName: Elevator Rush 3D
   productIcon: {fileID: 2800000, guid: 0049bd813b4544af79cb4fe539f26a73, type: 3}
   version: 0.1
-  iOSBundleId: com.fibergames.game
+  iOSBundleId: com.FiberGames.ElevatorRush
   teamId: 9JRFGT2VDU
   iOSBuildNo: 0
   androidBundleId: com.fibergames.game
   androidBuildNo: 1
-  facebookId: 0
-  facebookClientToken: 
-  gameId: 
-  gameSecret: 
+  facebookId: 6503188897
+  facebookClientToken: f0af5a64bd1439c6ad971eb27e3f864f
+  gameId: f01ca5c42f11e0d0e76785cb98fd2d274b0b75eaf671178278056a14d21c3422
+  gameSecret: bde0798ab9ac8833cd869011a66633c810a121851760506a6e45442b4a15f7dd
   background: {fileID: 0}
   loadingScreenLogo: {fileID: 0}
   loadingScreenTitle: {fileID: 0}
