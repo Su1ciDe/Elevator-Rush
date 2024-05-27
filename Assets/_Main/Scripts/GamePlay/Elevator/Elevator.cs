@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using DG.Tweening;
+using Fiber.Managers;
 using GamePlay.People;
 using Model;
 using ScriptableObjects;
@@ -20,8 +21,6 @@ namespace GamePlay.Elevator
 		[Space]
 		[SerializeField] private Transform entrancePoint;
 
-		private List<PersonGroup> currentGroups = new List<PersonGroup>();
-
 		public static event UnityAction<Elevator> OnComplete;
 
 		public void Setup(ElevatorData elevatorData, PersonDataSO personDataSO)
@@ -34,14 +33,18 @@ namespace GamePlay.Elevator
 			}
 		}
 
-		public override void MoveToSlot(Person person, ref Sequence sequence)
+		public override void MoveToSlot(Person person, Sequence sequence)
 		{
-			sequence.Append(person.MoveTo(entrancePoint.position));
+			sequence.Append(person.MoveTo(entrancePoint.position, .75f));
 
-			base.MoveToSlot(person, ref sequence);
+			base.MoveToSlot(person, sequence);
 
-			sequence.AppendCallback(() => person.transform.SetParent(transform));
-}
+			sequence.AppendCallback(() =>
+			{
+				LevelManager.Instance.CurrentLevel.ElevatorManager.SetValueText((int)ElevatorData.Value - GetPeopleCount());
+				person.transform.SetParent(transform);
+			});
+		}
 
 		public bool CheckIfCompleted()
 		{

@@ -70,11 +70,7 @@ namespace GamePlay.People
 					}
 				}
 
-				if (!slotHolder)
-				{
-					// LevelManager.Instance.CurrentLevel.HolderManager.CheckIfFull();
-					return;
-				}
+				if (!slotHolder) return;
 
 				float duration = 0;
 				for (var i = 0; i < people.Count; i++)
@@ -85,7 +81,7 @@ namespace GamePlay.People
 					if (i > 0)
 						pathPos.Insert(0, people[i - 1].CurrentCell.transform.position);
 
-					duration = people[i].MoveToSlot(pathPos.ToArray(), slotHolder).Duration();
+					duration = people[i].MoveToSlot(pathPos.ToArray(), slotHolder).SetDelay(i * .025f).Duration();
 				}
 
 				if (slotHolder is Elevator.Elevator)

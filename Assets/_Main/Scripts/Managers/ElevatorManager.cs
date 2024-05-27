@@ -78,14 +78,10 @@ namespace Managers
 			SetValueText((int)currentTempElevator.ElevatorData.Value);
 			currentTempElevator.transform.DOMove(floorPoint.position, MOVE_SPEED).SetSpeedBased(true).SetEase(Ease.OutBack).OnComplete(() =>
 			{
-				// Open Doors
 				OpenDoors();
 
 				CurrentElevator = currentTempElevator;
 				OnNewElevator?.Invoke(CurrentElevator);
-
-				// Check if can play
-				// CheckIfFailed();
 			});
 
 			if (CurrentElevatorStageIndex + 1 < Elevators.Count)
@@ -95,6 +91,10 @@ namespace Managers
 				nextElevator.gameObject.SetActive(true);
 				nextElevator.transform.position = moveInPoint.position;
 				nextElevator.transform.DOMove(nextElevatorPoint.position, MOVE_SPEED).SetSpeedBased(true).SetEase(Ease.OutBack);
+			}
+			else
+			{
+				ChangeNextColor(PersonType.None);
 			}
 		}
 
@@ -106,19 +106,17 @@ namespace Managers
 
 			// Next Stage
 			CurrentElevatorStageIndex++;
-			if (CurrentElevatorStageIndex < Elevators.Count)
-			{
-				//TODO: elevator door
-				//
-				CloseDoors();
 
-				tempElevator.transform.DOMove(moveOutPoint.position, MOVE_SPEED).SetDelay(closeDuration).SetSpeedBased(true).SetEase(Ease.OutQuint).OnComplete(() => Destroy(tempElevator.gameObject));
-				LoadNewElevator();
-			}
-			else
+			CloseDoors();
+			DOVirtual.DelayedCall(closeDuration, () =>
 			{
-				LevelManager.Instance.Win();
-			}
+				tempElevator.transform.DOMove(moveOutPoint.position, MOVE_SPEED).SetSpeedBased(true).SetEase(Ease.OutQuint).OnComplete(() => Destroy(tempElevator.gameObject));
+
+				if (CurrentElevatorStageIndex < Elevators.Count)
+					LoadNewElevator();
+				else
+					LevelManager.Instance.Win();
+			});
 		}
 
 		public void SetValueText(int value)
@@ -158,41 +156,6 @@ namespace Managers
 		private void OnElevatorCompleted(Elevator elevator)
 		{
 			CompleteStage();
-		}
-
-		public void CheckIfFailed()
-		{
-			if (checkIfCanPlayCoroutine is not null)
-				StopCoroutine(checkIfCanPlayCoroutine);
-
-			checkIfCanPlayCoroutine = StartCoroutine(CheckIfCanPlayCoroutine());
-		}
-
-		private Coroutine checkIfCanPlayCoroutine;
-
-		private IEnumerator CheckIfCanPlayCoroutine()
-		{
-			yield return new WaitForSeconds(0.5f);
-
-			bool peopleCanMove = false;
-			foreach (var personGroup in PeopleManager.Instance.Groups.Values)
-			{
-				var leader = personGroup.People[0];
-				var path = leader.CheckPath();
-				if (path is not null)
-				{
-					peopleCanMove = true;
-					break;
-				}
-			}
-
-			if (!peopleCanMove)
-			{
-				if (LevelManager.Instance.CurrentLevel.HolderManager.GetFirstEmptyHolder() is null)
-				{
-					LevelManager.Instance.Lose();
-				}
-			}
 		}
 
 #if UNITY_EDITOR
