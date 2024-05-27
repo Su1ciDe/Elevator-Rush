@@ -103,16 +103,17 @@ namespace GamePlay.People
 			foreach (var person in people)
 			{
 				var neighbours = Grid.Instance.GetNeighbours(Grid.Instance.GridCells[person.Coordinates.x, person.Coordinates.y]);
-				if (neighbours.Count.Equals(1))
+				if (!neighbours.Count.Equals(1)) continue;
+
+				var newCoor = person.Coordinates + person.Direction.GetDirectionVector();
+				var cell = Grid.Instance.TryToGetCell(newCoor);
+				
+				// If there is no person in the direction of this person looking then it is the leader
+				if (!cell) continue;
+				if (!cell.CurrentPerson || (cell.CurrentPerson && person.PersonType != cell.CurrentPerson.PersonType))
 				{
-					var newCoor = person.Coordinates + person.Direction.GetDirectionVector();
-					var cell = Grid.Instance.TryToGetCell(newCoor);
-					// If there is no person in the direction of this person looking then it is the leader
-					if (cell && !cell.CurrentPerson)
-					{
-						leader = person;
-						break;
-					}
+					leader = person;
+					break;
 				}
 			}
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using Fiber.Managers;
 using GamePlay;
+using GamePlay.Elevator;
 using TriInspector;
 using UnityEngine;
 

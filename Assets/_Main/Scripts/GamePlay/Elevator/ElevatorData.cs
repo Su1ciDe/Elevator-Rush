@@ -1,7 +1,7 @@
 using LevelEditor;
 using Utilities;
 
-namespace GamePlay
+namespace GamePlay.Elevator
 {
 	[System.Serializable]
 	public class ElevatorData

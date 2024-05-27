@@ -94,7 +94,7 @@ namespace GamePlay.People
 				seq.Append(transform.DOPath(path, duration).SetEase(Ease.Linear));
 			}
 
-			slotHolder.MoveToSlot(this,ref seq);
+			slotHolder.MoveToSlot(this, ref seq);
 
 			seq.AppendCallback(() =>
 			{
@@ -107,12 +107,13 @@ namespace GamePlay.People
 		public Tween MoveTo(Vector3 position)
 		{
 			IsMoving = true;
-			animations.Run();
+			// animations.Run();
 
 			var duration = CalculateMovementDuration(transform.position, position);
+			transform.DOLookAt(position, .15f).SetEase(Ease.InOutSine);
 			return transform.DOMove(position, duration).SetEase(Ease.Linear).OnComplete(() =>
 			{
-				animations.StopRunning();
+				// animations.StopRunning();
 				IsMoving = false;
 			});
 		}

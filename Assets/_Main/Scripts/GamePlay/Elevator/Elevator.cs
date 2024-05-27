@@ -6,7 +6,7 @@ using TriInspector;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace GamePlay
+namespace GamePlay.Elevator
 {
 	public class Elevator : SlotHolder
 	{
@@ -35,7 +35,7 @@ namespace GamePlay
 		{
 			sequence.Append(person.MoveTo(entrancePoint.position));
 
-			base.MoveToSlot(person,ref sequence);
+			base.MoveToSlot(person, ref sequence);
 
 			sequence.AppendCallback(() => person.transform.SetParent(transform));
 			sequence.Append(person.transform.DORotate(180 * Vector3.up, .15f).SetEase(Ease.InOutSine));

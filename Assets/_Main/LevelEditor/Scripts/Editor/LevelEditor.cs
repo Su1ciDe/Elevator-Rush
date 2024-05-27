@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Fiber.Utilities;
 using Fiber.LevelSystem;
 using GamePlay;
+using GamePlay.Elevator;
 using GamePlay.Obstacles;
 using ScriptableObjects;
 using Unity.EditorCoroutines.Editor;

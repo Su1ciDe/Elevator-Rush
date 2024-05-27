@@ -9,6 +9,7 @@ using DG.Tweening;
 using Fiber.Managers;
 using Lofelt.NiceVibrations;
 using AYellowpaper.SerializedCollections;
+using GamePlay.Elevator;
 using UnityEngine.Events;
 
 namespace Managers
