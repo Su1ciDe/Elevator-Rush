@@ -67,7 +67,7 @@ namespace LevelEditor.Editor
 
 		#endregion
 
-		private static Vector2Int maxSize = new Vector2Int(8, 8);
+		private static Vector2Int maxSize = new Vector2Int(12, 12);
 
 		[MenuItem("Elevator Rush/Level Editor")]
 		private static void ShowWindow()
