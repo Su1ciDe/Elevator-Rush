@@ -494,29 +494,33 @@ PrefabInstance:
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 9175607563331218665, guid: aca1ba92b2fdd44fe8c6a55c8055daa7, type: 3}
+      propertyPath: groupNo
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9175607563331218665, guid: aca1ba92b2fdd44fe8c6a55c8055daa7, type: 3}
       propertyPath: people.Array.size
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 9175607563331218665, guid: aca1ba92b2fdd44fe8c6a55c8055daa7, type: 3}
       propertyPath: people.Array.data[0]
       value: 
-      objectReference: {fileID: 7703290225662545866}
+      objectReference: {fileID: 512012370083226969}
     - target: {fileID: 9175607563331218665, guid: aca1ba92b2fdd44fe8c6a55c8055daa7, type: 3}
       propertyPath: people.Array.data[1]
       value: 
-      objectReference: {fileID: 512012370083226969}
+      objectReference: {fileID: 2023329984071663105}
     - target: {fileID: 9175607563331218665, guid: aca1ba92b2fdd44fe8c6a55c8055daa7, type: 3}
       propertyPath: people.Array.data[2]
       value: 
-      objectReference: {fileID: 2023329984071663105}
+      objectReference: {fileID: 4116001976444046042}
     - target: {fileID: 9175607563331218665, guid: aca1ba92b2fdd44fe8c6a55c8055daa7, type: 3}
       propertyPath: people.Array.data[3]
       value: 
-      objectReference: {fileID: 4116001976444046042}
+      objectReference: {fileID: 3456469360556326568}
     - target: {fileID: 9175607563331218665, guid: aca1ba92b2fdd44fe8c6a55c8055daa7, type: 3}
       propertyPath: people.Array.data[4]
       value: 
-      objectReference: {fileID: 3456469360556326568}
+      objectReference: {fileID: 7703290225662545866}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -1126,6 +1130,10 @@ PrefabInstance:
     - target: {fileID: 9175607563331218665, guid: aca1ba92b2fdd44fe8c6a55c8055daa7, type: 3}
       propertyPath: type
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 9175607563331218665, guid: aca1ba92b2fdd44fe8c6a55c8055daa7, type: 3}
+      propertyPath: groupNo
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 9175607563331218665, guid: aca1ba92b2fdd44fe8c6a55c8055daa7, type: 3}
       propertyPath: people.Array.size
@@ -3579,17 +3587,21 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 9175607563331218665, guid: aca1ba92b2fdd44fe8c6a55c8055daa7, type: 3}
+      propertyPath: groupNo
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9175607563331218665, guid: aca1ba92b2fdd44fe8c6a55c8055daa7, type: 3}
       propertyPath: people.Array.size
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 9175607563331218665, guid: aca1ba92b2fdd44fe8c6a55c8055daa7, type: 3}
       propertyPath: people.Array.data[0]
       value: 
-      objectReference: {fileID: 5695377885071959739}
+      objectReference: {fileID: 4524239735547096385}
     - target: {fileID: 9175607563331218665, guid: aca1ba92b2fdd44fe8c6a55c8055daa7, type: 3}
       propertyPath: people.Array.data[1]
       value: 
-      objectReference: {fileID: 4524239735547096385}
+      objectReference: {fileID: 5695377885071959739}
     - target: {fileID: 9175607563331218665, guid: aca1ba92b2fdd44fe8c6a55c8055daa7, type: 3}
       propertyPath: people.Array.data[2]
       value: 
@@ -6354,6 +6366,10 @@ PrefabInstance:
       value: PersonGroup
       objectReference: {fileID: 0}
     - target: {fileID: 9175607563331218665, guid: aca1ba92b2fdd44fe8c6a55c8055daa7, type: 3}
+      propertyPath: groupNo
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 9175607563331218665, guid: aca1ba92b2fdd44fe8c6a55c8055daa7, type: 3}
       propertyPath: people.Array.size
       value: 5
       objectReference: {fileID: 0}
@@ -6555,17 +6571,21 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 9175607563331218665, guid: aca1ba92b2fdd44fe8c6a55c8055daa7, type: 3}
+      propertyPath: groupNo
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 9175607563331218665, guid: aca1ba92b2fdd44fe8c6a55c8055daa7, type: 3}
       propertyPath: people.Array.size
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 9175607563331218665, guid: aca1ba92b2fdd44fe8c6a55c8055daa7, type: 3}
       propertyPath: people.Array.data[0]
       value: 
-      objectReference: {fileID: 6668063509417529786}
+      objectReference: {fileID: 8822431216262067521}
     - target: {fileID: 9175607563331218665, guid: aca1ba92b2fdd44fe8c6a55c8055daa7, type: 3}
       propertyPath: people.Array.data[1]
       value: 
-      objectReference: {fileID: 8822431216262067521}
+      objectReference: {fileID: 6668063509417529786}
     - target: {fileID: 9175607563331218665, guid: aca1ba92b2fdd44fe8c6a55c8055daa7, type: 3}
       propertyPath: people.Array.data[2]
       value: 
@@ -7270,6 +7290,10 @@ PrefabInstance:
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 9175607563331218665, guid: aca1ba92b2fdd44fe8c6a55c8055daa7, type: 3}
+      propertyPath: groupNo
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9175607563331218665, guid: aca1ba92b2fdd44fe8c6a55c8055daa7, type: 3}
       propertyPath: people.Array.size
       value: 5
       objectReference: {fileID: 0}
@@ -7463,6 +7487,10 @@ PrefabInstance:
       value: PersonGroup
       objectReference: {fileID: 0}
     - target: {fileID: 9175607563331218665, guid: aca1ba92b2fdd44fe8c6a55c8055daa7, type: 3}
+      propertyPath: groupNo
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 9175607563331218665, guid: aca1ba92b2fdd44fe8c6a55c8055daa7, type: 3}
       propertyPath: people.Array.size
       value: 5
       objectReference: {fileID: 0}
@@ -7481,11 +7509,11 @@ PrefabInstance:
     - target: {fileID: 9175607563331218665, guid: aca1ba92b2fdd44fe8c6a55c8055daa7, type: 3}
       propertyPath: people.Array.data[3]
       value: 
-      objectReference: {fileID: 4447974793738778545}
+      objectReference: {fileID: 5543869647371912960}
     - target: {fileID: 9175607563331218665, guid: aca1ba92b2fdd44fe8c6a55c8055daa7, type: 3}
       propertyPath: people.Array.data[4]
       value: 
-      objectReference: {fileID: 5543869647371912960}
+      objectReference: {fileID: 4447974793738778545}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:

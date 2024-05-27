@@ -1,6 +1,5 @@
 using System.Linq;
 using System.Collections;
-using System.Collections.Generic;
 using Fiber.Managers;
 using Fiber.Utilities;
 using ScriptableObjects;
@@ -8,12 +7,12 @@ using TriInspector;
 using UnityEngine;
 using Utilities;
 using AYellowpaper.SerializedCollections;
-using GamePlay.Elevator;
 using GamePlay.People;
 using LevelEditor;
 using UnityEngine.Events;
 #if UNITY_EDITOR
 using UnityEditor;
+using UnityEditor.SceneManagement;
 #endif
 
 namespace Managers
@@ -32,21 +31,6 @@ namespace Managers
 		private Coroutine waitForPeopleMovementCoroutine;
 
 		public static event UnityAction OnMovementCompleted;
-
-		private void OnEnable()
-		{
-			Elevator.OnComplete += OnElevatorCompleted;
-		}
-
-		private void OnDisable()
-		{
-			Elevator.OnComplete -= OnElevatorCompleted;
-		}
-
-		private void OnElevatorCompleted(Elevator elevator)
-		{
-			// elevator.
-		}
 
 		public void WaitForPeopleMovement(PersonGroup group, float delay)
 		{
@@ -90,7 +74,7 @@ namespace Managers
 				groups.Add(groupNo, group);
 			}
 
-			group.AddPerson(person);
+			group.AddPerson(person, groupNo);
 			return person;
 		}
 

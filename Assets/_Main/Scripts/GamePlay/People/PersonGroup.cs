@@ -15,12 +15,14 @@ namespace GamePlay.People
 	public class PersonGroup : MonoBehaviour
 	{
 		[SerializeField, ReadOnly] private PersonType type;
-		[SerializeField, ReadOnly] private List<Person> people = new List<Person>();
+		[SerializeField] public int groupNo;
+		public int GroupNo => groupNo;
+		[SerializeField] private List<Person> people = new List<Person>();
 		public List<Person> People => people;
 		public PersonType Type => type;
 
 		public bool IsCompleted { get; set; }
-		
+
 		private void Start()
 		{
 			var idleNo = Random.Range(0, 4);
@@ -107,13 +109,15 @@ namespace GamePlay.People
 		#region Setup
 
 #if UNITY_EDITOR
-		public void AddPerson(Person person)
+		public void AddPerson(Person person, int _groupNo)
 		{
+			groupNo = _groupNo;
 			type = person.PersonType;
 			person.transform.SetParent(transform);
 			people.Add(person);
 		}
 
+		[ContextMenu("Rearrange Group")]
 		public void SetupGroup()
 		{
 			// Find leader

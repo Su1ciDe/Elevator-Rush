@@ -158,6 +158,11 @@ namespace GamePlay.People
 			return Vector3.Distance(a, b) / moveSpeed;
 		}
 
+		public PersonGroup GetGroup()
+		{
+			return GetComponentInParent<PersonGroup>();
+		}
+
 #if UNITY_EDITOR
 		public void Setup(PersonType type, Material material, Direction direction, Vector2Int coordinates, Vector3 position)
 		{
@@ -168,6 +173,7 @@ namespace GamePlay.People
 			transform.position = position;
 			transform.eulerAngles = new Vector3(0, (int)direction * 90);
 		}
+
 #endif
 	}
 }
