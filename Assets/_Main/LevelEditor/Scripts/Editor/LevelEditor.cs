@@ -182,7 +182,7 @@ namespace LevelEditor.Editor
 				},
 				bindItem = (e, i) =>
 				{
-					// elevators[i] = new ElevatorData();
+					elevators[i] ??= new ElevatorData();
 
 					var enumColor = e.Q<EnumField>("enum_Color");
 					var enumValue = e.Q<EnumField>("enum_Value");
@@ -410,8 +410,8 @@ namespace LevelEditor.Editor
 
 			Debug.Log(elevators[0].ElevatorType);
 
-			 // SetupElevators();
-			 listView_Elevator.itemsSource = elevators;
+			// SetupElevators();
+			listView_Elevator.itemsSource = elevators;
 			listView_Elevator.Rebuild();
 			listView_Elevator.RefreshItems();
 		}

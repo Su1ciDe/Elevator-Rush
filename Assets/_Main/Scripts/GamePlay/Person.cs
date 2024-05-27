@@ -28,7 +28,7 @@ namespace GamePlay
 		[SerializeField] private float moveSpeed = 10;
 
 		[Title("References")]
-		[SerializeField] private MeshRenderer meshRenderer;
+		[SerializeField] private SkinnedMeshRenderer meshRenderer;
 		[SerializeField] private Collider col;
 
 		private const float HIGHLIGHT_DURATION = .25F;
