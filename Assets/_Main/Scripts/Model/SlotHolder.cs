@@ -12,7 +12,7 @@ namespace Model
 		[field: Title("Holder")]
 		[field: SerializeField] public PersonSlot[] Slots { get; set; }
 
-		public virtual void MoveToSlot(Person person, Sequence sequence)
+		public virtual void MoveToSlot(Person person, ref Sequence sequence)
 		{
 			var slot = GetFirstEmptySlot();
 			slot.CurrentPerson = person;

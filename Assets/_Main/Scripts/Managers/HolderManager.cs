@@ -63,8 +63,9 @@ namespace Managers
 			for (var i = 0; i < holders.Count; i++)
 			{
 				if (!holders[i].CurrentPersonGroup) continue;
-
 				var elevator = LevelManager.Instance.CurrentLevel.ElevatorManager.CurrentElevator;
+				if (holders[i].CurrentPersonGroup.Type != elevator.ElevatorData.ElevatorType) continue;
+
 				float duration = 0;
 				for (var j = 0; j < holders[i].CurrentPersonGroup.People.Count; j++)
 				{
@@ -79,7 +80,7 @@ namespace Managers
 				holders[i].CurrentPersonGroup = null;
 			}
 
-			RearrangePeople();
+			// RearrangePeople();
 		}
 
 		public void RearrangePeople()

@@ -31,11 +31,11 @@ namespace GamePlay
 			}
 		}
 
-		public override void MoveToSlot(Person person, Sequence sequence)
+		public override void MoveToSlot(Person person,ref  Sequence sequence)
 		{
 			sequence.Append(person.MoveTo(entrancePoint.position));
 
-			base.MoveToSlot(person, sequence);
+			base.MoveToSlot(person,ref sequence);
 
 			sequence.AppendCallback(() => person.transform.SetParent(transform));
 			sequence.Append(person.transform.DORotate(180 * Vector3.up, .15f).SetEase(Ease.InOutSine));

@@ -5,9 +5,13 @@ namespace GamePlay.People
 {
 	public class PersonAnimationController : AnimationController
 	{
+		private int selectedGroupNumber = -1;
+
 		public void ChooseIdle(int groupNumber)
 		{
-			switch (groupNumber)
+			selectedGroupNumber = groupNumber;
+
+			switch (selectedGroupNumber)
 			{
 				case 0:
 					SetBool(AnimationType.idle1, true);

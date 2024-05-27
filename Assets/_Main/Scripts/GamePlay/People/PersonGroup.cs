@@ -17,6 +17,7 @@ namespace GamePlay.People
 		[SerializeField, ReadOnly] private PersonType type;
 		[SerializeField, ReadOnly] private List<Person> people = new List<Person>();
 		public List<Person> People => people;
+		public PersonType Type => type;
 
 		private void Start()
 		{

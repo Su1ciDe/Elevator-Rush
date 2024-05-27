@@ -94,7 +94,7 @@ namespace GamePlay.People
 				seq.Append(transform.DOPath(path, duration).SetEase(Ease.Linear));
 			}
 
-			slotHolder.MoveToSlot(this, seq);
+			slotHolder.MoveToSlot(this,ref seq);
 
 			seq.AppendCallback(() =>
 			{
