@@ -90,11 +90,11 @@ namespace GamePlay.People
 
 				if (slotHolder is Elevator.Elevator)
 				{
-					PeopleManager.Instance.WaitForPeopleMovement(this, duration + 0.5f);
+					PeopleManager.Instance.WaitMovementElevator(this, duration + 0.5f);
 				}
 				else
 				{
-					StartCoroutine(PeopleManager.Instance.WaitMovement(this, duration + 0.5f));
+					PeopleManager.Instance.WaitMovement(this, duration + 0.5f);
 				}
 			}
 			else

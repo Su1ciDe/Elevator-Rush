@@ -106,16 +106,9 @@ namespace GamePlay.People
 
 		public Tween MoveTo(Vector3 position)
 		{
-			IsMoving = true;
-			// animations.Run();
-
 			var duration = CalculateMovementDuration(transform.position, position);
 			transform.DOLookAt(position, .15f).SetEase(Ease.InOutSine);
-			return transform.DOMove(position, duration).SetEase(Ease.Linear).OnComplete(() =>
-			{
-				// animations.StopRunning();
-				IsMoving = false;
-			});
+			return transform.DOMove(position, duration).SetEase(Ease.Linear);
 		}
 
 		private void RemoveFromCell(GridCell currentCell)
