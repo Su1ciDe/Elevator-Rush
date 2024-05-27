@@ -5,5 +5,12 @@ namespace Fiber.Animation
 	/// </summary>
 	public enum AnimationType
 	{
+		idle1,
+		idle2,
+		idle3,
+		idle4,
+		idle5,
+		idleSpeed,
+		Run,
 	}
 }

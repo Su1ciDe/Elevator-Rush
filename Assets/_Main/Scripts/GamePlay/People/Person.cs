@@ -11,7 +11,7 @@ using UnityEngine.Events;
 using Utilities;
 using Grid = GridSystem.Grid;
 
-namespace GamePlay
+namespace GamePlay.People
 {
 	public class Person : MonoBehaviour, INode
 	{
@@ -21,6 +21,9 @@ namespace GamePlay
 		[field: SerializeField, ReadOnly] public Direction Direction { get; private set; }
 
 		public bool IsMoving { get; set; }
+
+		[SerializeField] private PersonAnimationController animations;
+		public PersonAnimationController Animations => animations;
 
 		public GridCell CurrentCell => Grid.Instance.GridCells[Coordinates.x, Coordinates.y];
 
@@ -36,6 +39,16 @@ namespace GamePlay
 		public event UnityAction OnTap;
 		public event UnityAction OnDown;
 		public event UnityAction OnUp;
+
+		private void Awake()
+		{
+			animations = GetComponentInChildren<PersonAnimationController>();
+		}
+
+		private void Start()
+		{
+			animations.SetRandomIdleSpeed();
+		}
 
 		public List<GridCell> CheckPath()
 		{
@@ -70,6 +83,7 @@ namespace GamePlay
 		public Tween MoveToSlot(Vector3[] path, SlotHolder slotHolder)
 		{
 			IsMoving = true;
+			animations.Run();
 
 			RemoveFromCell(CurrentCell);
 
@@ -82,15 +96,25 @@ namespace GamePlay
 
 			slotHolder.MoveToSlot(this, seq);
 
-			seq.AppendCallback(() => IsMoving = false);
+			seq.AppendCallback(() =>
+			{
+				animations.StopRunning();
+				IsMoving = false;
+			});
 			return seq;
 		}
 
 		public Tween MoveTo(Vector3 position)
 		{
 			IsMoving = true;
+			animations.Run();
+
 			var duration = CalculateMovementDuration(transform.position, position);
-			return transform.DOMove(position, duration).SetEase(Ease.Linear).OnComplete(() => IsMoving = false);
+			return transform.DOMove(position, duration).SetEase(Ease.Linear).OnComplete(() =>
+			{
+				animations.StopRunning();
+				IsMoving = false;
+			});
 		}
 
 		private void RemoveFromCell(GridCell currentCell)

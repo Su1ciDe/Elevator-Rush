@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace GamePlay
+namespace GamePlay.People
 {
 	public class PersonSlot : MonoBehaviour
 	{

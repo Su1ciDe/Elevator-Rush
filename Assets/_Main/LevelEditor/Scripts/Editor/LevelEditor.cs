@@ -152,8 +152,7 @@ namespace LevelEditor.Editor
 				headerTitle = "Elevators",
 				showFoldoutHeader = true,
 				virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight,
-				reorderable = true,
-				reorderMode = ListViewReorderMode.Animated,
+				reorderable = false,
 				showAddRemoveFooter = true,
 				makeItem = () =>
 				{
@@ -387,8 +386,9 @@ namespace LevelEditor.Editor
 					cell.Color = personDataSO.PersonData[person.PersonType].color;
 					cell.Button.style.backgroundColor = cell.Color;
 					cell.Button.text = groupPair.Key.ToString();
+					cell.Direction = person.Direction;
 
-					SetLabelDirection(person.Direction, cell.Button);
+					SetLabelDirection(cell.Direction, cell.Button);
 				}
 			}
 
@@ -403,14 +403,7 @@ namespace LevelEditor.Editor
 
 			var temp = new List<ElevatorData>(loadedLevel.ElevatorManager.Elevators.Select(x => x.ElevatorData));
 			elevators = new List<ElevatorData>(temp);
-			// for (int i = 0; i < temp.Count; i++)
-			// {
-			// 	elevators.Add(temp[i]);
-			// }
 
-			Debug.Log(elevators[0].ElevatorType);
-
-			// SetupElevators();
 			listView_Elevator.itemsSource = elevators;
 			listView_Elevator.Rebuild();
 			listView_Elevator.RefreshItems();

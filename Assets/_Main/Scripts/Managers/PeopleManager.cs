@@ -9,6 +9,7 @@ using UnityEngine;
 using Utilities;
 using AYellowpaper.SerializedCollections;
 using Fiber.Managers;
+using GamePlay.People;
 using LevelEditor;
 #if UNITY_EDITOR
 using UnityEditor;

@@ -1,6 +1,5 @@
-using System.Collections;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using Fiber.Managers;
 using Fiber.Utilities.Extensions;
@@ -11,7 +10,7 @@ using UnityEngine;
 using Utilities;
 using Grid = GridSystem.Grid;
 
-namespace GamePlay
+namespace GamePlay.People
 {
 	public class PersonGroup : MonoBehaviour
 	{
@@ -19,13 +18,16 @@ namespace GamePlay
 		[SerializeField, ReadOnly] private List<Person> people = new List<Person>();
 		public List<Person> People => people;
 
-		private void Awake()
+		private void Start()
 		{
+			var idleNo = Random.Range(0, 4);
 			foreach (var person in people)
 			{
 				person.OnTap += OnPersonTapped;
 				person.OnDown += HighlightPeople;
 				person.OnUp += HideHighlightPeople;
+
+				person.Animations.ChooseIdle(idleNo);
 			}
 		}
 

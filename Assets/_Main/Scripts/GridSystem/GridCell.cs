@@ -1,5 +1,6 @@
 using GamePlay;
 using GamePlay.Obstacles;
+using GamePlay.People;
 using TriInspector;
 using UnityEngine;
 

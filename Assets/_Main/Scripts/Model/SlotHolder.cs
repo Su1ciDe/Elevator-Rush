@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using DG.Tweening;
 using GamePlay;
+using GamePlay.People;
 using TriInspector;
 using UnityEngine;
 

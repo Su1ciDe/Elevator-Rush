@@ -1,4 +1,5 @@
 using DG.Tweening;
+using GamePlay.People;
 using Model;
 using ScriptableObjects;
 using TriInspector;

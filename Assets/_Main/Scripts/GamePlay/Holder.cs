@@ -1,3 +1,4 @@
+using GamePlay.People;
 using Model;
 
 namespace GamePlay

@@ -1,5 +1,6 @@
 using Fiber.Managers;
 using Fiber.Utilities;
+using GamePlay.People;
 using UnityEngine;
 
 namespace GamePlay.Player
