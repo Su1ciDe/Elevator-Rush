@@ -95,7 +95,7 @@ namespace Managers
 				for (var j = 0; j < holders[i].CurrentPersonGroup.People.Count; j++)
 				{
 					var person = holders[i].CurrentPersonGroup.People[j];
-					person.MoveToSlot(new[] { holders[i].CurrentPersonGroup.People[j].transform.position, holders[holderIndex].transform.position }, holders[holderIndex]);
+					person.MoveToSlot(new List<Vector3> { holders[i].CurrentPersonGroup.People[j].transform.position, holders[holderIndex].transform.position }, holders[holderIndex]);
 				}
 
 				holderIndex++;

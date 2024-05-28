@@ -3,7 +3,7 @@ using Model;
 
 namespace GamePlay
 {
-	public class Holder : SlotHolder
+	public class Holder : PersonSlotController
 	{
 		public PersonGroup CurrentPersonGroup { get; set; }
 	}

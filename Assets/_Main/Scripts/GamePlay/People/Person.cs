@@ -1,6 +1,9 @@
+using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using Fiber.Managers;
 using Fiber.Utilities.Extensions;
+using GamePlay.Elevator;
 using GridSystem;
 using Interfaces;
 using LevelEditor;
@@ -80,28 +83,37 @@ namespace GamePlay.People
 			return shortestPath;
 		}
 
-		public Tween MoveToSlot(Vector3[] path, SlotHolder slotHolder)
+		public List<Vector3> PathList { get; private set; }
+
+		public Tween MoveToSlot(List<Vector3> path, PersonSlotController personSlotController)
 		{
 			IsMoving = true;
 			animations.Run();
 
 			RemoveFromCell(CurrentCell);
 
-			var seq = DOTween.Sequence();
-			if (path is not null)
-			{
-				var duration = CalculateMovementDuration(transform.position, path[^1]);
-				seq.Append(transform.DOPath(path, duration).SetEase(Ease.Linear));
-			}
+			PathList = path is not null ? new List<Vector3>(path) : new List<Vector3>();
 
-			slotHolder.MoveToSlot(this, seq);
+			var slot = personSlotController.MoveToSlot(this);
 
-			seq.AppendCallback(() =>
+			var tempPath = new List<Vector3>(PathList);
+			tempPath.RemoveAt(0);
+			var follower = new GameObject { transform = { position = tempPath[0] } };
+			follower.transform.DOPath(tempPath.ToArray(), moveSpeed).SetEase(Ease.Linear).SetSpeedBased(true);
+
+			return transform.DOPath(PathList?.ToArray(), moveSpeed).SetEase(Ease.Linear).SetSpeedBased(true).OnUpdate(() => transform.LookAt(follower.transform)).OnComplete(() =>
 			{
+				transform.SetParent(slot.transform);
+				transform.DORotate(slot.transform.eulerAngles, .15f).SetEase(Ease.InOutSine);
+
+				LevelManager.Instance.CurrentLevel.ElevatorManager.CalculateValue();
+
 				animations.StopRunning();
 				IsMoving = false;
+				PathList.Clear();
+
+				Destroy(follower);
 			});
-			return seq;
 		}
 
 		public Tween MoveTo(Vector3 position, float duration)

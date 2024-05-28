@@ -1,22 +1,21 @@
 using System.Collections.Generic;
-using DG.Tweening;
 using GamePlay.People;
 using TriInspector;
 using UnityEngine;
 
 namespace Model
 {
-	public abstract class SlotHolder : MonoBehaviour
+	public abstract class PersonSlotController : MonoBehaviour
 	{
 		[field: Title("Holder")]
 		[field: SerializeField] public PersonSlot[] Slots { get; set; }
 
-		public virtual void MoveToSlot(Person person, Sequence sequence)
+		public virtual PersonSlot MoveToSlot(Person person)
 		{
 			var slot = GetFirstEmptySlot();
 			slot.CurrentPerson = person;
-			sequence.Append(person.MoveTo(slot.transform.position, .6f));
-			sequence.Append(person.transform.DORotate(slot.transform.eulerAngles, .15f).SetEase(Ease.InOutSine));
+			person.PathList.Add(slot.transform.position);
+			return slot;
 		}
 
 		#region Helpers

@@ -56,21 +56,21 @@ namespace GamePlay.People
 
 			if (path is not null && path.Count > 0)
 			{
-				SlotHolder slotHolder;
+				PersonSlotController personSlotController;
 				if (LevelManager.Instance.CurrentLevel.ElevatorManager.CurrentElevator && type == LevelManager.Instance.CurrentLevel.ElevatorManager.CurrentElevator.ElevatorData.ElevatorType)
 				{
-					slotHolder = LevelManager.Instance.CurrentLevel.ElevatorManager.CurrentElevator;
+					personSlotController = LevelManager.Instance.CurrentLevel.ElevatorManager.CurrentElevator;
 				}
 				else
 				{
-					slotHolder = LevelManager.Instance.CurrentLevel.HolderManager.GetFirstEmptyHolder();
-					if (slotHolder is not null)
+					personSlotController = LevelManager.Instance.CurrentLevel.HolderManager.GetFirstEmptyHolder();
+					if (personSlotController is not null)
 					{
-						((Holder)slotHolder).CurrentPersonGroup = this;
+						((Holder)personSlotController).CurrentPersonGroup = this;
 					}
 				}
 
-				if (!slotHolder) return;
+				if (!personSlotController) return;
 
 				float duration = 0;
 				for (var i = 0; i < people.Count; i++)
@@ -81,16 +81,19 @@ namespace GamePlay.People
 					if (i > 0)
 						pathPos.Insert(0, people[i - 1].CurrentCell.transform.position);
 
-					duration = people[i].MoveToSlot(pathPos.ToArray(), slotHolder).SetDelay(i * .025f).Duration();
+					people[i].MoveToSlot(pathPos, personSlotController).onComplete += Complete;
 				}
 
-				if (slotHolder is Elevator.Elevator)
+				void Complete()
 				{
-					PeopleManager.Instance.WaitMovementElevator(this, duration + 0.5f);
-				}
-				else
-				{
-					PeopleManager.Instance.WaitMovement(this, duration + 0.5f);
+					if (personSlotController is Elevator.Elevator)
+					{
+						PeopleManager.Instance.WaitMovementElevator(this, 0.5f);
+					}
+					else
+					{
+						PeopleManager.Instance.WaitMovement(this, 0.5f);
+					}
 				}
 			}
 			else

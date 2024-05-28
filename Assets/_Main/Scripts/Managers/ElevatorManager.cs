@@ -45,6 +45,8 @@ namespace Managers
 		[SerializeField] private Transform moveInPoint;
 		[SerializeField] private Transform moveOutPoint;
 
+		private int value;
+
 		private const float MOVE_SPEED = 15f;
 
 		public static event UnityAction<Elevator> OnNewElevator;
@@ -75,7 +77,10 @@ namespace Managers
 			CurrentElevator = null;
 			var currentTempElevator = Elevators[CurrentElevatorStageIndex];
 			ChangeCurrentColor(currentTempElevator.ElevatorData.ElevatorType);
-			SetValueText((int)currentTempElevator.ElevatorData.Value);
+
+			value = (int)currentTempElevator.ElevatorData.Value;
+			SetValueText(value);
+
 			currentTempElevator.transform.DOMove(floorPoint.position, MOVE_SPEED).SetSpeedBased(true).SetEase(Ease.OutBack).OnComplete(() =>
 			{
 				OpenDoors();
@@ -119,9 +124,17 @@ namespace Managers
 			});
 		}
 
-		public void SetValueText(int value)
+		public void CalculateValue()
 		{
-			txtValue.SetText(value.ToString());
+			value--;
+			SetValueText(value);
+		}
+
+		public void SetValueText(int _value)
+		{
+			txtValue.transform.DOComplete();
+			txtValue.transform.DOPunchScale(.5f * Vector3.one, 0.2f).SetEase(Ease.InOutExpo);
+			txtValue.SetText(_value.ToString());
 		}
 
 		private void ChangeCurrentColor(PersonType type)

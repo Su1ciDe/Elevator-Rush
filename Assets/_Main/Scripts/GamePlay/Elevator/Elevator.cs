@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using DG.Tweening;
 using Fiber.Managers;
+using Fiber.Utilities.Extensions;
 using GamePlay.People;
 using Model;
 using ScriptableObjects;
@@ -10,7 +11,7 @@ using UnityEngine.Events;
 
 namespace GamePlay.Elevator
 {
-	public class Elevator : SlotHolder
+	public class Elevator : PersonSlotController
 	{
 		[Title("Properties")]
 		[SerializeField, ReadOnly] public ElevatorData ElevatorData;
@@ -33,17 +34,11 @@ namespace GamePlay.Elevator
 			}
 		}
 
-		public override void MoveToSlot(Person person, Sequence sequence)
+		public override PersonSlot MoveToSlot(Person person)
 		{
-			sequence.Append(person.MoveTo(entrancePoint.position, .75f));
+			person.PathList.Add(entrancePoint.position);
 
-			base.MoveToSlot(person, sequence);
-
-			sequence.AppendCallback(() =>
-			{
-				LevelManager.Instance.CurrentLevel.ElevatorManager.SetValueText((int)ElevatorData.Value - GetPeopleCount());
-				person.transform.SetParent(transform);
-			});
+			return base.MoveToSlot(person);
 		}
 
 		public bool CheckIfCompleted()
