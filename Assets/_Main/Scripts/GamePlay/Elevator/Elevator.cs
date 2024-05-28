@@ -1,7 +1,3 @@
-using System.Collections.Generic;
-using DG.Tweening;
-using Fiber.Managers;
-using Fiber.Utilities.Extensions;
 using GamePlay.People;
 using Model;
 using ScriptableObjects;
@@ -30,7 +26,7 @@ namespace GamePlay.Elevator
 
 			foreach (var meshRenderer in meshRenderers)
 			{
-				meshRenderer.material = personDataSO.PersonData[ElevatorData.ElevatorType];
+				meshRenderer.material = personDataSO.PersonData[ElevatorData.ElevatorType].ElevatorMaterial;
 			}
 		}
 

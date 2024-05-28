@@ -106,7 +106,10 @@ namespace GamePlay.People
 				transform.SetParent(slot.transform);
 				transform.DORotate(slot.transform.eulerAngles, .15f).SetEase(Ease.InOutSine);
 
-				LevelManager.Instance.CurrentLevel.ElevatorManager.CalculateValue();
+				if (personSlotController is Elevator.Elevator)
+				{
+					LevelManager.Instance.CurrentLevel.ElevatorManager.CalculateValue();
+				}
 
 				animations.StopRunning();
 				IsMoving = false;
@@ -114,13 +117,6 @@ namespace GamePlay.People
 
 				Destroy(follower);
 			});
-		}
-
-		public Tween MoveTo(Vector3 position, float duration)
-		{
-			// var duration = CalculateMovementDuration(transform.position, position);
-			transform.DOLookAt(position, .15f).SetEase(Ease.InOutSine);
-			return transform.DOMove(position, duration).SetEase(Ease.Linear);
 		}
 
 		private void RemoveFromCell(GridCell currentCell)

@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using LevelEditor;
 using ScriptableObjects;
@@ -149,7 +148,7 @@ namespace Managers
 
 		private void ChangeMaterial(MeshRenderer[] meshRenderers, PersonType type)
 		{
-			var mat = PeopleManager.Instance.PersonDataSO.PersonData[type];
+			var mat = PeopleManager.Instance.PersonDataSO.PersonData[type].ElevatorMaterial;
 			for (int i = 0; i < meshRenderers.Length; i++)
 				meshRenderers[i].material = mat;
 		}

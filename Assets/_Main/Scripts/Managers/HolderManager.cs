@@ -63,22 +63,24 @@ namespace Managers
 		{
 			for (var i = 0; i < holders.Count; i++)
 			{
-				if (!holders[i].CurrentPersonGroup) continue;
+				var group = holders[i].CurrentPersonGroup;
+				if (!group) continue;
 				var elevator = LevelManager.Instance.CurrentLevel.ElevatorManager.CurrentElevator;
-				if (holders[i].CurrentPersonGroup.Type != elevator.ElevatorData.ElevatorType) continue;
+				if (group.Type != elevator.ElevatorData.ElevatorType) continue;
 
-				float duration = 0;
-				for (var j = 0; j < holders[i].CurrentPersonGroup.People.Count; j++)
+				for (var j = 0; j < group.People.Count; j++)
 				{
-					var person = holders[i].CurrentPersonGroup.People[j];
-					duration = person.MoveToSlot(null, elevator).Duration();
+					var person = group.People[j];
+					person.MoveToSlot(null, elevator).onComplete += Complete;
 					holders[i].Slots[j].CurrentPerson = null;
 				}
 
-				PeopleManager.Instance.WaitMovementElevator(holders[i].CurrentPersonGroup, duration + 1f);
+				void Complete()
+				{
+					PeopleManager.Instance.WaitMovementElevator(group, 1f);
+				}
 
 				yield return new WaitForSeconds(0.5f);
-
 				holders[i].CurrentPersonGroup = null;
 			}
 

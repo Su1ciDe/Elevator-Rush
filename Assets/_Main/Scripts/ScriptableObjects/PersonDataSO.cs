@@ -14,6 +14,6 @@ namespace ScriptableObjects
 			public Material ElevatorMaterial;
 		}
 
-		public SerializedDictionary<PersonType, Material> PersonData = new SerializedDictionary<PersonType, Material>();
+		public SerializedDictionary<PersonType, MaterialData> PersonData = new SerializedDictionary<PersonType, MaterialData>();
 	}
 }

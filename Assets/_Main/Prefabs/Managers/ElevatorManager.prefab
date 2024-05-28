@@ -395,13 +395,15 @@ MonoBehaviour:
   personDataSO: {fileID: 11400000, guid: 3baa2da65b5c14f119c4caad8ea0ea0b, type: 2}
   leftDoor: {fileID: 4604850933618065872}
   rightDoor: {fileID: 1059268449661699287}
+  openDuration: 0.5
+  closeDuration: 0.5
+  txtValue: {fileID: 1865397839722525410}
   currentElevatorMRs:
   - {fileID: 6163021310271604184}
   - {fileID: 1404973394385514888}
   nextElevatorMRs:
   - {fileID: 7072212074666056006}
   - {fileID: 5542404003340564503}
-  txtValue: {fileID: 1865397839722525410}
   floorPoint: {fileID: 5099577284046729530}
   nextElevatorPoint: {fileID: 5804064387162392020}
   moveInPoint: {fileID: 5473234968016865234}

@@ -71,7 +71,7 @@ namespace Managers
 		public Person SpawnPerson(PersonType personType, Direction direction, int groupNo, int x, int y, Vector3 position)
 		{
 			var person = (Person)PrefabUtility.InstantiatePrefab(personPrefab);
-			person.Setup(personType, personDataSO.PersonData[personType], direction, new Vector2Int(x, y), position);
+			person.Setup(personType, personDataSO.PersonData[personType].PersonMaterial, direction, new Vector2Int(x, y), position);
 
 			if (!groups.TryGetValue(groupNo, out var group))
 			{
