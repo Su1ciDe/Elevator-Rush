@@ -13,9 +13,6 @@ namespace GamePlay.Elevator
 		[SerializeField, ReadOnly] public ElevatorData ElevatorData;
 
 		[Space]
-		[SerializeField] private MeshRenderer[] meshRenderers;
-
-		[Space]
 		[SerializeField] private Transform entrancePoint;
 
 		public static event UnityAction<Elevator> OnComplete;
@@ -23,11 +20,6 @@ namespace GamePlay.Elevator
 		public void Setup(ElevatorData elevatorData, PersonDataSO personDataSO)
 		{
 			ElevatorData = elevatorData;
-
-			foreach (var meshRenderer in meshRenderers)
-			{
-				meshRenderer.material = personDataSO.PersonData[ElevatorData.ElevatorType].ElevatorMaterial;
-			}
 		}
 
 		public override PersonSlot MoveToSlot(Person person)

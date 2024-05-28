@@ -14,8 +14,8 @@ namespace LevelEditor.Editor
 			colorEnum.Init(PersonType.None);
 
 			// Value Slider
-			var valueEnum = new EnumField() { name = "enum_Value", label = "Value", style = { flexGrow = 1 } };
-			valueEnum.Init(ElevatorValueType._10);
+			var valueEnum = new EnumField { name = "enum_Value", label = "Value", style = { flexGrow = 1 } };
+			valueEnum.Init(ElevatorValueType._5);
 
 			root.Add(colorEnum);
 			root.Add(valueEnum);
