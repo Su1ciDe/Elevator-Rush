@@ -1,13 +1,14 @@
 using Fiber.Managers;
 using Fiber.Utilities;
 using GamePlay.People;
+using Managers;
 using UnityEngine;
 
 namespace GamePlay.Player
 {
 	public class PlayerInput : MonoBehaviour
 	{
-		public bool CanInput { get; set; }
+		public bool CanInput { get; set; } = false;
 
 		[SerializeField] private LayerMask inputLayer;
 
@@ -18,6 +19,7 @@ namespace GamePlay.Player
 			LevelManager.OnLevelStart += OnLevelStarted;
 			LevelManager.OnLevelWin += OnLevelWon;
 			LevelManager.OnLevelLose += OnLevelLost;
+			ElevatorManager.OnNewElevator += OnNewElevator;
 		}
 
 		private void OnDisable()
@@ -25,6 +27,7 @@ namespace GamePlay.Player
 			LevelManager.OnLevelStart -= OnLevelStarted;
 			LevelManager.OnLevelWin -= OnLevelWon;
 			LevelManager.OnLevelLose -= OnLevelLost;
+			ElevatorManager.OnNewElevator -= OnNewElevator;
 		}
 
 		private void Update()
@@ -80,7 +83,7 @@ namespace GamePlay.Player
 		private void OnUp()
 		{
 			if (!selectedPerson) return;
-			
+
 			selectedPerson.OnTapped();
 			selectedPerson = null;
 		}
@@ -92,9 +95,15 @@ namespace GamePlay.Player
 			return hit.collider.TryGetComponent(out Person person) ? person : null;
 		}
 
-		private void OnLevelStarted()
+		private void OnNewElevator(Elevator.Elevator _)
 		{
 			CanInput = true;
+			ElevatorManager.OnNewElevator -= OnNewElevator;
+		}
+
+		private void OnLevelStarted()
+		{
+			// CanInput = true;
 		}
 
 		private void OnLevelLost()
