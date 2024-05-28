@@ -58,14 +58,7 @@ namespace GamePlay.People
 
 		private void HideHighlightPeople()
 		{
-			var currentPath = people[0].CurrentPath;
-			if (currentPath is not null && currentPath.Count > 0)
-			{
-				for (var i = 0; i < currentPath.Count; i++)
-				{
-					currentPath[i].HideHighlight();
-				}
-			}
+			
 
 			for (var i = 0; i < people.Count; i++)
 				people[i].HideHighlight();
@@ -142,7 +135,7 @@ namespace GamePlay.People
 		private void CantWalkFeedback(Person leader)
 		{
 			const string emojiTag = "FloatingEmoji_Angry";
-			var emoji = ObjectPooler.Instance.Spawn(emojiTag, leader.transform.position + 3 * Vector3.up).GetComponent<FloatingEmoji>();
+			var emoji = ObjectPooler.Instance.Spawn(emojiTag, leader.transform.position + 3.5f * Vector3.up).GetComponent<FloatingEmoji>();
 			emoji.Float(emojiTag);
 
 			for (var i = 0; i < people.Count; i++)

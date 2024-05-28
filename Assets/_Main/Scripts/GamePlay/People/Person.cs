@@ -60,7 +60,7 @@ namespace GamePlay.People
 			animations.SetRandomIdleSpeed();
 		}
 
-		public List<GridCell> CurrentPath { get; private set; } = new List<GridCell>();
+		public List<GridCell> CurrentPath { get; set; } = new List<GridCell>();
 
 		public List<GridCell> CheckPath()
 		{
@@ -163,6 +163,12 @@ namespace GamePlay.People
 		public void HideHighlight()
 		{
 			if (transform.localScale.x.Equals(1)) return;
+			
+			if (CurrentPath is not null && CurrentPath.Count > 0)
+			{
+				for (var i = 0; i < CurrentPath.Count; i++)
+					CurrentPath[i].HideHighlight();
+			}
 
 			transform.DOKill();
 			transform.DOScale(1, HIGHLIGHT_DURATION).SetEase(Ease.OutSine);

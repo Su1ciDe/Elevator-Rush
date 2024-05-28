@@ -73,10 +73,10 @@ namespace Managers
 				{
 					var person = group.People[j];
 					holders[i].Slots[j].CurrentPerson = null;
-					var i1 = i;
+					var j1 = j;
 					person.MoveToSlot(null, elevator, j).onComplete += () =>
 					{
-						if ((i1 + 1).Equals(group.People.Count) && PeopleManager.Instance.LastEnteredGroup == group)
+						if ((j1 + 1).Equals(group.People.Count) && PeopleManager.Instance.LastEnteredGroup == group)
 							WaitMovement();
 					};
 				}

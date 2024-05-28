@@ -44,7 +44,7 @@ namespace Managers
 
 		private IEnumerator WaitForPeopleMovementCoroutine(PersonGroup group)
 		{
-			yield return StartCoroutine(WaitMovementCoroutine(group));
+			yield return movementCoroutine = StartCoroutine(WaitMovementCoroutine(group));
 
 			if (LevelManager.Instance.CurrentLevel.ElevatorManager.CurrentElevator)
 			{
