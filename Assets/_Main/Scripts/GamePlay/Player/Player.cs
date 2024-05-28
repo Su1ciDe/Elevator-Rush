@@ -1,4 +1,5 @@
 using Fiber.Managers;
+using Fiber.Utilities;
 using UnityEngine;
 
 namespace GamePlay.Player
@@ -6,8 +7,15 @@ namespace GamePlay.Player
 	/// <summary>
 	/// /// Handle Player Specific Information Assigning,  ...
 	/// </summary>
-	public class Player : MonoBehaviour
+	public class Player : Singleton<Player>
 	{
+		public PlayerInput PlayerInput { get; private set; }
+
+		private void Awake()
+		{
+			PlayerInput = GetComponent<PlayerInput>();
+		}
+
 		private void Start()
 		{
 			// TODO

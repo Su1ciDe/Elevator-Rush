@@ -28,21 +28,23 @@ namespace Managers
 		[SerializeField] private PersonDataSO personDataSO;
 		public PersonDataSO PersonDataSO => personDataSO;
 
+		private Coroutine movementCoroutine;
 		private Coroutine waitForPeopleMovementCoroutine;
+
+		public PersonGroup LastEnteredGroup { get; set; }
 
 		public static event UnityAction OnMovementCompleted;
 
-		public void WaitMovementElevator(PersonGroup group, float delay)
+		public void WaitMovementElevator(PersonGroup group)
 		{
-			if (waitForPeopleMovementCoroutine is not null)
-				StopCoroutine(waitForPeopleMovementCoroutine);
+			StopWaiting();
 
-			waitForPeopleMovementCoroutine = StartCoroutine(WaitForPeopleMovementCoroutine(group, delay));
+			waitForPeopleMovementCoroutine = StartCoroutine(WaitForPeopleMovementCoroutine(group));
 		}
 
-		private IEnumerator WaitForPeopleMovementCoroutine(PersonGroup group, float delay)
+		private IEnumerator WaitForPeopleMovementCoroutine(PersonGroup group)
 		{
-			yield return WaitMovementCoroutine(group, delay);
+			yield return movementCoroutine = StartCoroutine(WaitMovementCoroutine(group));
 
 			if (LevelManager.Instance.CurrentLevel.ElevatorManager.CurrentElevator)
 			{
@@ -51,22 +53,33 @@ namespace Managers
 			}
 		}
 
-		private Coroutine movementCoroutine;
-
-		public void WaitMovement(PersonGroup group, float delay)
+		public void WaitMovement(PersonGroup group)
 		{
-			if (movementCoroutine is not null)
-				StopCoroutine(movementCoroutine);
+			StopWaiting();
 
-			movementCoroutine = StartCoroutine(WaitMovementCoroutine(group, delay));
+			movementCoroutine = StartCoroutine(WaitMovementCoroutine(group));
 		}
 
-		private IEnumerator WaitMovementCoroutine(PersonGroup group, float delay)
+		private IEnumerator WaitMovementCoroutine(PersonGroup group)
 		{
-			yield return new WaitForSeconds(delay);
 			yield return new WaitUntil(() => !group.People.Any(x => x.IsMoving));
 
 			OnMovementCompleted?.Invoke();
+		}
+
+		public void StopWaiting()
+		{
+			if (waitForPeopleMovementCoroutine is not null)
+			{
+				StopCoroutine(waitForPeopleMovementCoroutine);
+				waitForPeopleMovementCoroutine = null;
+			}
+
+			if (movementCoroutine is not null)
+			{
+				StopCoroutine(movementCoroutine);
+				movementCoroutine = null;
+			}
 		}
 
 #if UNITY_EDITOR
