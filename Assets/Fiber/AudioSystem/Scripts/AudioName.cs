@@ -8,5 +8,8 @@ namespace Fiber.AudioSystem
 	public enum AudioName
 	{
 		None = -1,
+		Tap,
+		Place,
+		Elevator,
 	}
 }
