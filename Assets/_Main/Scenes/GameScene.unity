@@ -228,7 +228,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: -6.9e-44, y: NaN, z: 2.2e-44, w: 4.5918e-41}
+  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 1.7077486e+16}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
@@ -1333,6 +1333,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: LevelManager
       objectReference: {fileID: 0}
+    - target: {fileID: 2171944396568542195, guid: 57581fc643bb5469a94e5ed25d7eeedd, type: 3}
+      propertyPath: Levels.Array.data[0]
+      value: 
+      objectReference: {fileID: 2338306174118509226, guid: d67fa2cdab37e5e4c86b587d8699a394, type: 3}
+    - target: {fileID: 2171944396568542195, guid: 57581fc643bb5469a94e5ed25d7eeedd, type: 3}
+      propertyPath: Levels.Array.data[1]
+      value: 
+      objectReference: {fileID: 2836027448420244919, guid: 34456075470cfec41872e3efaea9d556, type: 3}
+    - target: {fileID: 2171944396568542195, guid: 57581fc643bb5469a94e5ed25d7eeedd, type: 3}
+      propertyPath: Levels.Array.data[2]
+      value: 
+      objectReference: {fileID: 2182817954770136596, guid: c7d4c4e64e9c7624a945f1b7fa86c402, type: 3}
+    - target: {fileID: 2171944396568542195, guid: 57581fc643bb5469a94e5ed25d7eeedd, type: 3}
+      propertyPath: Levels.Array.data[3]
+      value: 
+      objectReference: {fileID: 1730378046058378526, guid: 8052cb3a2a4dfa54895afce34d1dbe5b, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

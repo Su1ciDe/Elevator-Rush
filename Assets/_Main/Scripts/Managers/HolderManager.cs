@@ -77,10 +77,10 @@ namespace Managers
 
 				void Complete()
 				{
-					PeopleManager.Instance.WaitMovementElevator(group, 1f);
+					PeopleManager.Instance.WaitMovementElevator(group, .5f);
 				}
 
-				yield return new WaitForSeconds(0.5f);
+				yield return new WaitForSeconds(0.55f);
 				holders[i].CurrentPersonGroup = null;
 			}
 

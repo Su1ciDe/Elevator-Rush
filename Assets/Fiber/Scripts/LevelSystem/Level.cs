@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Linq;
 using Fiber.Managers;
 using GamePlay.Elevator;
 using Managers;
@@ -67,12 +68,14 @@ namespace Fiber.LevelSystem
 
 		private IEnumerator CheckFailCoroutine()
 		{
-			yield return new WaitForSeconds(1f);
+			yield return new WaitUntil(() => elevatorManager.CurrentElevator);
+			yield return new WaitForSeconds(1);
 
 			bool peopleCanMove = false;
 			foreach (var personGroup in PeopleManager.Instance.Groups.Values)
 			{
 				if (personGroup.IsCompleted) continue;
+				if (personGroup.People.Any(x => x.IsMoving)) yield break;
 
 				var leader = personGroup.People[0];
 				var path = leader.CheckPath();

@@ -106,7 +106,8 @@ namespace GamePlay.People
 			var slot = personSlotController.MoveToSlot(this);
 
 			var tempPath = new List<Vector3>(PathList);
-			tempPath.RemoveAt(0);
+			if (tempPath.Count > 1)
+				tempPath.RemoveAt(0);
 			var follower = new GameObject { transform = { position = tempPath[0] } };
 			follower.transform.DOPath(tempPath.ToArray(), moveSpeed).SetEase(Ease.Linear).SetSpeedBased(true);
 

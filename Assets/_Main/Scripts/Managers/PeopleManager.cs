@@ -35,10 +35,7 @@ namespace Managers
 		public void WaitMovementElevator(PersonGroup group, float delay)
 		{
 			if (waitForPeopleMovementCoroutine is not null)
-			{
 				StopCoroutine(waitForPeopleMovementCoroutine);
-				waitForPeopleMovementCoroutine = null;
-			}
 
 			waitForPeopleMovementCoroutine = StartCoroutine(WaitForPeopleMovementCoroutine(group, delay));
 		}
@@ -54,9 +51,14 @@ namespace Managers
 			}
 		}
 
+		private Coroutine movementCoroutine;
+
 		public void WaitMovement(PersonGroup group, float delay)
 		{
-			StartCoroutine(WaitMovementCoroutine(group, delay));
+			if (movementCoroutine is not null)
+				StopCoroutine(movementCoroutine);
+
+			movementCoroutine = StartCoroutine(WaitMovementCoroutine(group, delay));
 		}
 
 		private IEnumerator WaitMovementCoroutine(PersonGroup group, float delay)

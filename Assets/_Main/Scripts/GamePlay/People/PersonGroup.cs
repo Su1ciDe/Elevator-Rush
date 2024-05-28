@@ -79,7 +79,8 @@ namespace GamePlay.People
 			if (path is not null && path.Count > 0)
 			{
 				PersonSlotController personSlotController;
-				if (LevelManager.Instance.CurrentLevel.ElevatorManager.CurrentElevator && type == LevelManager.Instance.CurrentLevel.ElevatorManager.CurrentElevator.ElevatorData.ElevatorType)
+				if (LevelManager.Instance.CurrentLevel.ElevatorManager.CurrentElevator && type == LevelManager.Instance.CurrentLevel.ElevatorManager.CurrentElevator.ElevatorData.ElevatorType &&
+				    LevelManager.Instance.CurrentLevel.ElevatorManager.CurrentElevator.GetFirstEmptySlot() is not null)
 				{
 					personSlotController = LevelManager.Instance.CurrentLevel.ElevatorManager.CurrentElevator;
 				}
@@ -102,10 +103,15 @@ namespace GamePlay.People
 					if (i > 0)
 						pathPos.Insert(0, people[i - 1].CurrentCell.transform.position);
 
-					people[i].MoveToSlot(pathPos, personSlotController).onComplete += Complete;
+					var i1 = i;
+					people[i].MoveToSlot(pathPos, personSlotController).onComplete += () =>
+					{
+						if ((i1 + 1).Equals(people.Count))
+							WaitMovement();
+					};
 				}
 
-				void Complete()
+				void WaitMovement()
 				{
 					if (personSlotController is Elevator.Elevator)
 					{
@@ -119,11 +125,11 @@ namespace GamePlay.People
 			}
 			else
 			{
-				CantWalkFeedback(path, leader);
+				CantWalkFeedback(leader);
 			}
 		}
 
-		private void CantWalkFeedback(List<GridCell> path, Person leader)
+		private void CantWalkFeedback(Person leader)
 		{
 			const string emojiTag = "FloatingEmoji_Angry";
 			var emoji = ObjectPooler.Instance.Spawn(emojiTag, leader.transform.position + 3 * Vector3.up).GetComponent<FloatingEmoji>();
@@ -132,11 +138,6 @@ namespace GamePlay.People
 			for (var i = 0; i < people.Count; i++)
 			{
 				people[i].HideHighlight();
-			}
-
-			for (int i = 0; i < path.Count; i++)
-			{
-				path[i].HideHighlight();
 			}
 		}
 
