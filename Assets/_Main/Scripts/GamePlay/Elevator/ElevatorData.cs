@@ -18,7 +18,7 @@ namespace GamePlay.Elevator
 		public ElevatorData()
 		{
 			ElevatorType = PersonType.None;
-			Value = ElevatorValueType._10;
+			Value = ElevatorValueType._5;
 		}
 	}
 }

@@ -388,6 +388,8 @@ MonoBehaviour:
   <Elevators>k__BackingField: []
   elevatorPrefabs:
     _serializedList:
+    - Key: 5
+      Value: {fileID: 5085561109945325938, guid: 28b1d0041c4f042f3913f3eb9dd0c96a, type: 3}
     - Key: 10
       Value: {fileID: 654431863473480157, guid: 98c8d7e58dc6c457e90db0295eeee0be, type: 3}
     - Key: 15
