@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Collections.Generic;
+using Fiber.AudioSystem;
 using Fiber.Managers;
 using Fiber.Utilities;
 using Fiber.Utilities.Extensions;
@@ -95,31 +96,40 @@ namespace GamePlay.People
 
 				if (!personSlotController) return;
 
+				AudioManager.Instance.PlayAudio(AudioName.Tap);
+				HapticManager.Instance.PlayHaptic(0.35f, 0);
+
 				for (var i = 0; i < people.Count; i++)
 				{
 					people[i].HideHighlight();
 
-					// Adds the position of the front person
+					// Adds the position of the person in front
 					if (i > 0)
 						pathPos.Insert(0, people[i - 1].CurrentCell.transform.position);
 
 					var i1 = i;
-					people[i].MoveToSlot(pathPos, personSlotController).onComplete += () =>
+					people[i].MoveToSlot(pathPos, personSlotController, i1).onComplete += () =>
 					{
-						if ((i1 + 1).Equals(people.Count))
+						if ((i1 + 1).Equals(people.Count) && PeopleManager.Instance.LastEnteredGroup == this)
 							WaitMovement();
 					};
+				}
+
+				if (personSlotController is Elevator.Elevator)
+				{
+					PeopleManager.Instance.LastEnteredGroup = this;
+					PeopleManager.Instance.StopWaiting();
 				}
 
 				void WaitMovement()
 				{
 					if (personSlotController is Elevator.Elevator)
 					{
-						PeopleManager.Instance.WaitMovementElevator(this, 0.5f);
+						PeopleManager.Instance.WaitMovementElevator(this);
 					}
 					else
 					{
-						PeopleManager.Instance.WaitMovement(this, 0.5f);
+						PeopleManager.Instance.WaitMovement(this);
 					}
 				}
 			}

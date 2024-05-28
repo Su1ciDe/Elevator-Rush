@@ -67,17 +67,26 @@ namespace Managers
 				if (!group) continue;
 				var elevator = LevelManager.Instance.CurrentLevel.ElevatorManager.CurrentElevator;
 				if (group.Type != elevator.ElevatorData.ElevatorType) continue;
+				if (elevator.GetFirstEmptySlot() is null) yield break;
 
 				for (var j = 0; j < group.People.Count; j++)
 				{
 					var person = group.People[j];
-					person.MoveToSlot(null, elevator).onComplete += Complete;
 					holders[i].Slots[j].CurrentPerson = null;
+					var i1 = i;
+					person.MoveToSlot(null, elevator, j).onComplete += () =>
+					{
+						if ((i1 + 1).Equals(group.People.Count) && PeopleManager.Instance.LastEnteredGroup == group)
+							WaitMovement();
+					};
 				}
 
-				void Complete()
+				PeopleManager.Instance.LastEnteredGroup = group;
+				PeopleManager.Instance.StopWaiting();
+
+				void WaitMovement()
 				{
-					PeopleManager.Instance.WaitMovementElevator(group, .5f);
+					PeopleManager.Instance.WaitMovementElevator(group);
 				}
 
 				yield return new WaitForSeconds(0.55f);
@@ -97,34 +106,11 @@ namespace Managers
 				for (var j = 0; j < holders[i].CurrentPersonGroup.People.Count; j++)
 				{
 					var person = holders[i].CurrentPersonGroup.People[j];
-					person.MoveToSlot(new List<Vector3> { holders[i].CurrentPersonGroup.People[j].transform.position, holders[holderIndex].transform.position }, holders[holderIndex]);
+					person.MoveToSlot(new List<Vector3> { holders[i].CurrentPersonGroup.People[j].transform.position, holders[holderIndex].transform.position }, holders[holderIndex], j);
 				}
 
 				holderIndex++;
 			}
-		}
-
-		public void CheckIfFull()
-		{
-			if (checkIfFullCoroutine == null)
-			{
-				checkIfFullCoroutine = StartCoroutine(CheckIfFullCoroutine());
-			}
-		}
-
-		private Coroutine checkIfFullCoroutine;
-
-		private IEnumerator CheckIfFullCoroutine()
-		{
-			yield return new WaitUntil(() => LevelManager.Instance.CurrentLevel.ElevatorManager.CurrentElevator);
-			yield return new WaitForSeconds(.5f);
-
-			if (GetFirstEmptyHolder() is null)
-			{
-				LevelManager.Instance.Lose();
-			}
-
-			checkIfFullCoroutine = null;
 		}
 
 		public Holder GetFirstEmptyHolder()

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using Fiber.AudioSystem;
 using Fiber.Managers;
 using Fiber.Utilities.Extensions;
 using GamePlay.Elevator;
@@ -48,7 +49,7 @@ namespace GamePlay.People
 		private void Awake()
 		{
 			animations = GetComponentInChildren<PersonAnimationController>();
-			
+
 			var mat = PeopleManager.Instance.PersonDataSO.PersonData[PersonType].PersonMaterial;
 			for (var i = 0; i < renderers.Length; i++)
 				renderers[i].material = mat;
@@ -94,7 +95,7 @@ namespace GamePlay.People
 
 		public List<Vector3> PathList { get; private set; }
 
-		public Tween MoveToSlot(List<Vector3> path, PersonSlotController personSlotController)
+		public Tween MoveToSlot(List<Vector3> path, PersonSlotController personSlotController, int index)
 		{
 			IsMoving = true;
 			animations.Run();
@@ -119,6 +120,8 @@ namespace GamePlay.People
 				HapticManager.Instance.PlayHaptic(HapticPatterns.PresetType.RigidImpact);
 				if (personSlotController is Elevator.Elevator)
 				{
+					AudioManager.Instance.PlayAudio(AudioName.Place).SetPitch(1 + index * 0.15f);
+
 					LevelManager.Instance.CurrentLevel.ElevatorManager.CalculateValue();
 				}
 

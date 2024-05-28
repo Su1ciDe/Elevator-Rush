@@ -8,6 +8,7 @@ using DG.Tweening;
 using Fiber.Managers;
 using Lofelt.NiceVibrations;
 using AYellowpaper.SerializedCollections;
+using Fiber.AudioSystem;
 using GamePlay.Elevator;
 using TMPro;
 using UnityEngine.Events;
@@ -46,7 +47,7 @@ namespace Managers
 
 		private int value;
 
-		private const float MOVE_SPEED = 15f;
+		private const float MOVE_SPEED = 20f;
 
 		public static event UnityAction<Elevator> OnNewElevator;
 
@@ -82,6 +83,8 @@ namespace Managers
 
 			currentTempElevator.transform.DOMove(floorPoint.position, MOVE_SPEED).SetSpeedBased(true).SetEase(Ease.OutBack).OnComplete(() =>
 			{
+				AudioManager.Instance.PlayAudio(AudioName.Elevator);
+				
 				OpenDoors();
 
 				CurrentElevator = currentTempElevator;
@@ -167,6 +170,8 @@ namespace Managers
 
 		private void OnElevatorCompleted(Elevator elevator)
 		{
+			HapticManager.Instance.PlayHaptic(HapticPatterns.PresetType.Success);
+			
 			CompleteStage();
 		}
 
