@@ -13,6 +13,8 @@ namespace Model
 		public virtual PersonSlot MoveToSlot(Person person)
 		{
 			var slot = GetFirstEmptySlot();
+			if (!slot) return null;
+			
 			slot.CurrentPerson = person;
 			person.PathList.Add(slot.transform.position);
 			return slot;

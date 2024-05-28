@@ -8,6 +8,7 @@ using GridSystem;
 using Interfaces;
 using LevelEditor;
 using Lofelt.NiceVibrations;
+using Managers;
 using Model;
 using TriInspector;
 using UnityEngine;
@@ -35,7 +36,7 @@ namespace GamePlay.People
 		[SerializeField] private float moveSpeed = 10;
 
 		[Title("References")]
-		[SerializeField] private SkinnedMeshRenderer meshRenderer;
+		[SerializeField] private Renderer[] renderers;
 		[SerializeField] private Collider col;
 
 		private const float HIGHLIGHT_DURATION = .25F;
@@ -47,6 +48,10 @@ namespace GamePlay.People
 		private void Awake()
 		{
 			animations = GetComponentInChildren<PersonAnimationController>();
+			
+			var mat = PeopleManager.Instance.PersonDataSO.PersonData[PersonType].PersonMaterial;
+			for (var i = 0; i < renderers.Length; i++)
+				renderers[i].material = mat;
 		}
 
 		private void Start()
@@ -132,8 +137,6 @@ namespace GamePlay.People
 
 		public void OnMouseDown()
 		{
-			
-
 			OnDown?.Invoke();
 		}
 
@@ -157,8 +160,6 @@ namespace GamePlay.People
 		{
 			if (transform.localScale.x.Equals(1)) return;
 
-			
-
 			transform.DOKill();
 			transform.DOScale(1, HIGHLIGHT_DURATION).SetEase(Ease.OutSine);
 		}
@@ -178,10 +179,13 @@ namespace GamePlay.People
 		{
 			Direction = direction;
 			PersonType = type;
-			meshRenderer.material = material;
 			Coordinates = coordinates;
 			transform.position = position;
 			transform.eulerAngles = new Vector3(0, (int)direction * 90);
+			for (var i = 0; i < renderers.Length; i++)
+			{
+				renderers[i].material = material;
+			}
 		}
 
 #endif

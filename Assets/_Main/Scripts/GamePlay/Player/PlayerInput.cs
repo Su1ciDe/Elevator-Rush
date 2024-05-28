@@ -66,6 +66,7 @@ namespace GamePlay.Player
 					selectedPerson.OnMouseUp();
 					selectedPerson = null;
 				}
+
 				return;
 			}
 
@@ -79,8 +80,9 @@ namespace GamePlay.Player
 		private void OnUp()
 		{
 			if (!selectedPerson) return;
-
+			
 			selectedPerson.OnTapped();
+			selectedPerson = null;
 		}
 
 		private Person GetPerson()
