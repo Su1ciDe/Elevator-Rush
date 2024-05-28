@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Fiber.Managers;
 using Fiber.Utilities;
 using Fiber.Utilities.Extensions;
+using GridSystem;
 using Managers;
 using Model;
 using TriInspector;
@@ -39,12 +40,32 @@ namespace GamePlay.People
 
 		private void HighlightPeople()
 		{
+			var path = people[0].CheckPath();
+			if (path is not null && path.Count > 0)
+			{
+				for (var i = 0; i < path.Count; i++)
+				{
+					path[i].ShowHighlight();
+				}
+			}
+
 			for (var i = 0; i < people.Count; i++)
+			{
 				people[i].ShowHighlight();
+			}
 		}
 
 		private void HideHighlightPeople()
 		{
+			var currentPath = people[0].CurrentPath;
+			if (currentPath is not null && currentPath.Count > 0)
+			{
+				for (var i = 0; i < currentPath.Count; i++)
+				{
+					currentPath[i].HideHighlight();
+				}
+			}
+
 			for (var i = 0; i < people.Count; i++)
 				people[i].HideHighlight();
 		}
@@ -52,7 +73,7 @@ namespace GamePlay.People
 		private void OnPersonTapped()
 		{
 			var leader = people[0];
-			var path = leader.CheckPath();
+			var path = leader.CurrentPath;
 			var pathPos = path?.Select(x => x.transform.position).ToList();
 
 			if (path is not null && path.Count > 0)
@@ -98,11 +119,11 @@ namespace GamePlay.People
 			}
 			else
 			{
-				CantWalkFeedback(leader);
+				CantWalkFeedback(path, leader);
 			}
 		}
 
-		private void CantWalkFeedback(Person leader)
+		private void CantWalkFeedback(List<GridCell> path, Person leader)
 		{
 			const string emojiTag = "FloatingEmoji_Angry";
 			var emoji = ObjectPooler.Instance.Spawn(emojiTag, leader.transform.position + 3 * Vector3.up).GetComponent<FloatingEmoji>();
@@ -111,6 +132,11 @@ namespace GamePlay.People
 			for (var i = 0; i < people.Count; i++)
 			{
 				people[i].HideHighlight();
+			}
+
+			for (int i = 0; i < path.Count; i++)
+			{
+				path[i].HideHighlight();
 			}
 		}
 

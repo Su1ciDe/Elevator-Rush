@@ -61,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -876546973899608171, guid: a181e21b5da2c4a43bdf4a1456e440f8, type: 3}
+  - {fileID: 2100000, guid: 522bc03df3a4a407b86fabd2242e005f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -164,6 +164,9 @@ MonoBehaviour:
   <Coordinates>k__BackingField: {x: 0, y: 0}
   <CurrentObstacle>k__BackingField: {fileID: 0}
   <CurrentPerson>k__BackingField: {fileID: 0}
+  meshRenderer: {fileID: 6883385646756496647}
+  material: {fileID: 2100000, guid: 522bc03df3a4a407b86fabd2242e005f, type: 2}
+  highlightMaterial: {fileID: 2100000, guid: c49c5aa51b5ec4a5c861cb804b4c0083, type: 2}
 --- !u!1 &8458542077090575448
 GameObject:
   m_ObjectHideFlags: 0

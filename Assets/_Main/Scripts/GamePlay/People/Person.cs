@@ -54,7 +54,7 @@ namespace GamePlay.People
 			animations.SetRandomIdleSpeed();
 		}
 
-		private List<GridCell> currentPath = new List<GridCell>();
+		public List<GridCell> CurrentPath { get; private set; } = new List<GridCell>();
 
 		public List<GridCell> CheckPath()
 		{
@@ -83,7 +83,7 @@ namespace GamePlay.People
 				}
 			}
 
-			currentPath = shortestPath;
+			CurrentPath = shortestPath;
 			return shortestPath;
 		}
 
@@ -132,6 +132,8 @@ namespace GamePlay.People
 
 		public void OnMouseDown()
 		{
+			
+
 			OnDown?.Invoke();
 		}
 
@@ -154,6 +156,8 @@ namespace GamePlay.People
 		public void HideHighlight()
 		{
 			if (transform.localScale.x.Equals(1)) return;
+
+			
 
 			transform.DOKill();
 			transform.DOScale(1, HIGHLIGHT_DURATION).SetEase(Ease.OutSine);
