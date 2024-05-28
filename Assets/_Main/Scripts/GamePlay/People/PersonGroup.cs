@@ -1,13 +1,14 @@
-using System.Collections.Generic;
 using System.Linq;
-using DG.Tweening;
+using System.Collections.Generic;
 using Fiber.Managers;
+using Fiber.Utilities;
 using Fiber.Utilities.Extensions;
 using Managers;
 using Model;
 using TriInspector;
-using UnityEngine;
+using UI;
 using Utilities;
+using UnityEngine;
 using Grid = GridSystem.Grid;
 
 namespace GamePlay.People
@@ -72,7 +73,6 @@ namespace GamePlay.People
 
 				if (!personSlotController) return;
 
-				float duration = 0;
 				for (var i = 0; i < people.Count; i++)
 				{
 					people[i].HideHighlight();
@@ -98,10 +98,19 @@ namespace GamePlay.People
 			}
 			else
 			{
-				for (var i = 0; i < people.Count; i++)
-				{
-					people[i].HideHighlight();
-				}
+				CantWalkFeedback(leader);
+			}
+		}
+
+		private void CantWalkFeedback(Person leader)
+		{
+			const string emojiTag = "FloatingEmoji_Angry";
+			var emoji = ObjectPooler.Instance.Spawn(emojiTag, leader.transform.position + 3 * Vector3.up).GetComponent<FloatingEmoji>();
+			emoji.Float(emojiTag);
+
+			for (var i = 0; i < people.Count; i++)
+			{
+				people[i].HideHighlight();
 			}
 		}
 

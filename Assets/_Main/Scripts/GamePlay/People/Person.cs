@@ -7,6 +7,7 @@ using GamePlay.Elevator;
 using GridSystem;
 using Interfaces;
 using LevelEditor;
+using Lofelt.NiceVibrations;
 using Model;
 using TriInspector;
 using UnityEngine;
@@ -53,6 +54,8 @@ namespace GamePlay.People
 			animations.SetRandomIdleSpeed();
 		}
 
+		private List<GridCell> currentPath = new List<GridCell>();
+
 		public List<GridCell> CheckPath()
 		{
 			var xList = new List<int> { Coordinates.x };
@@ -80,6 +83,7 @@ namespace GamePlay.People
 				}
 			}
 
+			currentPath = shortestPath;
 			return shortestPath;
 		}
 
@@ -106,6 +110,7 @@ namespace GamePlay.People
 				transform.SetParent(slot.transform);
 				transform.DORotate(slot.transform.eulerAngles, .15f).SetEase(Ease.InOutSine);
 
+				HapticManager.Instance.PlayHaptic(HapticPatterns.PresetType.RigidImpact);
 				if (personSlotController is Elevator.Elevator)
 				{
 					LevelManager.Instance.CurrentLevel.ElevatorManager.CalculateValue();

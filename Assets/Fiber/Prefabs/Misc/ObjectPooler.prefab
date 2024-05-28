@@ -24,13 +24,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9193890928686718355}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &9193890928686718356
 MonoBehaviour:
@@ -47,9 +47,13 @@ MonoBehaviour:
   pools:
   - Tag: MoneyIcon
     Prefab: {fileID: 4553407032979424552, guid: 6b95015607c9241b191be1f19e0a0fb4, type: 3}
-    InitialSize: 25
-    MaxSize: 100
+    InitialSize: 10
+    MaxSize: 50
   - Tag: MoneyIconFloating
     Prefab: {fileID: 5570248883799033574, guid: db7ca50b4bc4c4389aa32c0016fa2c7a, type: 3}
     InitialSize: 10
     MaxSize: 50
+  - Tag: FloatingEmoji_Angry
+    Prefab: {fileID: 7903736433280875522, guid: ea78376b3d7db494d83b614c5257d349, type: 3}
+    InitialSize: 5
+    MaxSize: 25

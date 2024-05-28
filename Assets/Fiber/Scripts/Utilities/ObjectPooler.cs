@@ -31,7 +31,8 @@ namespace Fiber.Utilities
 			public int CountInactive => PooledObjectsQueue.Count;
 		}
 		
-		[ListDrawerSettings(ShowElementLabels = true)]
+		// [ListDrawerSettings(ShowElementLabels = true)]
+		[TableList]
 		[SerializeField] private List<Pool> pools = new List<Pool>();
 		private Dictionary<string, Pooled> poolDictionary = new Dictionary<string, Pooled>();
 

@@ -27,6 +27,7 @@ namespace Fiber.Utilities
 		}
 
 		[SerializeField] private LookMode lookMode;
+		[SerializeField] private bool updateEveryFrame;
 
 		private Camera mainCamera => Helper.MainCamera;
 
@@ -34,9 +35,18 @@ namespace Fiber.Utilities
 		{
 			if (TryGetComponent(out Canvas canvas))
 				canvas.worldCamera = mainCamera;
+
+			if (!updateEveryFrame)
+				UpdateLookAt();
 		}
 
 		private void LateUpdate()
+		{
+			if (!updateEveryFrame) return;
+			UpdateLookAt();
+		}
+
+		private void UpdateLookAt()
 		{
 			switch (lookMode)
 			{
