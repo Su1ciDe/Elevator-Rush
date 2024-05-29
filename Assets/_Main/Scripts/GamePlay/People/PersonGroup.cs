@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Linq;
 using System.Collections.Generic;
 using Fiber.AudioSystem;
@@ -26,8 +27,10 @@ namespace GamePlay.People
 
 		public bool IsCompleted { get; set; }
 
-		private void Start()
+		private IEnumerator Start()
 		{
+			yield return null;
+			
 			var idleNo = Random.Range(0, 4);
 			foreach (var person in people)
 			{
@@ -58,8 +61,6 @@ namespace GamePlay.People
 
 		private void HideHighlightPeople()
 		{
-			
-
 			for (var i = 0; i < people.Count; i++)
 				people[i].HideHighlight();
 		}
@@ -70,6 +71,7 @@ namespace GamePlay.People
 			var path = leader.CurrentPath;
 			var pathPos = path?.Select(x => x.transform.position).ToList();
 
+			Debug.Log("Path : " + path);
 			if (path is not null && path.Count > 0)
 			{
 				PersonSlotController personSlotController;
@@ -86,6 +88,8 @@ namespace GamePlay.People
 						((Holder)personSlotController).CurrentPersonGroup = this;
 					}
 				}
+
+				Debug.Log("slot : " + personSlotController);
 
 				if (!personSlotController) return;
 
