@@ -1,6 +1,7 @@
 using Fiber.Managers;
 using Fiber.Utilities;
 using GamePlay.People;
+using Lean.Touch;
 using Managers;
 using UnityEngine;
 
@@ -14,12 +15,18 @@ namespace GamePlay.Player
 
 		private Person selectedPerson;
 
+		private bool isDown;
+
 		private void OnEnable()
 		{
 			LevelManager.OnLevelStart += OnLevelStarted;
 			LevelManager.OnLevelWin += OnLevelWon;
 			LevelManager.OnLevelLose += OnLevelLost;
 			ElevatorManager.OnNewElevator += OnNewElevator;
+
+			LeanTouch.OnFingerDown += OnDown;
+			LeanTouch.OnFingerUpdate += OnDrag;
+			LeanTouch.OnFingerUp += OnUp;
 		}
 
 		private void OnDisable()
@@ -28,40 +35,46 @@ namespace GamePlay.Player
 			LevelManager.OnLevelWin -= OnLevelWon;
 			LevelManager.OnLevelLose -= OnLevelLost;
 			ElevatorManager.OnNewElevator -= OnNewElevator;
+
+			LeanTouch.OnFingerDown -= OnDown;
+			LeanTouch.OnFingerUpdate -= OnDrag;
+			LeanTouch.OnFingerUp -= OnUp;
 		}
 
-		private void Update()
+		// private void Update()
+		// {
+		// 	if (!CanInput) return;
+		//
+		// 	if (Input.GetMouseButtonDown(0))
+		// 	{
+		// 		OnDown();
+		// 	}
+		//
+		// 	if (Input.GetMouseButton(0))
+		// 	{
+		// 		OnDrag();
+		// 	}
+		//
+		// 	if (Input.GetMouseButtonUp(0))
+		// 	{
+		// 		OnUp();
+		// 	}
+		// }
+
+		private void OnDown(LeanFinger finger)
 		{
-			if (!CanInput) return;
-
-			if (Input.GetMouseButtonDown(0))
-			{
-				OnDown();
-			}
-
-			if (Input.GetMouseButton(0))
-			{
-				OnDrag();
-			}
-
-			if (Input.GetMouseButtonUp(0))
-			{
-				OnUp();
-			}
-		}
-
-		private void OnDown()
-		{
-			var person = GetPerson();
+			isDown = true;
+			var person = GetPerson(finger);
 			if (!person) return;
 
 			selectedPerson = person;
 			selectedPerson.OnMouseDown();
 		}
 
-		private void OnDrag()
+		private void OnDrag(LeanFinger finger)
 		{
-			var person = GetPerson();
+			if (!isDown) return;
+			var person = GetPerson(finger);
 			if (!person)
 			{
 				if (selectedPerson)
@@ -80,17 +93,19 @@ namespace GamePlay.Player
 			selectedPerson.OnMouseDown();
 		}
 
-		private void OnUp()
+		private void OnUp(LeanFinger finger)
 		{
+			isDown = false;
 			if (!selectedPerson) return;
 
 			selectedPerson.OnTapped();
 			selectedPerson = null;
 		}
 
-		private Person GetPerson()
+		private Person GetPerson(LeanFinger finger)
 		{
-			var ray = Helper.MainCamera.ScreenPointToRay(Input.mousePosition);
+			var ray = finger.GetRay(Helper.MainCamera);
+			// var ray = Helper.MainCamera.ScreenPointToRay(Input.mousePosition);
 			if (!Physics.Raycast(ray, out var hit, 100, inputLayer)) return null;
 			return hit.collider.TryGetComponent(out Person person) ? person : null;
 		}
@@ -104,6 +119,7 @@ namespace GamePlay.Player
 		private void OnLevelStarted()
 		{
 			// CanInput = true;
+			selectedPerson = null;
 		}
 
 		private void OnLevelLost()
