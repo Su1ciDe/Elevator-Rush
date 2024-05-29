@@ -1,11 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using Fiber.AudioSystem;
 using Fiber.Managers;
 using Fiber.Utilities;
 using Fiber.Utilities.Extensions;
-using GamePlay.Elevator;
 using GridSystem;
 using Interfaces;
 using LevelEditor;
@@ -27,7 +25,7 @@ namespace GamePlay.People
 		[field: SerializeField, ReadOnly] public PersonType PersonType { get; private set; }
 		[field: SerializeField, ReadOnly] public Direction Direction { get; private set; }
 
-		public bool IsMoving { get; set; }
+		public bool IsMoving { get; private set; }
 
 		[SerializeField] private PersonAnimationController animations;
 		public PersonAnimationController Animations => animations;

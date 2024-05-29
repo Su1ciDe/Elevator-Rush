@@ -68,8 +68,9 @@ namespace Fiber.LevelSystem
 
 		private IEnumerator CheckFailCoroutine()
 		{
+			yield return new WaitForSeconds(0.5f);
 			yield return new WaitUntil(() => elevatorManager.CurrentElevator);
-			yield return new WaitForSeconds(1);
+			// yield return new WaitForSeconds(1);
 
 			bool peopleCanMove = false;
 			foreach (var personGroup in PeopleManager.Instance.Groups.Values)
@@ -79,8 +80,8 @@ namespace Fiber.LevelSystem
 				// yield return new WaitUntil(() => !personGroup.People.Any(x => x.IsMoving));
 
 				var leader = personGroup.People[0];
-				if (leader.IsMoving) continue;
-				// yield return new WaitUntil(() => !leader.IsMoving);
+				// if (leader.IsMoving) continue;
+				 yield return new WaitUntil(() => !leader.IsMoving);
 
 				var path = leader.CheckPath();
 				if (path is not null && path.Count > 0)
@@ -90,6 +91,11 @@ namespace Fiber.LevelSystem
 						peopleCanMove = true;
 						break;
 					}
+				}
+				else if (leader.PersonType == ElevatorManager.CurrentElevator?.ElevatorData.ElevatorType)
+				{
+					peopleCanMove = true;
+					break;
 				}
 			}
 

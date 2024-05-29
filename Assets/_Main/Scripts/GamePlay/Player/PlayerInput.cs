@@ -63,6 +63,7 @@ namespace GamePlay.Player
 
 		private void OnDown(LeanFinger finger)
 		{
+			if (!CanInput) return;
 			if (finger.IsOverGui) return;
 
 			isDown = true;
@@ -75,6 +76,7 @@ namespace GamePlay.Player
 
 		private void OnDrag(LeanFinger finger)
 		{
+			if (!CanInput) return;
 			if (finger.IsOverGui) return;
 
 			if (!isDown) return;
@@ -99,6 +101,7 @@ namespace GamePlay.Player
 
 		private void OnUp(LeanFinger finger)
 		{
+			if (!CanInput) return;
 			if (finger.IsOverGui) return;
 
 			isDown = false;

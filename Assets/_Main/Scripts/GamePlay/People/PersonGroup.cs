@@ -1,17 +1,17 @@
-using System.Collections;
 using System.Linq;
+using System.Collections;
 using System.Collections.Generic;
-using Fiber.AudioSystem;
 using Fiber.Managers;
+using Fiber.AudioSystem;
 using Fiber.Utilities;
 using Fiber.Utilities.Extensions;
-using GridSystem;
 using Managers;
 using Model;
 using TriInspector;
 using UI;
 using Utilities;
 using UnityEngine;
+using UnityEngine.Events;
 using Grid = GridSystem.Grid;
 
 namespace GamePlay.People
@@ -26,6 +26,8 @@ namespace GamePlay.People
 		public PersonType Type => type;
 
 		public bool IsCompleted { get; set; }
+
+		public event UnityAction OnTapped;
 
 		private IEnumerator Start()
 		{
@@ -135,6 +137,8 @@ namespace GamePlay.People
 			{
 				CantWalkFeedback(leader);
 			}
+			
+			OnTapped?.Invoke();
 		}
 
 		private void CantWalkFeedback(Person leader)

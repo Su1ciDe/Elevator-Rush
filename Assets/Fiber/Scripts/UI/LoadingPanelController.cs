@@ -21,7 +21,7 @@ namespace Fiber.UI
 		[SerializeField] private Image imgLoadingScreen;
 		[SerializeField] private Image imgLoadingScreenTitle;
 
-		public event UnityAction OnLoadingFinished;
+		public UnityAction OnLoadingFinished;
 
 		private void Start()
 		{
