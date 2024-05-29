@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using Fiber.AudioSystem;
 using Fiber.Managers;
+using Fiber.Utilities;
 using Fiber.Utilities.Extensions;
 using GamePlay.Elevator;
 using GridSystem;
@@ -41,6 +42,7 @@ namespace GamePlay.People
 		[SerializeField] private Collider col;
 
 		private const float HIGHLIGHT_DURATION = .25F;
+		private const string FOLLOWER_TAG = "Follower";
 
 		public event UnityAction OnTap;
 		public event UnityAction OnDown;
@@ -58,6 +60,11 @@ namespace GamePlay.People
 		private void Start()
 		{
 			animations.SetRandomIdleSpeed();
+		}
+
+		private void OnDestroy()
+		{
+			transform.DOKill();
 		}
 
 		public List<GridCell> CurrentPath { get; set; } = new List<GridCell>();
@@ -109,7 +116,7 @@ namespace GamePlay.People
 			var tempPath = new List<Vector3>(PathList);
 			if (tempPath.Count > 1)
 				tempPath.RemoveAt(0);
-			var follower = new GameObject { transform = { position = tempPath[0] } };
+			var follower = ObjectPooler.Instance.Spawn(FOLLOWER_TAG, tempPath[0]);
 			follower.transform.DOPath(tempPath.ToArray(), moveSpeed).SetEase(Ease.Linear).SetSpeedBased(true);
 
 			return transform.DOPath(PathList?.ToArray(), moveSpeed).SetEase(Ease.Linear).SetSpeedBased(true).OnUpdate(() => transform.LookAt(follower.transform)).OnComplete(() =>
@@ -129,7 +136,7 @@ namespace GamePlay.People
 				IsMoving = false;
 				PathList.Clear();
 
-				Destroy(follower);
+				ObjectPooler.Instance.Release(follower, FOLLOWER_TAG);
 			});
 		}
 
@@ -163,7 +170,7 @@ namespace GamePlay.People
 		public void HideHighlight()
 		{
 			if (transform.localScale.x.Equals(1)) return;
-			
+
 			if (CurrentPath is not null && CurrentPath.Count > 0)
 			{
 				for (var i = 0; i < CurrentPath.Count; i++)

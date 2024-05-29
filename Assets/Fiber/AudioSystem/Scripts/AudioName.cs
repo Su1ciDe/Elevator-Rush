@@ -11,5 +11,7 @@ namespace Fiber.AudioSystem
 		Tap,
 		Place,
 		Elevator,
+		Win,
+		Lose
 	}
 }

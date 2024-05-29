@@ -58,6 +58,10 @@ MonoBehaviour:
         Value: {fileID: 8300000, guid: 9b6db908be91748fc9c587bdd9cd6683, type: 3}
       - Key: 2
         Value: {fileID: 8300000, guid: 1d6b0c6d4f6754e83884dd2e20ddc2ea, type: 3}
+      - Key: 3
+        Value: {fileID: 8300000, guid: 03381111bb21e4fd383bf7d303a541a8, type: 3}
+      - Key: 4
+        Value: {fileID: 8300000, guid: cf2b18b4ee86b4cf785e6525a32465e9, type: 3}
   - AudioSourcePrefab: {fileID: 5458974145386491207, guid: 9e1ed01cef9ce4a008f7d16af7973136, type: 3}
     ActiveAudioSource: {fileID: 0}
     CanPlayOver: 0

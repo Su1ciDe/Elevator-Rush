@@ -30,7 +30,7 @@ namespace GamePlay.People
 		private IEnumerator Start()
 		{
 			yield return null;
-			
+
 			var idleNo = Random.Range(0, 4);
 			foreach (var person in people)
 			{
@@ -71,7 +71,6 @@ namespace GamePlay.People
 			var path = leader.CurrentPath;
 			var pathPos = path?.Select(x => x.transform.position).ToList();
 
-			Debug.Log("Path : " + path);
 			if (path is not null && path.Count > 0)
 			{
 				PersonSlotController personSlotController;
@@ -89,9 +88,11 @@ namespace GamePlay.People
 					}
 				}
 
-				Debug.Log("slot : " + personSlotController);
-
-				if (!personSlotController) return;
+				if (!personSlotController)
+				{
+					HideHighlightPeople();
+					return;
+				}
 
 				AudioManager.Instance.PlayAudio(AudioName.Tap);
 				HapticManager.Instance.PlayHaptic(0.35f, 0);
@@ -107,7 +108,7 @@ namespace GamePlay.People
 					var i1 = i;
 					people[i].MoveToSlot(pathPos, personSlotController, i1).onComplete += () =>
 					{
-						if ((i1 + 1).Equals(people.Count) && PeopleManager.Instance.LastEnteredGroup == this)
+						if ((i1 + 1).Equals(people.Count))
 							WaitMovement();
 					};
 				}
@@ -120,7 +121,7 @@ namespace GamePlay.People
 
 				void WaitMovement()
 				{
-					if (personSlotController is Elevator.Elevator)
+					if (personSlotController is Elevator.Elevator && PeopleManager.Instance.LastEnteredGroup == this)
 					{
 						PeopleManager.Instance.WaitMovementElevator(this);
 					}

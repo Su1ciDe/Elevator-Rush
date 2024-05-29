@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Fiber.AudioSystem;
 using Fiber.Utilities;
 using Fiber.LevelSystem;
 using TriInspector;
@@ -136,6 +137,7 @@ namespace Fiber.Managers
 		{
 			if (StateManager.Instance.CurrentState != GameState.OnStart) return;
 
+			AudioManager.Instance.PlayAudio(AudioName.Win);
 			OnLevelWin?.Invoke();
 		}
 
@@ -143,6 +145,7 @@ namespace Fiber.Managers
 		{
 			if (StateManager.Instance.CurrentState != GameState.OnStart) return;
 
+			AudioManager.Instance.PlayAudio(AudioName.Lose);
 			OnLevelLose?.Invoke();
 		}
 
