@@ -57,8 +57,7 @@ namespace Fiber.LevelSystem
 		}
 
 		public void CheckFail()
-		{			Debug.Log("hello");
-
+		{
 			if (checkFailCoroutine is not null)
 				StopCoroutine(checkFailCoroutine);
 
