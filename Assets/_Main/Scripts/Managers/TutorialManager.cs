@@ -47,6 +47,10 @@ namespace Managers
 		private void OnLevelUnloaded()
 		{
 			Unsub();
+
+			tutorialUI.HideHand();
+			tutorialUI.HideText();
+			tutorialUI.HideFocus();
 		}
 
 		private void Unsub()
