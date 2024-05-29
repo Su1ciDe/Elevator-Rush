@@ -63,6 +63,8 @@ namespace GamePlay.Player
 
 		private void OnDown(LeanFinger finger)
 		{
+			if (finger.IsOverGui) return;
+
 			isDown = true;
 			var person = GetPerson(finger);
 			if (!person) return;
@@ -73,6 +75,8 @@ namespace GamePlay.Player
 
 		private void OnDrag(LeanFinger finger)
 		{
+			if (finger.IsOverGui) return;
+
 			if (!isDown) return;
 			var person = GetPerson(finger);
 			if (!person)
@@ -95,6 +99,8 @@ namespace GamePlay.Player
 
 		private void OnUp(LeanFinger finger)
 		{
+			if (finger.IsOverGui) return;
+
 			isDown = false;
 			if (!selectedPerson) return;
 

@@ -57,3 +57,7 @@ MonoBehaviour:
     Prefab: {fileID: 7903736433280875522, guid: ea78376b3d7db494d83b614c5257d349, type: 3}
     InitialSize: 5
     MaxSize: 25
+  - Tag: Follower
+    Prefab: {fileID: 4595644512130209446, guid: 0ac4844e08c094c2d9a4a55411426aac, type: 3}
+    InitialSize: 15
+    MaxSize: 50

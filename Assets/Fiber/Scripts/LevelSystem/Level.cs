@@ -57,7 +57,8 @@ namespace Fiber.LevelSystem
 		}
 
 		public void CheckFail()
-		{
+		{			Debug.Log("hello");
+
 			if (checkFailCoroutine is not null)
 				StopCoroutine(checkFailCoroutine);
 
@@ -75,9 +76,13 @@ namespace Fiber.LevelSystem
 			foreach (var personGroup in PeopleManager.Instance.Groups.Values)
 			{
 				if (personGroup.IsCompleted) continue;
-				if (personGroup.People.Any(x => x.IsMoving)) yield break;
+				// if (personGroup.People.Any(x => x.IsMoving)) yield break;
+				// yield return new WaitUntil(() => !personGroup.People.Any(x => x.IsMoving));
 
 				var leader = personGroup.People[0];
+				if (leader.IsMoving) continue;
+				// yield return new WaitUntil(() => !leader.IsMoving);
+
 				var path = leader.CheckPath();
 				if (path is not null && path.Count > 0)
 				{
