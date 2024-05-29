@@ -68,34 +68,35 @@ namespace Fiber.LevelSystem
 
 		private IEnumerator CheckFailCoroutine()
 		{
-			yield return new WaitForSeconds(0.5f);
+			yield return new WaitForSeconds(1f);
 			yield return new WaitUntil(() => elevatorManager.CurrentElevator);
-			// yield return new WaitForSeconds(1);
 
+			var currentElevator = elevatorManager.CurrentElevator;
 			bool peopleCanMove = false;
 			foreach (var personGroup in PeopleManager.Instance.Groups.Values)
 			{
 				if (personGroup.IsCompleted) continue;
 				// if (personGroup.People.Any(x => x.IsMoving)) yield break;
-				// yield return new WaitUntil(() => !personGroup.People.Any(x => x.IsMoving));
+				yield return new WaitUntil(() => !personGroup.People.Any(x => x.IsMoving));
 
 				var leader = personGroup.People[0];
 				// if (leader.IsMoving) continue;
-				 yield return new WaitUntil(() => !leader.IsMoving);
+				// yield return new WaitUntil(() => !leader.IsMoving);
+				if (currentElevator != elevatorManager.CurrentElevator) yield break;
 
-				var path = leader.CheckPath();
-				if (path is not null && path.Count > 0)
+				if (leader.PersonType == ElevatorManager.CurrentElevator?.ElevatorData.ElevatorType)
 				{
-					if (leader.PersonType == ElevatorManager.CurrentElevator?.ElevatorData.ElevatorType || HolderManager.GetFirstEmptyHolder() is not null)
+					var path = leader.CheckPath();
+					if ((path is not null && path.Count > 0) || HolderManager.GetFirstEmptyHolder() is not null)
 					{
 						peopleCanMove = true;
 						break;
 					}
-				}
-				else if (leader.PersonType == ElevatorManager.CurrentElevator?.ElevatorData.ElevatorType)
-				{
-					peopleCanMove = true;
-					break;
+					else if (leader.CurrentCell.CurrentPerson != leader) // means that the group is in the holder
+					{
+						peopleCanMove = true;
+						break;
+					}
 				}
 			}
 
