@@ -127,10 +127,9 @@ namespace GamePlay.People
 
 				void WaitMovement()
 				{
-					if (personSlotController is Elevator.Elevator)
+					if (personSlotController is Elevator.Elevator && PeopleManager.Instance.LastEnteredGroup == this)
 					{
-						if (PeopleManager.Instance.LastEnteredGroup == this)
-							PeopleManager.Instance.WaitMovementElevator(this);
+						PeopleManager.Instance.WaitMovementElevator(this);
 					}
 					else
 					{
@@ -151,6 +150,7 @@ namespace GamePlay.People
 			const string emojiTag = "FloatingEmoji_Angry";
 			var emoji = ObjectPooler.Instance.Spawn(emojiTag, leader.transform.position + 3.5f * Vector3.up).GetComponent<FloatingEmoji>();
 			emoji.Float(emojiTag);
+
 
 			for (var i = 0; i < people.Count; i++)
 			{
