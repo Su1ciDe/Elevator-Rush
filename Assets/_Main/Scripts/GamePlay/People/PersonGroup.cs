@@ -5,6 +5,7 @@ using Fiber.Managers;
 using Fiber.AudioSystem;
 using Fiber.Utilities;
 using Fiber.Utilities.Extensions;
+using Lofelt.NiceVibrations;
 using Managers;
 using Model;
 using TriInspector;
@@ -92,6 +93,8 @@ namespace GamePlay.People
 
 				if (!personSlotController)
 				{
+					HapticManager.Instance.PlayHaptic(HapticPatterns.PresetType.Warning);
+
 					HideHighlightPeople();
 					return;
 				}
@@ -117,15 +120,17 @@ namespace GamePlay.People
 
 				if (personSlotController is Elevator.Elevator)
 				{
+					IsCompleted = true;
 					PeopleManager.Instance.LastEnteredGroup = this;
 					PeopleManager.Instance.StopWaiting();
 				}
 
 				void WaitMovement()
 				{
-					if (personSlotController is Elevator.Elevator && PeopleManager.Instance.LastEnteredGroup == this)
+					if (personSlotController is Elevator.Elevator)
 					{
-						PeopleManager.Instance.WaitMovementElevator(this);
+						if (PeopleManager.Instance.LastEnteredGroup == this)
+							PeopleManager.Instance.WaitMovementElevator(this);
 					}
 					else
 					{
@@ -137,7 +142,7 @@ namespace GamePlay.People
 			{
 				CantWalkFeedback(leader);
 			}
-			
+
 			OnTapped?.Invoke();
 		}
 

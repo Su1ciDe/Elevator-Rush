@@ -75,9 +75,10 @@ namespace Fiber.LevelSystem
 			bool peopleCanMove = false;
 			foreach (var personGroup in PeopleManager.Instance.Groups.Values)
 			{
-				if (personGroup.IsCompleted) continue;
 				// if (personGroup.People.Any(x => x.IsMoving)) yield break;
 				yield return new WaitUntil(() => !personGroup.People.Any(x => x.IsMoving));
+				yield return null;
+				if (personGroup.IsCompleted) continue;
 
 				var leader = personGroup.People[0];
 				// if (leader.IsMoving) continue;
