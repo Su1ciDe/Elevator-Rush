@@ -89,7 +89,7 @@ namespace Managers
 					PeopleManager.Instance.WaitMovementElevator(group);
 				}
 
-				yield return new WaitForSeconds(0.55f);
+				yield return new WaitForSeconds(0.5f);
 				holders[i].CurrentPersonGroup = null;
 			}
 

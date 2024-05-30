@@ -63,6 +63,7 @@ namespace Managers
 		private IEnumerator WaitMovementCoroutine(PersonGroup group)
 		{
 			yield return new WaitUntil(() => !group.People.Any(x => x.IsMoving));
+			yield return new WaitForSeconds(1f);
 
 			OnMovementCompleted?.Invoke();
 		}
