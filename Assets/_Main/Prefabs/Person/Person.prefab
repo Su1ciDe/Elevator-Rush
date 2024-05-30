@@ -113,10 +113,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.6
   m_Height: 2.305003
   m_Direction: 1
-  m_Center: {x: 0, y: 1.1525015, z: 0}
+  m_Center: {x: 0, y: 1.152501, z: 0}
 --- !u!114 &2848473151770334493
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -133,7 +133,7 @@ MonoBehaviour:
   <PersonType>k__BackingField: -1
   <Direction>k__BackingField: 0
   animations: {fileID: 7641527395456656447}
-  moveSpeed: 12
+  moveSpeed: 15
   renderers:
   - {fileID: 8338250422523107655}
   - {fileID: 8938031051106581526}

@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Collections;
 using GamePlay.People;
 using Model;
@@ -32,12 +33,7 @@ namespace GamePlay.Elevator
 
 		public IEnumerator WaitForPeopleCompleteMovement()
 		{
-			for (var i = 0; i < Slots.Length; i++)
-			{
-				var i1 = i;
-				if (Slots[i1].CurrentPerson)
-					yield return new WaitUntil(() => !Slots[i1].CurrentPerson.IsMoving);
-			}
+			yield return new WaitUntil(() => !Slots.Any(x => x.CurrentPerson && x.CurrentPerson.IsMoving));
 		}
 
 		public bool CheckIfCompleted()
