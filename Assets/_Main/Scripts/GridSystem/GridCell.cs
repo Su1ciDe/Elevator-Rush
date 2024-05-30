@@ -51,5 +51,10 @@ namespace GridSystem
 		{
 			meshRenderer.material = material;
 		}
+
+		public void DisableModel()
+		{
+			meshRenderer.gameObject.SetActive(false);
+		}
 	}
 }

@@ -227,6 +227,7 @@ namespace GridSystem
 					{
 						var obstacle = ObstacleManager.Instance.SpawnObstacle(cellInfo.Obstacle, x, y, pos);
 						cell.CurrentObstacle = obstacle;
+						cell.DisableModel();
 					}
 				}
 			}

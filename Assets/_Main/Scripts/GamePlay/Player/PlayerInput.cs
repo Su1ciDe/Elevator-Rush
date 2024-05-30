@@ -22,7 +22,6 @@ namespace GamePlay.Player
 			LevelManager.OnLevelStart += OnLevelStarted;
 			LevelManager.OnLevelWin += OnLevelWon;
 			LevelManager.OnLevelLose += OnLevelLost;
-			ElevatorManager.OnNewElevator += OnNewElevator;
 
 			LeanTouch.OnFingerDown += OnDown;
 			LeanTouch.OnFingerUpdate += OnDrag;
@@ -34,32 +33,16 @@ namespace GamePlay.Player
 			LevelManager.OnLevelStart -= OnLevelStarted;
 			LevelManager.OnLevelWin -= OnLevelWon;
 			LevelManager.OnLevelLose -= OnLevelLost;
-			ElevatorManager.OnNewElevator -= OnNewElevator;
 
 			LeanTouch.OnFingerDown -= OnDown;
 			LeanTouch.OnFingerUpdate -= OnDrag;
 			LeanTouch.OnFingerUp -= OnUp;
 		}
 
-		// private void Update()
-		// {
-		// 	if (!CanInput) return;
-		//
-		// 	if (Input.GetMouseButtonDown(0))
-		// 	{
-		// 		OnDown();
-		// 	}
-		//
-		// 	if (Input.GetMouseButton(0))
-		// 	{
-		// 		OnDrag();
-		// 	}
-		//
-		// 	if (Input.GetMouseButtonUp(0))
-		// 	{
-		// 		OnUp();
-		// 	}
-		// }
+		private void OnDestroy()
+		{
+			ElevatorManager.OnNewElevator -= OnNewElevator;
+		}
 
 		private void OnDown(LeanFinger finger)
 		{
@@ -127,7 +110,7 @@ namespace GamePlay.Player
 
 		private void OnLevelStarted()
 		{
-			// CanInput = true;
+			ElevatorManager.OnNewElevator += OnNewElevator;
 			selectedPerson = null;
 		}
 
