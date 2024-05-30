@@ -35,7 +35,8 @@ namespace GamePlay.Elevator
 			for (var i = 0; i < Slots.Length; i++)
 			{
 				var i1 = i;
-				yield return new WaitUntil(() => !Slots[i1].CurrentPerson.IsMoving);
+				if (Slots[i1].CurrentPerson)
+					yield return new WaitUntil(() => !Slots[i1].CurrentPerson.IsMoving);
 			}
 		}
 
