@@ -48,6 +48,7 @@ namespace Managers
 
 			if (LevelManager.Instance.CurrentLevel.ElevatorManager.CurrentElevator)
 			{
+				yield return LevelManager.Instance.CurrentLevel.ElevatorManager.CurrentElevator.WaitForPeopleCompleteMovement();
 				LevelManager.Instance.CurrentLevel.ElevatorManager.CurrentElevator.CheckIfCompleted();
 				group.IsCompleted = true;
 			}
@@ -63,7 +64,7 @@ namespace Managers
 		private IEnumerator WaitMovementCoroutine(PersonGroup group)
 		{
 			yield return new WaitUntil(() => !group.People.Any(x => x.IsMoving));
-			yield return new WaitForSeconds(1f);
+			// yield return new WaitForSeconds(1f);
 
 			OnMovementCompleted?.Invoke();
 		}

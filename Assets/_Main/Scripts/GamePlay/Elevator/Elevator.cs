@@ -1,3 +1,4 @@
+using System.Collections;
 using GamePlay.People;
 using Model;
 using ScriptableObjects;
@@ -27,6 +28,15 @@ namespace GamePlay.Elevator
 			person.PathList.Add(entrancePoint.position);
 
 			return base.MoveToSlot(person);
+		}
+
+		public IEnumerator WaitForPeopleCompleteMovement()
+		{
+			for (var i = 0; i < Slots.Length; i++)
+			{
+				var i1 = i;
+				yield return new WaitUntil(() => !Slots[i1].CurrentPerson.IsMoving);
+			}
 		}
 
 		public bool CheckIfCompleted()

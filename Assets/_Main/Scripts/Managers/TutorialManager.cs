@@ -82,7 +82,7 @@ namespace Managers
 
 		private IEnumerator Level1WaitLoading()
 		{
-			if (LoadingPanelController.Instance)
+			if (LoadingPanelController.Instance && !LoadingPanelController.Instance.IsLoaded) 
 				yield return new WaitUntilAction(ref LoadingPanelController.Instance.OnLoadingFinished);
 
 			level1_firstGroup = PeopleManager.Instance.Groups[1];
@@ -159,7 +159,7 @@ namespace Managers
 
 		private IEnumerator Level2WaitLoading()
 		{
-			if (LoadingPanelController.Instance)
+			if (LoadingPanelController.Instance && !LoadingPanelController.Instance.IsLoaded)
 				yield return new WaitUntilAction(ref LoadingPanelController.Instance.OnLoadingFinished);
 
 			Player.Instance.PlayerInput.CanInput = true;
@@ -180,9 +180,8 @@ namespace Managers
 			tutorialUI.HideText();
 			tutorialUI.HideHand();
 
-
 			Player.Instance.PlayerInput.CanInput = false;
-			
+
 			PeopleManager.OnMovementCompleted += Level2OnMovementCompleted;
 		}
 
