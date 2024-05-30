@@ -180,12 +180,17 @@ namespace Managers
 			tutorialUI.HideText();
 			tutorialUI.HideHand();
 
+
+			Player.Instance.PlayerInput.CanInput = false;
+			
 			PeopleManager.OnMovementCompleted += Level2OnMovementCompleted;
 		}
 
 		private void Level2OnMovementCompleted()
 		{
 			PeopleManager.OnMovementCompleted -= Level2OnMovementCompleted;
+
+			Player.Instance.PlayerInput.CanInput = true;
 
 			tutorialUI.ShowText("The way is clear now!");
 			tutorialUI.ShowTap(level2_secondGroup.People[0].transform.position + 3 * Vector3.up, Helper.MainCamera);
