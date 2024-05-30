@@ -82,7 +82,7 @@ namespace Managers
 
 		private IEnumerator Level1WaitLoading()
 		{
-			if (LoadingPanelController.Instance)
+			if (LoadingPanelController.Instance && !LoadingPanelController.Instance.IsLoaded) 
 				yield return new WaitUntilAction(ref LoadingPanelController.Instance.OnLoadingFinished);
 
 			level1_firstGroup = PeopleManager.Instance.Groups[1];
@@ -159,7 +159,7 @@ namespace Managers
 
 		private IEnumerator Level2WaitLoading()
 		{
-			if (LoadingPanelController.Instance)
+			if (LoadingPanelController.Instance && !LoadingPanelController.Instance.IsLoaded)
 				yield return new WaitUntilAction(ref LoadingPanelController.Instance.OnLoadingFinished);
 
 			Player.Instance.PlayerInput.CanInput = true;
@@ -180,12 +180,16 @@ namespace Managers
 			tutorialUI.HideText();
 			tutorialUI.HideHand();
 
+			Player.Instance.PlayerInput.CanInput = false;
+
 			PeopleManager.OnMovementCompleted += Level2OnMovementCompleted;
 		}
 
 		private void Level2OnMovementCompleted()
 		{
 			PeopleManager.OnMovementCompleted -= Level2OnMovementCompleted;
+
+			Player.Instance.PlayerInput.CanInput = true;
 
 			tutorialUI.ShowText("The way is clear now!");
 			tutorialUI.ShowTap(level2_secondGroup.People[0].transform.position + 3 * Vector3.up, Helper.MainCamera);

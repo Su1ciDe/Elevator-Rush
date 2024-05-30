@@ -81,6 +81,7 @@ namespace Managers
 					};
 				}
 
+				group.IsCompleted = true;
 				PeopleManager.Instance.LastEnteredGroup = group;
 				PeopleManager.Instance.StopWaiting();
 

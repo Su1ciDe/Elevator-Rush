@@ -5,6 +5,7 @@ using Fiber.Managers;
 using Fiber.AudioSystem;
 using Fiber.Utilities;
 using Fiber.Utilities.Extensions;
+using Lofelt.NiceVibrations;
 using Managers;
 using Model;
 using TriInspector;
@@ -92,6 +93,8 @@ namespace GamePlay.People
 
 				if (!personSlotController)
 				{
+					HapticManager.Instance.PlayHaptic(HapticPatterns.PresetType.Warning);
+
 					HideHighlightPeople();
 					return;
 				}
@@ -117,6 +120,7 @@ namespace GamePlay.People
 
 				if (personSlotController is Elevator.Elevator)
 				{
+					IsCompleted = true;
 					PeopleManager.Instance.LastEnteredGroup = this;
 					PeopleManager.Instance.StopWaiting();
 				}
@@ -137,7 +141,7 @@ namespace GamePlay.People
 			{
 				CantWalkFeedback(leader);
 			}
-			
+
 			OnTapped?.Invoke();
 		}
 
@@ -146,6 +150,7 @@ namespace GamePlay.People
 			const string emojiTag = "FloatingEmoji_Angry";
 			var emoji = ObjectPooler.Instance.Spawn(emojiTag, leader.transform.position + 3.5f * Vector3.up).GetComponent<FloatingEmoji>();
 			emoji.Float(emojiTag);
+
 
 			for (var i = 0; i < people.Count; i++)
 			{

@@ -37,7 +37,11 @@ namespace Managers
 
 		public void WaitMovementElevator(PersonGroup group)
 		{
-			StopWaiting();
+			if (waitForPeopleMovementCoroutine is not null)
+			{
+				StopCoroutine(waitForPeopleMovementCoroutine);
+				waitForPeopleMovementCoroutine = null;
+			}
 
 			waitForPeopleMovementCoroutine = StartCoroutine(WaitForPeopleMovementCoroutine(group));
 		}
@@ -48,14 +52,18 @@ namespace Managers
 
 			if (LevelManager.Instance.CurrentLevel.ElevatorManager.CurrentElevator)
 			{
+				yield return LevelManager.Instance.CurrentLevel.ElevatorManager.CurrentElevator.WaitForPeopleCompleteMovement();
 				LevelManager.Instance.CurrentLevel.ElevatorManager.CurrentElevator.CheckIfCompleted();
-				group.IsCompleted = true;
 			}
 		}
 
 		public void WaitMovement(PersonGroup group)
 		{
-			StopWaiting();
+			if (movementCoroutine is not null)
+			{
+				StopCoroutine(movementCoroutine);
+				movementCoroutine = null;
+			}
 
 			movementCoroutine = StartCoroutine(WaitMovementCoroutine(group));
 		}
@@ -63,7 +71,6 @@ namespace Managers
 		private IEnumerator WaitMovementCoroutine(PersonGroup group)
 		{
 			yield return new WaitUntil(() => !group.People.Any(x => x.IsMoving));
-			yield return new WaitForSeconds(1f);
 
 			OnMovementCompleted?.Invoke();
 		}
