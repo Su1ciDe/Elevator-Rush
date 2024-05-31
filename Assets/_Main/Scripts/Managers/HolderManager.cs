@@ -101,6 +101,12 @@ namespace Managers
 				holders[i].CurrentPersonGroup = null;
 			}
 
+			yield return null;
+			if (LevelManager.Instance.CurrentLevel.HolderManager.GetFirstEmptyHolder() is null)
+			{
+				LevelManager.Instance.Lose();
+			}
+
 			// RearrangePeople();
 		}
 

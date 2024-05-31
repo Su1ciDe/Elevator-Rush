@@ -125,11 +125,6 @@ namespace GamePlay.People
 					PeopleManager.Instance.StopWaiting();
 				}
 
-				if (LevelManager.Instance.CurrentLevel.HolderManager.GetFirstEmptyHolder() is null)
-				{
-					LevelManager.Instance.Lose();
-				}
-
 				void WaitMovement()
 				{
 					if (personSlotController is Elevator.Elevator && PeopleManager.Instance.LastEnteredGroup == this)
