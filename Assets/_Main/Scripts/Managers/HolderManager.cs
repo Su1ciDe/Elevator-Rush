@@ -100,13 +100,7 @@ namespace Managers
 				yield return new WaitForSeconds(0.5f);
 				holders[i].CurrentPersonGroup = null;
 			}
-
-			yield return null;
-			if (LevelManager.Instance.CurrentLevel.HolderManager.GetFirstEmptyHolder() is null)
-			{
-				LevelManager.Instance.Lose();
-			}
-
+			
 			// RearrangePeople();
 		}
 

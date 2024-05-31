@@ -25,18 +25,22 @@ namespace Fiber.LevelSystem
 		[SerializeField] private HolderManager holderManager;
 		public HolderManager HolderManager => holderManager;
 
-		// private void OnEnable()
-		// {
-		// 	ElevatorManager.OnNewElevator += OnNewElevatorFirst;
-		// 	PeopleManager.OnMovementCompleted += OnMovementCompleted;
-		// }
-		//
-		// private void OnDisable()
-		// {
-		// 	ElevatorManager.OnNewElevator -= OnNewElevatorFirst;
-		// 	ElevatorManager.OnNewElevator -= OnNewElevator;
-		// 	PeopleManager.OnMovementCompleted -= OnMovementCompleted;
-		// }
+		private void OnEnable()
+		{
+			PeopleManager.OnMovementCompleted += FailCheck;
+
+			// ElevatorManager.OnNewElevator += OnNewElevatorFirst;
+			// PeopleManager.OnMovementCompleted += OnMovementCompleted;
+		}
+
+		private void OnDisable()
+		{
+			PeopleManager.OnMovementCompleted -= FailCheck;
+
+			// ElevatorManager.OnNewElevator -= OnNewElevatorFirst;
+			// ElevatorManager.OnNewElevator -= OnNewElevator;
+			// PeopleManager.OnMovementCompleted -= OnMovementCompleted;
+		}
 
 		public virtual void Load()
 		{
@@ -47,29 +51,29 @@ namespace Fiber.LevelSystem
 		{
 		}
 
-		private void OnMovementCompleted()
-		{
-			CheckFail();
-		}
+		// private void OnMovementCompleted()
+		// {
+		// 	CheckFail();
+		// }
 
-		private void OnNewElevatorFirst(Elevator elevator)
-		{
-			ElevatorManager.OnNewElevator -= OnNewElevatorFirst;
-			ElevatorManager.OnNewElevator += OnNewElevator;
-		}
+		// private void OnNewElevatorFirst(Elevator elevator)
+		// {
+		// 	ElevatorManager.OnNewElevator -= OnNewElevatorFirst;
+		// 	ElevatorManager.OnNewElevator += OnNewElevator;
+		// }
 
 		private void OnNewElevator(Elevator elevator)
 		{
-			CheckFail();
+			// CheckFail();
 		}
 
-		public void CheckFail()
-		{
-			if (checkFailCoroutine is not null)
-				StopCoroutine(checkFailCoroutine);
-
-			checkFailCoroutine = StartCoroutine(CheckFailCoroutine());
-		}
+		// public void CheckFail()
+		// {
+		// 	if (checkFailCoroutine is not null)
+		// 		StopCoroutine(checkFailCoroutine);
+		//
+		// 	checkFailCoroutine = StartCoroutine(FailCheckCoroutine());
+		// }
 
 		private Coroutine checkFailCoroutine;
 
@@ -111,6 +115,31 @@ namespace Fiber.LevelSystem
 			{
 				LevelManager.Instance.Lose();
 			}
+		}
+
+		private void FailCheck()
+		{
+			if (checkFailCoroutine is not null)
+				StopCoroutine(checkFailCoroutine);
+
+			checkFailCoroutine = StartCoroutine(FailCheckCoroutine());
+		}
+
+		private IEnumerator FailCheckCoroutine()
+		{
+			yield return new WaitForSeconds(0.5f);
+			yield return new WaitUntil(() => elevatorManager.CurrentElevator);
+			yield return null;
+
+			foreach (var personGroup in PeopleManager.Instance.Groups.Values)
+				yield return new WaitUntil(() => !personGroup.People.Any(x => x.IsMoving));
+
+			yield return null;
+
+			if (HolderManager.GetFirstEmptyHolder() is null)
+				LevelManager.Instance.Lose();
+
+			checkFailCoroutine = null;
 		}
 	}
 }
