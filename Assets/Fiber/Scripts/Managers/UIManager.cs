@@ -29,6 +29,7 @@ namespace Fiber.Managers
 
 		private void OnEnable()
 		{
+			LevelManager.OnLevelUnload += OnLevelUnloaded;
 			LevelManager.OnLevelLoad += OnLevelLoad;
 			LevelManager.OnLevelStart += OnLevelStart;
 			LevelManager.OnLevelWin += OnLevelWin;
@@ -37,6 +38,7 @@ namespace Fiber.Managers
 
 		private void OnDisable()
 		{
+			LevelManager.OnLevelUnload -= OnLevelUnloaded;
 			LevelManager.OnLevelLoad -= OnLevelLoad;
 			LevelManager.OnLevelStart -= OnLevelStart;
 			LevelManager.OnLevelWin -= OnLevelWin;
@@ -48,9 +50,19 @@ namespace Fiber.Managers
 			winPanel.Open();
 		}
 
+		private void HideWinPanel()
+		{
+			winPanel.Close();
+		}
+
 		private void ShowLosePanel()
 		{
 			losePanel.Open();
+		}
+
+		private void HideLosePanel()
+		{
+			losePanel.Close();
 		}
 
 		private void HideStartPanel()
@@ -91,6 +103,12 @@ namespace Fiber.Managers
 		private void DisableInput()
 		{
 			inputPanel.SetActive(false);
+		}
+
+		private void OnLevelUnloaded()
+		{
+			HideWinPanel();
+			HideLosePanel();
 		}
 
 		private void OnLevelLoad()
