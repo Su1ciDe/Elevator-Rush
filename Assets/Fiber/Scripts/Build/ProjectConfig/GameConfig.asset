@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   companyName: Fiber Games
   productName: Elevator Rush 3D
-  productIcon: {fileID: 2800000, guid: 0049bd813b4544af79cb4fe539f26a73, type: 3}
+  productIcon: {fileID: 2800000, guid: 547e2215a15b7427ea548a718a7cd8c6, type: 3}
   version: 0.1
   iOSBundleId: com.FiberGames.ElevatorRush
   teamId: 9JRFGT2VDU
   iOSBuildNo: 0
-  androidBundleId: com.fibergames.game
+  androidBundleId: com.FiberGames.ElevatorRush
   androidBuildNo: 1
   facebookId: 6503188897
   facebookClientToken: f0af5a64bd1439c6ad971eb27e3f864f
