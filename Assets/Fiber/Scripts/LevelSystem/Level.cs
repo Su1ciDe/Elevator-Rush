@@ -127,13 +127,13 @@ namespace Fiber.LevelSystem
 
 		private IEnumerator FailCheckCoroutine()
 		{
-			yield return new WaitForSeconds(0.5f);
-			yield return new WaitUntil(() => elevatorManager.CurrentElevator);
-			yield return null;
-
-			foreach (var personGroup in PeopleManager.Instance.Groups.Values)
-				yield return new WaitUntil(() => !personGroup.People.Any(x => x.IsMoving));
-
+			// yield return new WaitForSeconds(0.5f);
+			// yield return new WaitUntil(() => elevatorManager.CurrentElevator);
+			// yield return null;
+			//
+			// foreach (var personGroup in PeopleManager.Instance.Groups.Values)
+			// 	yield return new WaitUntil(() => !personGroup.People.Any(x => x.IsMoving));
+			
 			yield return null;
 
 			if (HolderManager.GetFirstEmptyHolder() is null)
