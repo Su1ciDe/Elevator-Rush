@@ -1,5 +1,5 @@
-using System.Collections;
 using System.Linq;
+using System.Collections;
 using Fiber.Managers;
 using GamePlay.Elevator;
 using Managers;
@@ -27,12 +27,13 @@ namespace Fiber.LevelSystem
 
 		private void OnEnable()
 		{
-			ElevatorManager.OnNewElevator += OnNewElevator;
+			ElevatorManager.OnNewElevator += OnNewElevatorFirst;
 			PeopleManager.OnMovementCompleted += OnMovementCompleted;
 		}
 
 		private void OnDisable()
 		{
+			ElevatorManager.OnNewElevator -= OnNewElevatorFirst;
 			ElevatorManager.OnNewElevator -= OnNewElevator;
 			PeopleManager.OnMovementCompleted -= OnMovementCompleted;
 		}
@@ -49,6 +50,12 @@ namespace Fiber.LevelSystem
 		private void OnMovementCompleted()
 		{
 			CheckFail();
+		}
+
+		private void OnNewElevatorFirst(Elevator elevator)
+		{
+			ElevatorManager.OnNewElevator -= OnNewElevatorFirst;
+			ElevatorManager.OnNewElevator += OnNewElevator;
 		}
 
 		private void OnNewElevator(Elevator elevator)
@@ -75,8 +82,8 @@ namespace Fiber.LevelSystem
 			bool peopleCanMove = false;
 			foreach (var personGroup in PeopleManager.Instance.Groups.Values)
 			{
-				// if (personGroup.People.Any(x => x.IsMoving)) yield break;
-				yield return new WaitUntil(() => !personGroup.People.Any(x => x.IsMoving));
+				if (personGroup.People.Any(x => x.IsMoving)) yield break;
+				// yield return new WaitUntil(() => !personGroup.People.Any(x => x.IsMoving));
 				yield return null;
 				if (personGroup.IsCompleted) continue;
 
@@ -85,19 +92,18 @@ namespace Fiber.LevelSystem
 				// yield return new WaitUntil(() => !leader.IsMoving);
 				if (currentElevator != elevatorManager.CurrentElevator) yield break;
 
-				if (leader.PersonType == ElevatorManager.CurrentElevator?.ElevatorData.ElevatorType)
+				if (leader.PersonType != ElevatorManager.CurrentElevator?.ElevatorData.ElevatorType) continue;
+
+				var path = leader.CheckPath();
+				if ((path is not null && path.Count > 0) || HolderManager.GetFirstEmptyHolder() is not null)
 				{
-					var path = leader.CheckPath();
-					if ((path is not null && path.Count > 0) || HolderManager.GetFirstEmptyHolder() is not null)
-					{
-						peopleCanMove = true;
-						break;
-					}
-					else if (leader.CurrentCell.CurrentPerson != leader) // means that the group is in the holder
-					{
-						peopleCanMove = true;
-						break;
-					}
+					peopleCanMove = true;
+					break;
+				}
+				else if (leader.CurrentCell.CurrentPerson != leader) // means that the group is in the holder
+				{
+					peopleCanMove = true;
+					break;
 				}
 			}
 
