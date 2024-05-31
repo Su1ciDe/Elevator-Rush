@@ -30,17 +30,24 @@ namespace Managers
 
 		private void OnEnable()
 		{
+			LevelManager.OnLevelLose += OnLevelLost;
 			ElevatorManager.OnNewElevator += OnNewElevator;
 		}
 
 		private void OnDisable()
 		{
+			LevelManager.OnLevelLose -= OnLevelLost;
 			ElevatorManager.OnNewElevator -= OnNewElevator;
 		}
 
 		private void OnNewElevator(Elevator newElevator)
 		{
 			CheckPeople();
+		}
+
+		private void OnLevelLost()
+		{
+			ElevatorManager.OnNewElevator -= OnNewElevator;
 		}
 
 		private void Init()

@@ -25,18 +25,18 @@ namespace Fiber.LevelSystem
 		[SerializeField] private HolderManager holderManager;
 		public HolderManager HolderManager => holderManager;
 
-		private void OnEnable()
-		{
-			ElevatorManager.OnNewElevator += OnNewElevatorFirst;
-			PeopleManager.OnMovementCompleted += OnMovementCompleted;
-		}
-
-		private void OnDisable()
-		{
-			ElevatorManager.OnNewElevator -= OnNewElevatorFirst;
-			ElevatorManager.OnNewElevator -= OnNewElevator;
-			PeopleManager.OnMovementCompleted -= OnMovementCompleted;
-		}
+		// private void OnEnable()
+		// {
+		// 	ElevatorManager.OnNewElevator += OnNewElevatorFirst;
+		// 	PeopleManager.OnMovementCompleted += OnMovementCompleted;
+		// }
+		//
+		// private void OnDisable()
+		// {
+		// 	ElevatorManager.OnNewElevator -= OnNewElevatorFirst;
+		// 	ElevatorManager.OnNewElevator -= OnNewElevator;
+		// 	PeopleManager.OnMovementCompleted -= OnMovementCompleted;
+		// }
 
 		public virtual void Load()
 		{
