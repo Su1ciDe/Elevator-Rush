@@ -34,10 +34,13 @@ namespace GamePlay.People
 
 		[Space]
 		[SerializeField] private float moveSpeed = 10;
+		[SerializeField] private float capColorValueOffset = .1f;
 
 		[Title("References")]
 		[SerializeField] private Renderer[] renderers;
 		[SerializeField] private Collider col;
+		[SerializeField] private GameObject cap;
+		[SerializeField] private Transform model;
 
 		private const float HIGHLIGHT_DURATION = .25F;
 		private const string FOLLOWER_TAG = "Follower";
@@ -204,5 +207,18 @@ namespace GamePlay.People
 		}
 
 #endif
+		public void SetLeader(float multiplier)
+		{
+			model.localScale = Vector3.one * multiplier;
+			
+			cap.SetActive(true);
+
+			var renderer = cap.GetComponent<MeshRenderer>();
+			var color = renderer.sharedMaterial.GetColor("_BaseColor");
+			
+			MaterialPropertyBlock materialPropertyBlock = new MaterialPropertyBlock();
+			materialPropertyBlock.SetColor("_BaseColor", new Color(color.r - capColorValueOffset, color.g - capColorValueOffset, color.b - capColorValueOffset));
+			renderer.SetPropertyBlock(materialPropertyBlock);
+		}
 	}
 }

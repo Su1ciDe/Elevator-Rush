@@ -29,14 +29,22 @@ namespace GamePlay.People
 		public bool IsCompleted { get; set; }
 
 		public event UnityAction OnTapped;
-
+		[SerializeField] private float leaderScaleMultiplier = 1.13f;
 		private IEnumerator Start()
 		{
 			yield return null;
 
+			bool leaderHasRescaled = false;
+			
 			var idleNo = Random.Range(0, 4);
 			foreach (var person in people)
 			{
+				if (!leaderHasRescaled)
+				{
+					person.SetLeader(leaderScaleMultiplier);
+					leaderHasRescaled = true;
+				}
+				
 				person.OnTap += OnPersonTapped;
 				person.OnDown += HighlightPeople;
 				person.OnUp += HideHighlightPeople;

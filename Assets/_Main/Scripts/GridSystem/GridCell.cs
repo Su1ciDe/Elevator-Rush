@@ -1,3 +1,4 @@
+using System;
 using GamePlay.People;
 using GamePlay.Obstacles;
 using TriInspector;
@@ -35,6 +36,14 @@ namespace GridSystem
 		}
 
 		#endregion
+
+		private void Start()
+		{
+			if (CurrentObstacle)
+			{
+				meshRenderer.gameObject.SetActive(false);
+			}
+		}
 
 		public void Setup(int x, int y, Vector2 nodeSize)
 		{
