@@ -225,7 +225,7 @@ namespace GridSystem
 
 					if (cellInfo.Obstacle is not null)
 					{
-						var obstacle = ObstacleManager.Instance.SpawnObstacle(cellInfo.Obstacle, x, y, pos);
+						var obstacle = ObstacleManager.Instance.SpawnObstacle(cellInfo.Obstacle, x, y, pos, cellInfo.Direction);
 						cell.CurrentObstacle = obstacle;
 						cell.DisableModel();
 					}

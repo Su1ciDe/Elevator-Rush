@@ -233,7 +233,7 @@ namespace LevelEditor.Editor
 		{
 			if (e.button.Equals(0)) // Place
 			{
-				if (radio_PeopleObstacle.value.Equals(0))
+				if (radio_PeopleObstacle.value.Equals(0)) // Person
 				{
 					if (selectedType == PersonType.None)
 					{
@@ -252,11 +252,13 @@ namespace LevelEditor.Editor
 						SetLabelDirection(direction, cellInfo.Button);
 					}
 				}
-				else if (radio_PeopleObstacle.value.Equals(1))
+				else if (radio_PeopleObstacle.value.Equals(1)) // Obstacle
 				{
 					cellInfo.Button.style.backgroundColor = Color.black;
 					cellInfo.Button.text = drop_Obstacle.value;
 					cellInfo.Obstacle = obstacles[drop_Obstacle.index];
+
+					SetLabelDirection(direction, cellInfo.Button);
 				}
 			}
 			else if (e.button.Equals(1)) // Rotate
@@ -401,7 +403,10 @@ namespace LevelEditor.Editor
 				var cell = gridCells[obstacle.Coordinates.x, obstacle.Coordinates.y];
 				cell.Obstacle = obstaclePrefab;
 				cell.Button.text = obstaclePrefab.name;
+				cell.Direction = obstacle.Direction;
 				cell.Button.style.backgroundColor = cell.Color = Color.black;
+
+				SetLabelDirection(cell.Direction, cell.Button);
 			}
 
 			var temp = new List<ElevatorData>(loadedLevel.ElevatorManager.Elevators.Select(x => x.ElevatorData));

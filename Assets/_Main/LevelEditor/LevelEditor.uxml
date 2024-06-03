@@ -1,7 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/_Main/LevelEditor/LevelEditor.uss?fileID=7433441132597879392&amp;guid=b6f0f5a176744ff3ba0d281daf2c7273&amp;type=3#LevelEditor" />
     <ui:VisualElement name="Main" style="flex-grow: 1;">
-        <ui:VisualElement name="Load" class="bordered-box">
+        <ui:VisualElement name="Load" class="bordered-box" style="flex-shrink: 0;">
             <ui:Label text="Load" display-tooltip-when-elided="true" class="header" />
             <ui:VisualElement name="Load_VE" style="flex-direction: row-reverse;">
                 <ui:Button text="Load" display-tooltip-when-elided="true" name="btn_Load" style="width: 100px;" />
@@ -27,9 +27,9 @@
                 <ui:Label tabindex="-1" text="Direction: " parse-escape-sequences="true" display-tooltip-when-elided="true" />
                 <ui:Label tabindex="-1" parse-escape-sequences="true" display-tooltip-when-elided="true" name="lbl_Direction" text="Up" style="-unity-font-style: bold; font-size: 20px;" />
             </ui:VisualElement>
-            <ui:VisualElement name="Grid_VE" style="flex-grow: 1;" />
+            <ui:ScrollView name="Grid_VE" style="flex-grow: 1;" />
         </ui:VisualElement>
-        <ui:VisualElement name="Options" class="bordered-box">
+        <ui:VisualElement name="Options" class="bordered-box" style="flex-shrink: 0;">
             <ui:Label text="Options" display-tooltip-when-elided="true" class="header" />
             <ui:VisualElement name="Elevators_VE" style="flex-grow: 1;" />
             <ui:VisualElement style="flex-grow: 1;">

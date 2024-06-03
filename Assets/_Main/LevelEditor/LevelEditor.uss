@@ -66,11 +66,11 @@
 
 .cell {
     background-color: white;
-    height: 50px;
-    width: 50px;
+    height: 60px;
+    width: 60px;
     transition: 0.2s all;
 
-    font-size: 12px;
+    font-size: 10px;
     -unity-font-style: bold;
     -unity-text-align: middle-center;
     -unity-text-outline-color: black;
