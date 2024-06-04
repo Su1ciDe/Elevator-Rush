@@ -153,7 +153,15 @@ namespace Managers
 		{
 			var mat = PeopleManager.Instance.PersonDataSO.PersonData[type].ElevatorMaterial;
 			for (int i = 0; i < meshRenderers.Length; i++)
-				meshRenderers[i].material = mat;
+			{
+				if (meshRenderers[i].materials.Length > 1)
+				{
+					meshRenderers[i].materials[1].color = mat.color;
+					Debug.Log(meshRenderers[i].gameObject.name);
+				}
+				else 
+					meshRenderers[i].material = mat;
+			}
 		}
 
 		private void OpenDoors()
