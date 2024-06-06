@@ -243,7 +243,7 @@ namespace LevelEditor.Editor
 					}
 					else
 					{
-						cellInfo.Button.style.backgroundColor = personDataSO.PersonData[selectedType].PersonMaterial.color;
+						cellInfo.Button.style.backgroundColor = personDataSO.PersonData[selectedType].PersonMaterial.GetColor(baseColor);
 						cellInfo.PersonType = selectedType;
 						cellInfo.GroupNo = (int)txt_GroupNo.value;
 						cellInfo.Button.text = cellInfo.GroupNo.ToString();
@@ -322,6 +322,7 @@ namespace LevelEditor.Editor
 		#region Save
 
 		private GameObject levelBasePrefab;
+		private static readonly int baseColor = Shader.PropertyToID("_BaseColor");
 
 		private void Save()
 		{
@@ -386,7 +387,7 @@ namespace LevelEditor.Editor
 					cell.PersonType = person.PersonType;
 					cell.GroupNo = groupPair.Key;
 					cell.Coordinates = person.Coordinates;
-					cell.Color = personDataSO.PersonData[person.PersonType].PersonMaterial.color;
+					cell.Color = personDataSO.PersonData[person.PersonType].PersonMaterial.GetColor(baseColor);
 					cell.Button.style.backgroundColor = cell.Color;
 					cell.Button.text = groupPair.Key.ToString();
 					cell.Direction = person.Direction;
