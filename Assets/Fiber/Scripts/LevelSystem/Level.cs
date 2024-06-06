@@ -136,7 +136,9 @@ namespace Fiber.LevelSystem
 
 			bool fail = HolderManager.GetFirstEmptyHolder() is null;
 
+			yield return null;
 			yield return new WaitUntil(() => elevatorManager.CurrentElevator);
+			yield return null;
 
 			var people = HolderManager.GetPeople().ToArray();
 			for (int i = 0; i < people.Length; i++)

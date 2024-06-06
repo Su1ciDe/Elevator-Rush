@@ -108,6 +108,7 @@ namespace Managers
 		public void CompleteStage()
 		{
 			var tempElevator = CurrentElevator;
+			CurrentElevator = null;
 
 			HapticManager.Instance.PlayHaptic(HapticPatterns.PresetType.Success);
 
