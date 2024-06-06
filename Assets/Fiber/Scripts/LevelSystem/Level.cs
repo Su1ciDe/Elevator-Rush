@@ -127,16 +127,28 @@ namespace Fiber.LevelSystem
 
 		private IEnumerator FailCheckCoroutine()
 		{
-			// yield return new WaitForSeconds(0.5f);
-			// yield return new WaitUntil(() => elevatorManager.CurrentElevator);
-			// yield return null;
-			//
-			// foreach (var personGroup in PeopleManager.Instance.Groups.Values)
-			// 	yield return new WaitUntil(() => !personGroup.People.Any(x => x.IsMoving));
-			
+			yield return null;
+			yield return new WaitUntil(() => elevatorManager.CurrentElevator);
 			yield return null;
 
-			if (HolderManager.GetFirstEmptyHolder() is null)
+			foreach (var personGroup in PeopleManager.Instance.Groups.Values)
+				yield return new WaitUntil(() => !personGroup.People.Any(x => x.IsMoving));
+
+			bool fail = HolderManager.GetFirstEmptyHolder() is null;
+
+			yield return new WaitUntil(() => elevatorManager.CurrentElevator);
+
+			var people = HolderManager.GetPeople().ToArray();
+			for (int i = 0; i < people.Length; i++)
+			{
+				if (people[i].Type == elevatorManager.CurrentElevator.ElevatorData.ElevatorType)
+				{
+					fail = false;
+					break;
+				}
+			}
+
+			if (fail)
 				LevelManager.Instance.Lose();
 
 			checkFailCoroutine = null;

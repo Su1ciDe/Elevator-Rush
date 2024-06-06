@@ -4,6 +4,7 @@ using DG.Tweening;
 using Fiber.Managers;
 using GamePlay;
 using GamePlay.Elevator;
+using GamePlay.People;
 using TriInspector;
 using UnityEngine;
 
@@ -100,7 +101,7 @@ namespace Managers
 				yield return new WaitForSeconds(0.5f);
 				holders[i].CurrentPersonGroup = null;
 			}
-			
+
 			// RearrangePeople();
 		}
 
@@ -130,6 +131,15 @@ namespace Managers
 			}
 
 			return null;
+		}
+
+		public IEnumerable<PersonGroup> GetPeople()
+		{
+			for (int i = 0; i < holders.Count; i++)
+			{
+				if (holders[i].CurrentPersonGroup)
+					yield return holders[i].CurrentPersonGroup;
+			}
 		}
 
 		#region Setup
