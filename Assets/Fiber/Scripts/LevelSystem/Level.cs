@@ -134,23 +134,22 @@ namespace Fiber.LevelSystem
 			foreach (var personGroup in PeopleManager.Instance.Groups.Values)
 				yield return new WaitUntil(() => !personGroup.People.Any(x => x.IsMoving));
 
-			bool fail = HolderManager.GetFirstEmptyHolder() is null;
-
 			yield return null;
 			yield return new WaitUntil(() => elevatorManager.CurrentElevator);
 			yield return null;
 
 			var people = HolderManager.GetPeople().ToArray();
+			var failed = people.Length.Equals(holderManager.Amount);
 			for (int i = 0; i < people.Length; i++)
 			{
 				if (people[i].Type == elevatorManager.CurrentElevator.ElevatorData.ElevatorType)
 				{
-					fail = false;
+					failed = false;
 					break;
 				}
 			}
 
-			if (fail)
+			if (failed)
 				LevelManager.Instance.Lose();
 
 			checkFailCoroutine = null;
