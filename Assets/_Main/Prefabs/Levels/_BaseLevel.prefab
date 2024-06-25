@@ -349,6 +349,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_ElevatorButtons
       objectReference: {fileID: 0}
+    - target: {fileID: 3567294143341593067, guid: d3b847dcdd82d4c2393f1af80d54a3aa, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 6319a9f89c5e94353a530699875bad90, type: 2}
     - target: {fileID: 4640905664311224993, guid: d3b847dcdd82d4c2393f1af80d54a3aa, type: 3}
       propertyPath: m_LocalScale.x
       value: 1
@@ -393,6 +397,11 @@ PrefabInstance:
 --- !u!4 &5518994542584447117 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d3b847dcdd82d4c2393f1af80d54a3aa, type: 3}
+  m_PrefabInstance: {fileID: 5412712360562239334}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &8835009315767625357 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 3567294143341593067, guid: d3b847dcdd82d4c2393f1af80d54a3aa, type: 3}
   m_PrefabInstance: {fileID: 5412712360562239334}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5899439336324276920
@@ -588,6 +597,18 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[3]
       value: 
       objectReference: {fileID: -2310514774154243031, guid: a181e21b5da2c4a43bdf4a1456e440f8, type: 3}
+    - target: {fileID: 6706818000399039967, guid: d8226c8764781400a9a4a6f1ff82b9af, type: 3}
+      propertyPath: nextElevatorMRs.Array.data[0]
+      value: 
+      objectReference: {fileID: 8835009315767625357}
+    - target: {fileID: 6706818000399039967, guid: d8226c8764781400a9a4a6f1ff82b9af, type: 3}
+      propertyPath: nextElevatorMRs.Array.data[1]
+      value: 
+      objectReference: {fileID: 8835009315767625357}
+    - target: {fileID: 6706818000399039967, guid: d8226c8764781400a9a4a6f1ff82b9af, type: 3}
+      propertyPath: nextElevatorMRs.Array.data[2]
+      value: 
+      objectReference: {fileID: 8835009315767625357}
     - target: {fileID: 7072212074666056006, guid: d8226c8764781400a9a4a6f1ff82b9af, type: 3}
       propertyPath: m_Materials.Array.data[1]
       value: 

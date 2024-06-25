@@ -53,12 +53,16 @@ namespace GridSystem
 
 		public void ShowHighlight()
 		{
-			meshRenderer.material = highlightMaterial;
+			var mats = meshRenderer.materials;
+			mats[1] = highlightMaterial;
+			meshRenderer.materials = mats;
 		}
 
 		public void HideHighlight()
 		{
-			meshRenderer.material = material;
+			var mats = meshRenderer.materials;
+			mats[1] = material;
+			meshRenderer.materials = mats;
 		}
 
 		public void DisableModel()

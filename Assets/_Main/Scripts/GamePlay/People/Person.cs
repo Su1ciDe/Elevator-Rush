@@ -41,6 +41,8 @@ namespace GamePlay.People
 		[SerializeField] private Collider col;
 		[SerializeField] private GameObject cap;
 		[SerializeField] private Transform model;
+		
+		private static readonly int baseColor = Shader.PropertyToID("_BaseColor");
 
 		private const float HIGHLIGHT_DURATION = .25F;
 		private const string FOLLOWER_TAG = "Follower";
@@ -213,12 +215,12 @@ namespace GamePlay.People
 			
 			cap.SetActive(true);
 
-			var renderer = cap.GetComponent<MeshRenderer>();
-			var color = renderer.sharedMaterial.GetColor("_BaseColor");
+			var capRenderer = cap.GetComponent<MeshRenderer>();
+			var color = capRenderer.sharedMaterial.GetColor(baseColor);
 			
-			MaterialPropertyBlock materialPropertyBlock = new MaterialPropertyBlock();
-			materialPropertyBlock.SetColor("_BaseColor", new Color(color.r - capColorValueOffset, color.g - capColorValueOffset, color.b - capColorValueOffset));
-			renderer.SetPropertyBlock(materialPropertyBlock);
+			var materialPropertyBlock = new MaterialPropertyBlock();
+			materialPropertyBlock.SetColor(baseColor, new Color(color.r - capColorValueOffset, color.g - capColorValueOffset, color.b - capColorValueOffset));
+			capRenderer.SetPropertyBlock(materialPropertyBlock);
 		}
 	}
 }
